@@ -1,12 +1,17 @@
 # greenroom
 
-> CLI, MCP server and library that rehearses a launch, pricing change or repositioning against simulated buyers built from real, verbatim quotes. Works on a Claude subscription (claude -p), any API key, or a local model. Bright Data is the optional grounding layer.
+> CLI, MCP server and library that rehearses a launch, pricing change or repositioning against simulated buyers built from real, verbatim quotes. Works on a Claude subscription (claude -p), any API key, or a local model. Bright Data is the optional grounding layer. Results come as a median with a range across independent samples, with a confidence grade.
 
-## Docs
-- [README](README.md): install, backends, CLI, MCP, limits
-- [AGENTS.md](AGENTS.md): workflow, seed writing, error codes for agents
+## Start here
+- Operating guide for agents: run `npx -y greenroom guide` (the MCP server sends the same text as its instructions)
+- [README](https://github.com/danishashko/greenroom/blob/main/README.md): install, backends, time and cost, CLI, MCP, limits
+- [Claude Code skill](https://github.com/danishashko/greenroom/blob/main/skills/greenroom/SKILL.md)
+- [Example report: Heroku 2022 backtest](https://github.com/danishashko/greenroom/blob/main/examples/heroku-2022/report.md)
 
 ## Interfaces
 - CLI: `npx greenroom run "<change>" --json`
 - MCP: `npx -y greenroom mcp` (tools: greenroom_doctor, greenroom_estimate, greenroom_start, greenroom_status, greenroom_report, greenroom_runs)
 - Schemas: `greenroom schema report`, `greenroom schema seed`
+
+## Optional
+- [AGENTS.md](https://github.com/danishashko/greenroom/blob/main/AGENTS.md): for coding agents changing the repo

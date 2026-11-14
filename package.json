@@ -10,6 +10,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "skills",
     "AGENTS.md",
     "llms.txt",
     "README.md",

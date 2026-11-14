@@ -4,6 +4,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import { DEFAULTS, parseSeed, planRun, runRehearsal, type RunOptions, type RunResult } from "./engine.js";
 import { GreenroomError, toGreenroomError } from "./errors.js";
+import { AGENT_GUIDE } from "./guide.js";
 import { resolveGround } from "./ground/index.js";
 import { PROVIDERS, createProvider } from "./llm/index.js";
 import { Meter } from "./meter.js";
@@ -109,7 +110,7 @@ async function waitFor(j: Job, seconds: number): Promise<void> {
 }
 
 export async function startMcpServer(): Promise<void> {
-  const server = new McpServer({ name: "greenroom", version: VERSION });
+  const server = new McpServer({ name: "greenroom", version: VERSION }, { instructions: AGENT_GUIDE });
 
   server.registerTool(
     "greenroom_doctor",

@@ -345,3 +345,14 @@ describe("cli crash", () => {
     expect(isTransient(new Error("claude crashed (exit code 3221226505) without output."))).toBe(true);
   });
 });
+
+describe("agent guide", () => {
+  it("is what the MCP server sends and names every tool and error code", async () => {
+    const { AGENT_GUIDE } = await import("../src/guide.js");
+    for (const t of ["greenroom_doctor", "greenroom_estimate", "greenroom_start", "greenroom_status", "greenroom_report", "greenroom_runs"]) expect(AGENT_GUIDE).toContain(t);
+    const { EXIT_CODES } = await import("../src/errors.js");
+    for (const code of Object.keys(EXIT_CODES).filter((c) => c !== "INTERNAL")) expect(AGENT_GUIDE).toContain(code);
+    const mcp = (await import("node:fs")).readFileSync("src/mcp.ts", "utf8");
+    expect(mcp).toContain("instructions: AGENT_GUIDE");
+  });
+});

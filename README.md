@@ -8,6 +8,21 @@ npx greenroom run "Raise Pro from $49 to $79 per month" --audience "B2B marketin
 
 You get a report with the share of buyers who react badly, who would leave, the objections behind it with real quotes, and the changes that would soften it. Every persona is built from quotes pulled from Reddit, Hacker News, review sites and forums. Quotes that do not appear verbatim on the source page are thrown away.
 
+![Rehearsal report for the 2022 Heroku free plan removal, backtested as of the day before the announcement](docs/report.png)
+
+The report above is a backtest: Heroku's 2022 removal of free plans, rehearsed with only what was published before the announcement. Full output in [examples/heroku-2022](examples/heroku-2022/report.md).
+
+## For AI agents
+
+| You are | Start here |
+| --- | --- |
+| An MCP client | `claude mcp add greenroom -- npx -y greenroom mcp`. The server sends its operating guide as MCP instructions. |
+| An agent with a shell | `npx -y greenroom guide` prints the same guide. Every command below takes `--json`. |
+| Claude Code with skills | Copy [skills/greenroom](skills/greenroom/SKILL.md) into `.claude/skills/`. |
+| A coding agent changing this repo | [AGENTS.md](AGENTS.md) |
+
+The guide covers the call order (doctor, estimate, start, status, report), how to write the seed, how to report results (median with range, confidence, quote URLs) and every error code.
+
 ## Pick your own backend
 
 No API key is required if you already pay for Claude.
@@ -54,6 +69,17 @@ greenroom run "Heroku ends all free plans on November 28, 2022" --as-of 2022-08-
 
 `--as-of` limits search to pages published by that date, drops quotes dated later, and tells every persona that today is that day. Compare the report with what really happened before you trust a run on a change that has not happened yet. The model may still remember the real outcome, and the report says so.
 
+## Time and cost
+
+Measured with `claude-cli` on a Claude subscription and Bright Data grounding:
+
+| Run | Calls | Time | Input tokens |
+| --- | --- | --- | --- |
+| Default: 8 personas, 3 rounds, 3 samples | 90 | 7 min | 278k |
+| Quick look: `--samples 1` | 35 | 3 min | 109k |
+
+On a subscription there is no per-call charge. On an API key, `greenroom estimate` shows the calls and tokens before anything is spent, and a dollar figure when you set `GREENROOM_PRICE_IN_PER_M` and `GREENROOM_PRICE_OUT_PER_M`. `--max-calls` is a hard cap.
+
 ## CLI
 
 ```bash
@@ -62,11 +88,13 @@ greenroom estimate "<change>"      # calls, tokens, time. Spends nothing.
 greenroom doctor [--deep]          # which backends work here
 greenroom runs                     # saved runs
 greenroom show <runId> --format md|json|html|path
+greenroom providers                # every LLM backend
 greenroom schema report|seed       # JSON Schema
+greenroom guide                    # operating guide for agents
 greenroom mcp                      # MCP server on stdio
 ```
 
-Add `--json` to any command for one JSON document on stdout. Progress goes to stderr. `--events` streams progress as NDJSON.
+`run`, `estimate`, `doctor`, `providers` and `runs` take `--json` and then print one JSON document on stdout. `schema` always prints JSON, and `show --format json` prints a saved report. Progress goes to stderr, and `run --events` streams it as NDJSON.
 
 Exit codes: `0` ok, `2` usage, `3` backend unavailable, `4` call cap hit, `5` not enough evidence, `6` invalid model output, `7` grounding failed, `8` not found.
 
@@ -80,7 +108,7 @@ claude mcp add greenroom -- npx -y greenroom mcp
 { "mcpServers": { "greenroom": { "command": "npx", "args": ["-y", "greenroom", "mcp"] } } }
 ```
 
-Tools: `greenroom_doctor`, `greenroom_estimate`, `greenroom_start`, `greenroom_status`, `greenroom_report`, `greenroom_runs`. Runs take minutes, so `greenroom_start` returns a job id and `greenroom_status` can wait up to 55 seconds per call. Every tool has an output schema and read/write annotations. See [AGENTS.md](AGENTS.md).
+Tools: `greenroom_doctor`, `greenroom_estimate`, `greenroom_start`, `greenroom_status`, `greenroom_report`, `greenroom_runs`. Runs take minutes, so `greenroom_start` returns a job id and `greenroom_status` can wait up to 55 seconds per call. Every tool has an output schema and read/write annotations, and the server sends the operating guide as its instructions.
 
 ## Library
 

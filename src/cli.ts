@@ -311,6 +311,15 @@ program
   });
 
 program
+  .command("guide")
+  .description("Print the operating guide for AI agents (the same text the MCP server sends)")
+  .action(async () => {
+    const { AGENT_GUIDE } = await import("./guide.js");
+    process.stdout.write(`${AGENT_GUIDE}
+`);
+  });
+
+program
   .command("mcp")
   .description("Start the MCP server on stdio")
   .action(async () => {
