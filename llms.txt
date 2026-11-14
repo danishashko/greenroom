@@ -1,0 +1,12 @@
+# greenroom
+
+> CLI, MCP server and library that rehearses a launch, pricing change or repositioning against simulated buyers built from real, verbatim quotes. Works on a Claude subscription (claude -p), any API key, or a local model. Bright Data is the optional grounding layer.
+
+## Docs
+- [README](README.md): install, backends, CLI, MCP, limits
+- [AGENTS.md](AGENTS.md): workflow, seed writing, error codes for agents
+
+## Interfaces
+- CLI: `npx greenroom run "<change>" --json`
+- MCP: `npx -y greenroom mcp` (tools: greenroom_doctor, greenroom_estimate, greenroom_start, greenroom_status, greenroom_report, greenroom_runs)
+- Schemas: `greenroom schema report`, `greenroom schema seed`
