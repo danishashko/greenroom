@@ -10,11 +10,12 @@ To **use** greenroom rather than change it, run `npx greenroom guide`. It prints
 | --- | --- |
 | `src/engine.ts` | Runs the stages, checkpoints, resume, samples, usage totals |
 | `src/pipeline/ground.ts` | Search, page reading, quote extraction and verbatim check, cut-off filter |
+| `src/ground/customers.ts` | Customer data import: CSV/JSON/JSONL parsing, column detection, segment-spread sampling |
 | `src/ground/clean.ts` | Strips page noise and keeps the paragraphs most likely to hold opinions |
 | `src/ground/brightdata.ts` | Bright Data SERP and Web Unlocker, retries, Google redirect unwrapping |
-| `src/pipeline/personas.ts` | Personas from quotes, weights from evidence share |
+| `src/pipeline/personas.ts` | Personas from quotes, weights from evidence share, or anchored to seed segment counts |
 | `src/pipeline/simulate.ts` | Rounds, per-round checkpoints |
-| `src/pipeline/report.ts` | Stats, ensemble ranges, confidence, themes, verdict |
+| `src/pipeline/report.ts` | Stats, per-segment results, customers and revenue at risk, ensemble ranges, confidence, themes, verdict |
 | `src/llm/*` | Backends. `claude-cli.ts` is the subscription path |
 | `src/prompts.ts` | Every prompt |
 | `src/render/*` | HTML and markdown reports |

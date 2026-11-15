@@ -1,3 +1,4 @@
+import { money, signedMoney } from "../pipeline/report.js";
 import type { Report } from "../schema.js";
 import { pct } from "../util.js";
 
@@ -21,6 +22,25 @@ export function renderMarkdown(r: Report): string {
   lines.push(`| Would leave or switch | ${pct(r.stats.leaveShare)} |`);
   lines.push(`| Changed stance after seeing others | ${pct(r.stats.movedMindShare)} |`);
   lines.push(`| Confidence | ${r.basis.confidence} (${r.basis.confidenceReason}) |`, "");
+
+  const risk = r.stats.atRisk;
+  if (r.stats.segments.length && risk) {
+    const withMrr = risk.mrr !== null;
+    lines.push("## By customer segment", "");
+    const priced = r.stats.segments.some((x) => x.mrrAfter !== null);
+    lines.push(
+      `| Segment | Customers | Negative | Would leave | Customers at risk |${withMrr ? " Revenue at risk |" : ""}${priced ? " Net revenue | Breaks even if leave under |" : ""}`,
+      `| --- | --- | --- | --- | --- |${withMrr ? " --- |" : ""}${priced ? " --- | --- |" : ""}`,
+    );
+    for (const x of r.stats.segments) {
+      lines.push(
+        `| ${cell(x.name)} | ${x.customers.toLocaleString("en-US")} (${pct(x.share)}) | ${x.negativeShare === null ? "no persona" : pct(x.negativeShare)} | ${x.leaveShare === null ? "" : pct(x.leaveShare)} | ${x.customersAtRisk?.toLocaleString("en-US") ?? ""} |${withMrr ? ` ${x.mrrAtRisk === null ? "" : money(x.mrrAtRisk, risk.currency)} |` : ""}${
+          priced ? ` ${x.netMrrChange === null ? "" : signedMoney(x.netMrrChange, risk.currency)} | ${x.breakEvenLeaveShare === null ? "" : pct(x.breakEvenLeaveShare)} |` : ""
+        }`,
+      );
+    }
+    lines.push("", `Total at risk: ${risk.customers.toLocaleString("en-US")} customers (${pct(risk.customerShare)})${withMrr ? ` and ${money(risk.mrr ?? 0, risk.currency)} of monthly revenue (${pct(risk.mrrShare ?? 0)})` : ""}.${risk.netMrrChange !== null ? ` Net monthly revenue after the change: ${signedMoney(risk.netMrrChange, risk.currency)}. Downgrades are not counted.` : ""}${risk.uncoveredCustomers ? ` ${risk.uncoveredCustomers.toLocaleString("en-US")} customers in segments without a persona are not counted.` : ""}`, "");
+  }
 
   lines.push("### Actions in the next 30 days", "");
   for (const [k, v] of Object.entries(r.stats.actions).sort((a, b) => b[1] - a[1])) lines.push(`- ${k.replace("_", " ")}: ${pct(v)}`);
@@ -55,7 +75,8 @@ export function renderMarkdown(r: Report): string {
 
   lines.push("## Basis", "");
   lines.push(`- Type: simulated reactions, not measured behavior`);
-  lines.push(`- Quotes: ${r.basis.evidenceCount} from ${r.basis.domainCount} domains via ${r.basis.groundingProvider}`);
+  lines.push(`- Quotes: ${r.basis.evidenceCount} from ${r.basis.domainCount} sources via ${r.basis.groundingProvider}${r.basis.customerQuotes ? `, ${r.basis.customerQuotes} from your customer data` : ""}`);
+  lines.push(`- Audience shares: ${r.basis.weighting === "segments" ? "anchored to your customer counts per segment" : "from how many quotes back each persona"}`);
   if (r.basis.asOf) lines.push(`- Cut-off: ${r.basis.asOf}, ${r.basis.droppedAfterCutoff} later results or quotes left out`);
   lines.push(`- Personas: ${r.stats.personas}, rounds: ${r.stats.rounds}`);
   lines.push(`- Models: ${r.basis.llmProvider} (${r.basis.models.fast} / ${r.basis.models.strong})`);

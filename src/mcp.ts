@@ -29,6 +29,27 @@ const runInput = {
   ground: z.enum(["auto", "brightdata", "local", "none"]).optional().describe("Where real quotes come from. auto uses Bright Data when a key exists."),
   urls: z.array(z.string().url()).optional().describe("Extra pages to read as evidence."),
   evidencePaths: z.array(z.string()).optional().describe("Local files or folders of quotes (txt, md, json, csv)."),
+  customerPaths: z
+    .array(z.string())
+    .optional()
+    .describe("The user's own customer text: support tickets, survey or NPS comments, call notes, churn reasons (csv, tsv, json, jsonl). Rows are used as written and outrank web quotes."),
+  customerColumns: z
+    .object({ text: z.string().optional(), segment: z.string().optional(), date: z.string().optional() })
+    .optional()
+    .describe("Column names in the customer data. Detected from common names (body, comment, plan, created_at...) when left out."),
+  segments: z
+    .array(
+      z.object({
+        name: z.string(),
+        customers: z.number().int().positive(),
+        mrr: z.number().nonnegative().optional().describe("Segment monthly revenue today."),
+        mrrAfter: z.number().nonnegative().optional().describe("Segment monthly revenue at the new price if nobody left. Set it for the segments whose price changes."),
+      }),
+    )
+    .max(8)
+    .optional()
+    .describe("The real customer base by segment, e.g. plans. Audience shares are anchored to these counts and the report gives customers and revenue at risk. Ask the user for these numbers; never guess them."),
+  currency: z.string().regex(/^[A-Z]{3}$/).optional().describe("ISO currency of segment mrr. Default USD."),
   personas: z.number().int().min(3).max(16).optional().describe("Number of buyer personas. Default 8."),
   rounds: z.number().int().min(1).max(5).optional().describe("Simulation rounds. Default 3."),
   samples: z.number().int().min(1).max(7).optional().describe("Independent persona sets on the same evidence, reported as median and range. Default 3. Use 1 for a quick look."),
@@ -39,11 +60,13 @@ type RunInput = { [K in keyof typeof runInput]: z.infer<(typeof runInput)[K]> };
 
 function toOptions(i: RunInput): RunOptions {
   return {
-    seed: parseSeed({ change: i.change, kind: i.kind, productName: i.productName, productUrl: i.productUrl, audience: i.audience, competitors: i.competitors, context: i.context, asOf: i.asOf }),
+    seed: parseSeed({ change: i.change, kind: i.kind, productName: i.productName, productUrl: i.productUrl, audience: i.audience, competitors: i.competitors, context: i.context, asOf: i.asOf, segments: i.segments, currency: i.currency }),
     llm: i.llm,
     ground: i.ground,
     urls: i.urls,
     evidencePaths: i.evidencePaths,
+    customerPaths: i.customerPaths,
+    customerColumns: i.customerColumns,
     personas: i.personas,
     rounds: i.rounds,
     samples: i.samples,
@@ -81,7 +104,17 @@ function summarize(r: RunResult["report"]) {
     headline: r.headline,
     readout: r.readout,
     stats: r.stats,
-    ensemble: { samples: r.ensemble.samples, negativeShare: r.ensemble.negativeShare, leaveShare: r.ensemble.leaveShare, positiveShare: r.ensemble.positiveShare },
+    ensemble: {
+      samples: r.ensemble.samples,
+      negativeShare: r.ensemble.negativeShare,
+      leaveShare: r.ensemble.leaveShare,
+      positiveShare: r.ensemble.positiveShare,
+      customersAtRisk: r.ensemble.customersAtRisk,
+      mrrAtRisk: r.ensemble.mrrAtRisk,
+      netMrrChange: r.ensemble.netMrrChange,
+    },
+    segments: r.stats.segments,
+    atRisk: r.stats.atRisk,
     confidence: { level: r.basis.confidence, reason: r.basis.confidenceReason },
     themes: r.themes.map((t) => ({ label: t.label, audienceShare: t.weight, quotes: t.quotes.map((q) => ({ quote: q.quote, url: q.url })) })),
     recommendations: r.recommendations,

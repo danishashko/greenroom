@@ -9,6 +9,7 @@ import {
   type Persona,
   type Reaction,
   type Report,
+  type Segment,
 } from "../schema.js";
 import { pct, round } from "../util.js";
 import type { Ctx } from "./context.js";
@@ -29,7 +30,7 @@ const VerdictSchema = z.object({
 });
 
 /** All headline numbers come from code, weighted by persona share. The model never writes a statistic. */
-export function computeStats(personas: Persona[], reactions: Reaction[], rounds: number): Stats {
+export function computeStats(personas: Persona[], reactions: Reaction[], rounds: number, segments: Segment[] = [], currency = "USD"): Stats {
   const w = new Map(personas.map((p) => [p.id, p.weight]));
   const last = reactions.filter((r) => r.round === rounds);
   const first = new Map(reactions.filter((r) => r.round === 1).map((r) => [r.personaId, r]));
@@ -52,6 +53,7 @@ export function computeStats(personas: Persona[], reactions: Reaction[], rounds:
     if (f && f.stance !== r.stance) moved += wt;
   }
   const total = neg + neu + pos || 1;
+  const bySeg = segmentResults(personas, last, segments);
   return {
     personas: personas.length,
     rounds,
@@ -62,19 +64,102 @@ export function computeStats(personas: Persona[], reactions: Reaction[], rounds:
     leaveShare: round(leave / total),
     actions,
     movedMindShare: round(moved / total),
+    segments: bySeg,
+    atRisk: atRiskFrom(bySeg, segments, currency),
   };
 }
 
-function range(values: number[]): Ensemble["leaveShare"] {
+const leaves = (r: Reaction) => r.action === "churn" || r.action === "switch_competitor";
+
+/** Per segment: the segment's own reaction split, turned into customers and revenue at risk. */
+export function segmentResults(personas: Persona[], last: Reaction[], segments: Segment[]): Stats["segments"] {
+  const total = segments.reduce((s, x) => s + x.customers, 0) || 1;
+  return segments.map((seg) => {
+    const members = personas.filter((p) => p.customerSegment === seg.name);
+    const w = members.reduce((s, p) => s + p.weight, 0);
+    const share = round(seg.customers / total, 4);
+    // A segment without mrrAfter keeps today's price once any segment has one.
+    const priced = segments.some((x) => x.mrrAfter !== undefined);
+    const after = priced ? (seg.mrrAfter ?? seg.mrr ?? 0) : null;
+    const now = seg.mrr ?? 0;
+    const base = {
+      name: seg.name,
+      customers: seg.customers,
+      mrr: seg.mrr ?? null,
+      share,
+      personaIds: members.map((p) => p.id),
+      mrrAfter: after,
+      breakEvenLeaveShare: after !== null && after > now ? round(1 - now / after) : null,
+    };
+    if (!members.length || w <= 0) return { ...base, negativeShare: null, leaveShare: null, customersAtRisk: null, mrrAtRisk: null, netMrrChange: null };
+    let neg = 0;
+    let leave = 0;
+    for (const p of members) {
+      const r = last.find((x) => x.personaId === p.id);
+      if (!r) continue;
+      if (r.stance < 0) neg += p.weight;
+      if (leaves(r)) leave += p.weight;
+    }
+    const leaveShare = leave / w;
+    return {
+      ...base,
+      negativeShare: round(neg / w),
+      leaveShare: round(leaveShare),
+      customersAtRisk: Math.round(leaveShare * seg.customers),
+      mrrAtRisk: segments.some((x) => x.mrr !== undefined) ? Math.round(leaveShare * (seg.mrr ?? 0)) : null,
+      // Those who stay pay the new price; those who leave pay nothing. Downgrades are not modeled.
+      netMrrChange: after !== null ? Math.round((1 - leaveShare) * after - now) : null,
+    };
+  });
+}
+
+export function atRiskFrom(rows: Stats["segments"], segments: Segment[], currency: string): Stats["atRisk"] {
+  if (!segments.length) return null;
+  const totalCustomers = segments.reduce((s, x) => s + x.customers, 0) || 1;
+  // A segment without mrr (a free plan) counts as zero revenue once any segment has mrr.
+  const hasMrr = segments.some((x) => x.mrr !== undefined);
+  const totalMrr = segments.reduce((s, x) => s + (x.mrr ?? 0), 0);
+  const customers = rows.reduce((s, r) => s + (r.customersAtRisk ?? 0), 0);
+  const mrr = hasMrr ? rows.reduce((s, r) => s + (r.mrrAtRisk ?? 0), 0) : null;
+  return {
+    customers,
+    customerShare: round(customers / totalCustomers),
+    mrr,
+    mrrShare: mrr !== null && totalMrr > 0 ? round(mrr / totalMrr) : null,
+    uncoveredCustomers: rows.filter((r) => r.leaveShare === null).reduce((s, r) => s + r.customers, 0),
+    netMrrChange: rows.some((r) => r.netMrrChange !== null) ? rows.reduce((s, r) => s + (r.netMrrChange ?? 0), 0) : null,
+    currency,
+  };
+}
+
+export function money(n: number, currency: string): string {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 0 }).format(n);
+}
+
+/** "+$3,200" or "-$1,450". */
+export function signedMoney(n: number, currency: string): string {
+  return `${n > 0 ? "+" : n < 0 ? "-" : ""}${money(Math.abs(n), currency)}`;
+}
+
+function range(values: number[], digits = 3): Ensemble["leaveShare"] {
   const v = [...values].sort((a, b) => a - b);
   const mid = Math.floor(v.length / 2);
   const median = v.length % 2 ? (v[mid] as number) : ((v[mid - 1] as number) + (v[mid] as number)) / 2;
-  return { median: round(median), min: round(v[0] ?? 0), max: round(v[v.length - 1] ?? 0) };
+  return { median: round(median, digits), min: round(v[0] ?? 0, digits), max: round(v[v.length - 1] ?? 0, digits) };
 }
 
 /** Median and range across samples, plus which sample to show: the one closest to the median leave share. */
 export function buildEnsemble(perSample: Stats[]): Ensemble {
-  const rows = perSample.map((s) => ({ negativeShare: s.negativeShare, positiveShare: s.positiveShare, leaveShare: s.leaveShare, meanStance: s.meanStance }));
+  const rows = perSample.map((s) => ({
+    negativeShare: s.negativeShare,
+    positiveShare: s.positiveShare,
+    leaveShare: s.leaveShare,
+    meanStance: s.meanStance,
+    customersAtRisk: s.atRisk?.customers ?? null,
+    mrrAtRisk: s.atRisk?.mrr ?? null,
+    netMrrChange: s.atRisk?.netMrrChange ?? null,
+  }));
+  const nums = (k: "customersAtRisk" | "mrrAtRisk" | "netMrrChange") => (rows.length && rows.every((r) => r[k] !== null) ? range(rows.map((r) => r[k] as number), 0) : null);
   const leave = range(rows.map((r) => r.leaveShare));
   let shown = 0;
   rows.forEach((r, i) => {
@@ -87,6 +172,9 @@ export function buildEnsemble(perSample: Stats[]): Ensemble {
     positiveShare: range(rows.map((r) => r.positiveShare)),
     leaveShare: leave,
     meanStance: range(rows.map((r) => r.meanStance)),
+    customersAtRisk: nums("customersAtRisk"),
+    mrrAtRisk: nums("mrrAtRisk"),
+    netMrrChange: nums("netMrrChange"),
     perSample: rows,
   };
 }
@@ -96,35 +184,76 @@ function withRange(r: Ensemble["leaveShare"], samples: number): string {
   return `${pct(r.median)} (${Math.round(r.min * 100)} to ${pct(r.max)})`;
 }
 
+function countRange(r: Ensemble["leaveShare"], samples: number, fmt: (n: number) => string): string {
+  if (samples < 2 || r.min === r.max) return fmt(r.median);
+  return `${fmt(r.median)} (${fmt(r.min)} to ${fmt(r.max)})`;
+}
+
+/** "About 1,240 customers and $48,000 of monthly revenue at risk", with ranges across samples. Empty without segments. */
+export function atRiskLine(e: Ensemble, currency: string): string {
+  if (!e.customersAtRisk) return "";
+  const netOnly = e.netMrrChange ? ` Net monthly revenue after the change: ${countRange(e.netMrrChange, e.samples, (n) => signedMoney(n, currency))}.` : "";
+  if (e.customersAtRisk.max === 0) return `No customers would leave.${netOnly}`;
+  const customers = countRange(e.customersAtRisk, e.samples, (n) => n.toLocaleString("en-US"));
+  const mrr = e.mrrAtRisk ? ` and ${countRange(e.mrrAtRisk, e.samples, (n) => money(n, currency))} of monthly revenue` : "";
+  const net = e.netMrrChange ? ` Net monthly revenue after the change: ${countRange(e.netMrrChange, e.samples, (n) => signedMoney(n, currency))}.` : "";
+  return `That puts about ${customers} customers${mrr} at risk.${net}`;
+}
+
 /** Numbers first. With several samples, the medians lead and the range follows in brackets. */
-export function buildHeadline(e: Ensemble, topTheme?: string): string {
+export function buildHeadline(e: Ensemble, topTheme?: string, currency = "USD"): string {
   const leave = withRange(e.leaveShare, e.samples);
   const lead =
     e.negativeShare.median >= e.positiveShare.median
       ? `${withRange(e.negativeShare, e.samples)} of the audience reacts negatively and ${leave} would leave or switch.`
       : `${withRange(e.positiveShare, e.samples)} of the audience reacts positively and ${leave} would leave or switch.`;
-  return topTheme ? `${lead} Main objection: ${topTheme.toLowerCase()}.` : lead;
+  const risk = atRiskLine(e, currency);
+  const out = risk ? `${lead} ${risk}` : lead;
+  return topTheme ? `${out} Main objection: ${topTheme.toLowerCase()}.` : out;
 }
 
 /** Wide disagreement between samples is a confidence problem even when evidence is plentiful. */
 export const SPREAD_LIMIT = 0.25;
 
-export function gradeConfidence(evidenceCount: number, domainCount: number, grounded: boolean, ensemble?: Ensemble): { level: Confidence; reason: string } {
+export interface ConfidenceExtras {
+  /** Quotes from the user's own customer data. Enough of them stand in for source variety. */
+  customerQuotes?: number;
+  /** Share of the customer base in segments no persona covered. */
+  uncoveredShare?: number;
+  /** Customer data without segment sizes: shares follow quote counts, which over-sample complainers. */
+  unanchoredCustomers?: boolean;
+}
+
+export function gradeConfidence(
+  evidenceCount: number,
+  domainCount: number,
+  grounded: boolean,
+  ensemble?: Ensemble,
+  extras: ConfidenceExtras = {},
+): { level: Confidence; reason: string } {
   let level: Confidence;
   let reason: string;
+  const own = extras.customerQuotes ?? 0;
+  const basis = own ? `${evidenceCount} quotes (${own} from your customers) from ${domainCount} ${domainCount === 1 ? "source" : "sources"}` : `${evidenceCount} quotes from ${domainCount} domains`;
   if (!grounded) {
     level = "low";
     reason = "No source evidence. Personas were written by the model from the description.";
-  } else if (evidenceCount < 12 || domainCount < 3) {
+  } else if (evidenceCount < 12 || (domainCount < 3 && own < 12)) {
     level = "low";
-    reason = `${evidenceCount} quotes from ${domainCount} domains is thin.`;
-  } else if (evidenceCount < 30 || domainCount < 5) {
+    reason = `${basis} is thin.`;
+  } else if (evidenceCount < 30 || (domainCount < 5 && own < 45)) {
     level = "medium";
-    reason = `${evidenceCount} quotes from ${domainCount} domains.`;
+    reason = `${basis}.`;
   } else {
     level = "high";
-    reason = `${evidenceCount} quotes from ${domainCount} domains.`;
+    reason = `${basis}.`;
   }
+  const down = (l: Confidence): Confidence => (l === "high" ? "medium" : "low");
+  if ((extras.uncoveredShare ?? 0) > 0.1) {
+    level = down(level);
+    reason += ` Segments holding ${pct(extras.uncoveredShare ?? 0)} of customers had no persona.`;
+  }
+  if (extras.unanchoredCustomers) reason += " Audience shares follow quote counts; pass segments for shares that match your customer base.";
   if (ensemble && ensemble.samples > 1) {
     const spread = Math.max(ensemble.leaveShare.max - ensemble.leaveShare.min, ensemble.negativeShare.max - ensemble.negativeShare.min);
     if (spread > SPREAD_LIMIT) {
@@ -192,7 +321,9 @@ export interface ReportInput {
 
 export async function reportStage(ctx: Ctx, input: ReportInput): Promise<Report> {
   const { evidence } = input;
-  const perSample = input.samples.map((s) => computeStats(s.personas, s.reactions, ctx.rounds));
+  const segments = ctx.seed.segments ?? [];
+  const currency = ctx.seed.currency ?? "USD";
+  const perSample = input.samples.map((s) => computeStats(s.personas, s.reactions, ctx.rounds, segments, currency));
   const ensemble = buildEnsemble(perSample);
   const shown = input.samples[ensemble.shownSample] as ReportInput["samples"][number];
   const { personas, reactions } = shown;
@@ -223,6 +354,20 @@ export async function reportStage(ctx: Ctx, input: ReportInput): Promise<Report>
     `Would leave or switch: ${pct(stats.leaveShare)}.`,
     `Actions: ${Object.entries(stats.actions).map(([k, v]) => `${k} ${pct(v)}`).join(", ")}.`,
     `Changed stance between first and last round: ${pct(stats.movedMindShare)}.`,
+    ...(stats.segments.length
+      ? [
+          `By customer segment: ${stats.segments
+            .map((x) =>
+              x.leaveShare === null
+                ? `${x.name} not covered`
+                : `${x.name} (${x.customers} customers) negative ${pct(x.negativeShare ?? 0)}, would leave ${pct(x.leaveShare)}${
+                    x.netMrrChange !== null ? `, net monthly revenue ${signedMoney(x.netMrrChange, currency)}` : ""
+                  }${x.breakEvenLeaveShare !== null ? `, breaks even if under ${pct(x.breakEvenLeaveShare)} leave` : ""}`,
+            )
+            .join("; ")}.`,
+          atRiskLine(ensemble, currency),
+        ]
+      : []),
   ].join("\n");
   const verdict = await ctx.llm.complete({
     system: SYSTEM_ANALYST,
@@ -239,7 +384,19 @@ export async function reportStage(ctx: Ctx, input: ReportInput): Promise<Report>
 
   const domains = new Set(evidence.map((e) => e.domain));
   const grounded = evidence.length > 0;
-  const conf = gradeConfidence(evidence.length, domains.size, grounded, ensemble);
+  const customerQuotes = evidence.filter((e) => e.source === "customer").length;
+  const totalCustomers = segments.reduce((s, x) => s + x.customers, 0);
+  const uncoveredShare = stats.atRisk && totalCustomers ? stats.atRisk.uncoveredCustomers / totalCustomers : 0;
+  const conf = gradeConfidence(evidence.length, domains.size, grounded, ensemble, {
+    customerQuotes,
+    uncoveredShare,
+    unanchoredCustomers: customerQuotes > 0 && !segments.length,
+  });
+  const net = ensemble.netMrrChange;
+  if (net && net.min < 0 && net.max > 0) {
+    // Blended shares can agree while the bottom line flips sign between samples.
+    conf.reason += ` Net revenue ranges from ${signedMoney(net.min, currency)} to ${signedMoney(net.max, currency)} across samples, so whether the change gains or loses revenue is not settled.`;
+  }
   if (ctx.seed.asOf) {
     // Search and quotes respect the cut-off, but the model itself may remember what happened next.
     conf.reason += ` Backtest as of ${ctx.seed.asOf}: the model may already know the outcome, so compare against what really happened.`;
@@ -251,7 +408,7 @@ export async function reportStage(ctx: Ctx, input: ReportInput): Promise<Report>
     runId: input.runId,
     createdAt: input.createdAt,
     seed: ctx.seed,
-    headline: buildHeadline(ensemble, themes[0]?.label),
+    headline: buildHeadline(ensemble, themes[0]?.label, currency),
     readout: verdict.data.readout,
     stats,
     ensemble,
@@ -265,6 +422,8 @@ export async function reportStage(ctx: Ctx, input: ReportInput): Promise<Report>
       grounded,
       evidenceCount: evidence.length,
       domainCount: domains.size,
+      customerQuotes,
+      weighting: segments.length ? "segments" : "evidence",
       confidence: conf.level,
       confidenceReason: conf.reason,
       groundingProvider: input.groundingProvider,

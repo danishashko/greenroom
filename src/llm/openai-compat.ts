@@ -62,7 +62,8 @@ export class OpenAiCompatProvider extends BaseProvider {
       const res = await fetch(`${this.baseUrl}/chat/completions`, {
         method: "POST",
         headers: this.authHeaders(),
-        body: JSON.stringify({ model: req.model, messages, temperature: 0.7, response_format: responseFormat }),
+        // Without max_tokens some hosts reserve the model's full output window and refuse low balances.
+        body: JSON.stringify({ model: req.model, messages, temperature: 0.7, max_tokens: 16000, response_format: responseFormat }),
         signal: AbortSignal.timeout(Number(process.env["GREENROOM_HTTP_TIMEOUT_MS"] ?? 180_000)),
       });
       return res;
@@ -73,9 +74,9 @@ export class OpenAiCompatProvider extends BaseProvider {
     if (!res.ok) {
       const body = (await res.text()).slice(0, 300);
       throw new GreenroomError(
-        res.status === 401 || res.status === 403 ? "PROVIDER_UNAVAILABLE" : "INTERNAL",
+        res.status === 401 || res.status === 402 || res.status === 403 ? "PROVIDER_UNAVAILABLE" : "INTERNAL",
         `${this.id} returned HTTP ${res.status}: ${body}`,
-        res.status === 401 ? "Check the API key." : undefined,
+        res.status === 401 ? "Check the API key." : res.status === 402 ? "The account is out of credits. Add credits or use another backend." : undefined,
       );
     }
     const data = (await res.json()) as {

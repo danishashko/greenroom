@@ -1,6 +1,6 @@
 # greenroom
 
-> CLI, MCP server and library that rehearses a launch, pricing change or repositioning against simulated buyers built from real, verbatim quotes. Works on a Claude subscription (claude -p), any API key, or a local model. Bright Data is the optional grounding layer. Results come as a median with a range across independent samples, with a confidence grade.
+> CLI, MCP server and library that rehearses a launch, pricing change or repositioning against simulated buyers built from real, verbatim quotes. Works on a Claude subscription (claude -p), any API key, or a local model. Bright Data is the optional grounding layer. Add your own customer text (tickets, survey comments) and segment sizes to get customers and revenue at risk. Results come as a median with a range across independent samples, with a confidence grade.
 
 ## Start here
 - Operating guide for agents: run `npx -y greenroom guide` (the MCP server sends the same text as its instructions)

@@ -21,12 +21,16 @@ WRITING THE SEED
 - Set kind, productName, audience and competitors when known. A vague audience gives vague personas.
 - Pass productUrl so personas know the real product.
 - Never put the expected outcome in change or context.
+- The user's own customer text beats the web. When they have support tickets, survey or NPS comments, call notes or churn reasons, pass the files as customerPaths (CLI --customers). Rows are used as written.
+- Ask the user for their customer count per segment (plan or tier), with monthly revenue if they share it, and pass segments. Audience shares then match their real base and the report gives customers and revenue at risk. Never guess these numbers.
+- For a price change, also set mrrAfter on each segment whose price changes: its monthly revenue at the new price if nobody left. The report then gives net monthly revenue after the change and the leave share at which each segment breaks even.
 - Backtest a past change: set asOf to the day before it was announced, then compare the report with what really happened and tell the user how close it was.
 
 READING THE RESULT
 - headline and stats are computed in code. Quote them as they are.
 - headline gives the median across samples with the range in brackets. Always pass the range on with the number: ensemble.leaveShare has median, min and max.
 - Say basis.confidence (low, medium, high) next to any number you report, with its reason.
+- With segments, lead with ensemble.netMrrChange when present, then ensemble.customersAtRisk and ensemble.mrrAtRisk (median and range). Compare each segment's leaveShare with its breakEvenLeaveShare. Downgrades are not in the revenue figures: say so and name the segment with the highest leaveShare in stats.segments. A segment with a null leaveShare had no persona: say so.
 - Cite quotes by their url. Never paraphrase a quote as if it were one.
 - It is a simulation. Never present it as a forecast or a measured result. recommendations are hypotheses.
 

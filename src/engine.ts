@@ -1,5 +1,6 @@
 import type { z } from "zod";
 import { GreenroomError } from "./errors.js";
+import { loadCustomerData, type CustomerColumns } from "./ground/customers.js";
 import { resolveGround, type GroundChoice } from "./ground/index.js";
 import type { GroundProvider } from "./ground/types.js";
 import { resolveProvider } from "./llm/index.js";
@@ -24,6 +25,10 @@ export interface RunOptions {
   ground?: GroundChoice;
   urls?: string[];
   evidencePaths?: string[];
+  /** First-party customer text (csv, tsv, json, jsonl): support tickets, survey comments, call notes, churn reasons. */
+  customerPaths?: string[];
+  /** Column names in the customer data. Detected from common names when left out. */
+  customerColumns?: CustomerColumns;
   maxQueries?: number;
   maxPages?: number;
   country?: string;
@@ -69,6 +74,20 @@ export function parseSeed(input: unknown): Seed {
   return r.data;
 }
 
+/** "Free=12000,Pro=3400:98000" to segment objects. Revenue after the colon is optional. */
+export function parseSegments(spec: string): { name: string; customers: number; mrr?: number }[] {
+  return spec
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const m = /^(.+?)\s*=\s*([\d_]+)(?:\s*:\s*([\d_.]+))?(?:\s*:\s*([\d_.]+))?$/.exec(part);
+      if (!m) throw new GreenroomError("USAGE", `Cannot read segment "${part}".`, 'Use name=customers, name=customers:mrr or name=customers:mrr:mrrAfter, for example "Pro=3400:98000:132000".');
+      const customers = Number((m[2] as string).replace(/_/g, ""));
+      return { name: (m[1] as string).trim(), customers, ...(m[3] ? { mrr: Number(m[3].replace(/_/g, "")) } : {}), ...(m[4] ? { mrrAfter: Number(m[4].replace(/_/g, "")) } : {}) };
+    });
+}
+
 /** Pre-flight: provider checks and the call/token estimate. Spends nothing. */
 export function planRun(opts: Pick<RunOptions, "llm" | "models" | "ground" | "urls" | "maxQueries" | "maxPages" | "personas" | "rounds" | "samples">): {
   estimate: Estimate;
@@ -112,6 +131,8 @@ export async function runRehearsal(opts: RunOptions): Promise<RunResult> {
   } else {
     if (!opts.seed) throw new GreenroomError("USAGE", "A seed with the change to rehearse is required.", 'Example: greenroom run "Raise Pro from $49 to $79 per month".');
     seed = parseSeed(opts.seed);
+    // Bad customer files or column names fail now, before a run folder exists.
+    if (opts.customerPaths?.length) loadCustomerData(opts.customerPaths, opts.customerColumns, seed.asOf);
     store = RunStore.create(outDir, seed.change);
   }
 
@@ -120,6 +141,10 @@ export async function runRehearsal(opts: RunOptions): Promise<RunResult> {
   const rounds = (opts.resume ? stored.rounds : undefined) ?? opts.rounds ?? DEFAULTS.rounds;
   const samples = opts.samples ?? stored.samples ?? DEFAULTS.samples;
   validate({ personas: personasN, rounds, samples });
+  if ((seed.segments?.length ?? 0) > personasN) {
+    throw new GreenroomError("USAGE", `${seed.segments?.length} segments need at least as many personas (got ${personasN}).`, "Raise --personas or merge small segments.");
+  }
+  if (new Set(seed.segments?.map((x) => x.name)).size !== (seed.segments?.length ?? 0)) throw new GreenroomError("USAGE", "Segment names must be unique.");
 
   const groundChoice = opts.ground ?? stored.ground ?? "auto";
   // A resumed run with saved evidence needs no grounding backend (or key) at all.
@@ -128,6 +153,8 @@ export async function runRehearsal(opts: RunOptions): Promise<RunResult> {
   const groundOptions = {
     urls: opts.urls ?? stored.urls ?? [],
     evidencePaths: opts.evidencePaths ?? stored.evidencePaths ?? [],
+    customerPaths: opts.customerPaths ?? stored.customerPaths ?? [],
+    customerColumns: opts.customerColumns ?? stored.customerColumns,
     maxQueries: opts.maxQueries ?? stored.maxQueries ?? DEFAULTS.maxQueries,
     maxPages: opts.maxPages ?? stored.maxPages ?? DEFAULTS.maxPages,
     country: opts.country ?? stored.country,

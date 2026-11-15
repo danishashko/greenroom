@@ -2,6 +2,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 import { cleanMarkdown, focusText, seedTerms } from "../ground/clean.js";
+import { loadCustomerData } from "../ground/customers.js";
 import { classifySource } from "../ground/types.js";
 import { extractPrompt, queriesPrompt, SYSTEM_ANALYST } from "../prompts.js";
 import type { Evidence } from "../schema.js";
@@ -94,6 +95,15 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
     } catch (e) {
       warnings.push(`Product page not read: ${e instanceof Error ? e.message : String(e)}`);
     }
+  }
+
+  // First-party customer text is used as written, ahead of everything else.
+  if (g.customerPaths.length) {
+    const c = loadCustomerData(g.customerPaths, g.customerColumns, seed.asOf);
+    direct.push(...c.evidence);
+    dropped += c.dropped;
+    warnings.push(...c.warnings);
+    ctx.emit({ stage: "ground", level: "info", message: `Loaded ${c.evidence.length} customer quotes from ${c.rows} rows` });
   }
 
   // User-supplied evidence: JSON arrays of quotes are used directly, other files are mined like pages.

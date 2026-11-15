@@ -2,7 +2,26 @@ import { GreenroomError } from "../errors.js";
 import { BaseProvider, type BaseOptions } from "./base.js";
 import type { ProviderCheck, RawRequest, RawResult } from "./types.js";
 
-/** Anthropic Messages API with forced tool use for schema-exact output. */
+/** Keywords structured outputs rejects. Zod still validates them on the answer, with repair retries. */
+const UNSUPPORTED = new Set(["minLength", "maxLength", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf", "minItems", "maxItems", "uniqueItems", "pattern"]);
+
+/**
+ * Fit a JSON Schema to the structured outputs subset: drop length and range limits, and close every
+ * object with additionalProperties false, which the API requires.
+ */
+export function toStructuredSchema(node: unknown): unknown {
+  if (Array.isArray(node)) return node.map(toStructuredSchema);
+  if (!node || typeof node !== "object") return node;
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(node as Record<string, unknown>)) {
+    if (UNSUPPORTED.has(k)) continue;
+    out[k] = k === "properties" && v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([p, s]) => [p, toStructuredSchema(s)])) : toStructuredSchema(v);
+  }
+  if (out["type"] === "object" || "properties" in out) out["additionalProperties"] = false;
+  return out;
+}
+
+/** Anthropic Messages API with structured outputs (output_config.format), so answers match the schema. */
 export class AnthropicApiProvider extends BaseProvider {
   id = "anthropic";
   label = "Anthropic API (API key)";
@@ -39,13 +58,13 @@ export class AnthropicApiProvider extends BaseProvider {
       headers: { "content-type": "application/json", "x-api-key": this.apiKey, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({
         model: req.model,
-        max_tokens: 8000,
+        // Current models think before answering; leave room so the JSON is not cut off.
+        max_tokens: 16000,
         system: req.system,
         messages: [{ role: "user", content: req.prompt }],
-        tools: [{ name: "respond", description: "Return the structured answer.", input_schema: req.schemaJson }],
-        tool_choice: { type: "tool", name: "respond" },
+        output_config: { format: { type: "json_schema", schema: toStructuredSchema(req.schemaJson) } },
       }),
-      signal: AbortSignal.timeout(Number(process.env["GREENROOM_HTTP_TIMEOUT_MS"] ?? 180_000)),
+      signal: AbortSignal.timeout(Number(process.env["GREENROOM_HTTP_TIMEOUT_MS"] ?? 240_000)),
     });
     if (!res.ok) {
       throw new GreenroomError(
@@ -55,12 +74,14 @@ export class AnthropicApiProvider extends BaseProvider {
       );
     }
     const data = (await res.json()) as {
-      content?: { type: string; input?: unknown }[];
+      content?: { type: string; text?: string }[];
+      stop_reason?: string;
       usage?: { input_tokens?: number; output_tokens?: number };
     };
-    const tool = data.content?.find((c) => c.type === "tool_use");
+    if (data.stop_reason === "refusal") throw new GreenroomError("LLM_INVALID_OUTPUT", "anthropic declined this request (stop_reason refusal).", "Rephrase the change, or use another backend.");
+    const text = (data.content ?? []).filter((c) => c.type === "text").map((c) => c.text ?? "").join("");
     return {
-      json: tool?.input,
+      text,
       usage: { inputTokens: data.usage?.input_tokens ?? 0, outputTokens: data.usage?.output_tokens ?? 0 },
     };
   }

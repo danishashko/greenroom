@@ -1,3 +1,4 @@
+import type { CustomerColumns } from "../ground/customers.js";
 import type { GroundProvider } from "../ground/types.js";
 import type { LlmProvider } from "../llm/types.js";
 import type { Meter } from "../meter.js";
@@ -14,6 +15,9 @@ export interface RunEvent {
 export interface GroundOptions {
   urls: string[];
   evidencePaths: string[];
+  /** First-party customer text files (csv, json, jsonl): tickets, survey comments, call notes. */
+  customerPaths: string[];
+  customerColumns?: CustomerColumns;
   maxQueries: number;
   maxPages: number;
   country?: string;

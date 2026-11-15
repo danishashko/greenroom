@@ -13,10 +13,16 @@ export function seedBlock(seed: Seed, productContext?: string): string {
     seed.productName ? `Product: ${seed.productName}` : "",
     seed.productUrl ? `Product page: ${seed.productUrl}` : "",
     seed.audience ? `Audience: ${seed.audience}` : "",
-    seed.competitors.length ? `Competitors buyers compare against: ${seed.competitors.join(", ")}` : "",
+    seed.competitors.length
+      ? `Competitors buyers compare against: ${seed.competitors.join(", ")}`
+      : "",
     seed.context ? `Extra context: ${seed.context}` : "",
-    seed.asOf ? `Today is ${seed.asOf}. The change is being announced now. Nothing after this date has happened yet.` : "",
-    productContext ? `Product page text (may be partial):\n${productContext}` : "",
+    seed.asOf
+      ? `Today is ${seed.asOf}. The change is being announced now. Nothing after this date has happened yet.`
+      : "",
+    productContext
+      ? `Product page text (may be partial):\n${productContext}`
+      : "",
   ];
   return lines.filter(Boolean).join("\n");
 }
@@ -27,7 +33,11 @@ export function queriesPrompt(seed: Seed, max: number): string {
 Write up to ${max} web search queries that find real people discussing this product category, its pricing, alternatives and complaints. Favor community and review sources: Reddit, Hacker News, G2, Capterra, Trustpilot, forums. Mix queries about the product itself, its competitors, and the pain the product solves. Each query must work in Google. Do not include the change itself if it is not public yet.${seed.asOf ? " Do not search for reactions to the change or for what happened after it." : ""}`;
 }
 
-export function extractPrompt(seed: Seed, url: string, pageText: string): string {
+export function extractPrompt(
+  seed: Seed,
+  url: string,
+  pageText: string,
+): string {
   return `${seedBlock(seed)}
 
 Source URL: ${url}
@@ -47,15 +57,39 @@ Extract up to 6 quotes from real people (customers, users, commenters, reviewers
 Return an empty list if nothing qualifies.`;
 }
 
-export function personasPrompt(seed: Seed, evidence: Evidence[], n: number, productContext?: string, ungrounded = false): string {
+/** Where a quote came from, as the model sees it. Customer rows carry their segment. */
+export function sourceTag(e: Evidence): string {
+  return e.source === "customer"
+    ? `your customer${e.segment ? `, ${e.segment}` : ""}`
+    : `${e.source}, ${e.domain}`;
+}
+
+export function personasPrompt(
+  seed: Seed,
+  evidence: Evidence[],
+  n: number,
+  productContext?: string,
+  ungrounded = false,
+): string {
   const ev = evidence.length
-    ? evidence.map((e) => `[${e.id}] (${e.source}, ${e.domain}) ${e.quote}`).join("\n")
+    ? evidence.map((e) => `[${e.id}] (${sourceTag(e)}) ${e.quote}`).join("\n")
     : "(no source evidence available)";
+  const own = evidence.some((e) => e.source === "customer");
+  const segs = seed.segments?.length
+    ? `\nThe real customer base, by segment:\n${seed.segments
+        .map(
+          (s) =>
+            `- "${s.name}": ${s.customers} customers${s.mrr !== undefined ? `, ${s.mrr} ${seed.currency} MRR` : ""}${s.mrrAfter !== undefined ? `, ${s.mrrAfter} ${seed.currency} MRR at the new price` : ""}`,
+        )
+        .join(
+          "\n",
+        )}\nGive every persona a customerSegment, using one of these names exactly. Cover every segment with at least one persona; a large or varied segment may get several. Audience share is computed from these customer counts.\n`
+    : "";
   return `${seedBlock(seed, productContext)}
 
-Real quotes collected from the web:
+Real quotes${own ? " (marked 'your customer' when they come from the company's own customers)" : " collected from the web"}:
 ${ev}
-
+${own ? "\nQuotes from your own customers describe the real customer base. Build personas mainly from them and use web quotes to fill gaps, such as prospects and people comparing alternatives.\n" : ""}${segs}
 Build exactly ${n} distinct buyer personas that together cover the audience for this product. ${
     ungrounded
       ? "There is no source evidence, so build them from the description only and leave evidenceIds empty."
@@ -74,7 +108,9 @@ export function reactionPrompt(args: {
   digest?: string;
 }): string {
   const { seed, persona, ownEvidence, round, rounds, digest } = args;
-  const quotes = ownEvidence.length ? ownEvidence.map((e) => `[${e.id}] ${e.quote}`).join("\n") : "(none)";
+  const quotes = ownEvidence.length
+    ? ownEvidence.map((e) => `[${e.id}]${e.source === "customer" ? " (a customer)" : ""} ${e.quote}`).join("\n")
+    : "(none)";
   const roundNote =
     round === 1
       ? "You just saw the announcement. React as you would on first read."
@@ -83,7 +119,7 @@ export function reactionPrompt(args: {
         : "You have now seen how others reacted. You may keep or change your view. Change it only if someone raised a point that matters to you.";
   return `${seedBlock(seed, args.productContext)}
 
-You are ${persona.name}, ${persona.role} (${persona.segment}).
+You are ${persona.name}, ${persona.role} (${persona.segment}${persona.customerSegment ? `, on ${persona.customerSegment}` : ""}).
 ${persona.summary}
 Goals: ${persona.goals.join("; ")}
 Concerns: ${persona.objections.join("; ")}
@@ -103,7 +139,12 @@ Give your reaction. stance runs from -2 (hostile) to 2 (enthusiastic). action is
  * positive voice so every persona meets the strongest case on both sides, then fills the
  * rest in an order rotated per persona, so no single voice reaches everyone first.
  */
-export function digestFrom(reactions: Reaction[], personas: Persona[], rotate = 0, size = 5): string {
+export function digestFrom(
+  reactions: Reaction[],
+  personas: Persona[],
+  rotate = 0,
+  size = 5,
+): string {
   const byId = new Map(personas.map((p) => [p.id, p]));
   const counts = { neg: 0, neu: 0, pos: 0 };
   for (const r of reactions) {
@@ -111,17 +152,22 @@ export function digestFrom(reactions: Reaction[], personas: Persona[], rotate = 
     else if (r.stance > 0) counts.pos++;
     else counts.neu++;
   }
-  const lines = [`${reactions.length} other buyers: ${counts.neg} negative, ${counts.neu} neutral, ${counts.pos} positive.`];
+  const lines = [
+    `${reactions.length} other buyers: ${counts.neg} negative, ${counts.neu} neutral, ${counts.pos} positive.`,
+  ];
   const byStance = [...reactions].sort((a, b) => a.stance - b.stance);
   const picked: Reaction[] = [];
-  const add = (r: Reaction | undefined) => r && !picked.includes(r) && picked.length < size && picked.push(r);
+  const add = (r: Reaction | undefined) =>
+    r && !picked.includes(r) && picked.length < size && picked.push(r);
   add(byStance[0]);
   add(byStance[byStance.length - 1]);
   const n = reactions.length;
   for (let i = 0; i < n; i++) add(reactions[(i + rotate) % n]);
   for (const r of picked) {
     const p = byId.get(r.personaId);
-    lines.push(`- A ${p?.role ?? "buyer"} (${r.action.replace("_", " ")}): ${r.reasoning.slice(0, 220)}`);
+    lines.push(
+      `- A ${p?.role ?? "buyer"} (${r.action.replace("_", " ")}): ${r.reasoning.slice(0, 220)}`,
+    );
   }
   return lines.join("\n");
 }
@@ -146,7 +192,10 @@ export function verdictPrompt(args: {
     const r = lastReactions.find((x) => x.personaId === p.id);
     return `${p.id} ${p.name}, ${p.role}, share ${Math.round(p.weight * 100)}%: stance ${r?.stance ?? "?"}, action ${r?.action ?? "?"}. ${r?.reasoning.slice(0, 200) ?? ""}`;
   });
-  const ev = evidence.slice(0, 40).map((e) => `[${e.id}] ${e.quote.slice(0, 200)}`).join("\n");
+  const ev = evidence
+    .slice(0, 40)
+    .map((e) => `[${e.id}] ${e.quote.slice(0, 200)}`)
+    .join("\n");
   return `${seedBlock(seed)}
 
 Simulation results (weighted by audience share):
@@ -162,7 +211,7 @@ Available evidence:
 ${ev || "(none)"}
 
 Write:
-1. readout: two or three plain sentences saying what happens if this change ships as described, with the main reason. No hedging filler, no mention of simulation or method.
+1. readout: two or three plain sentences saying what happens if this change ships as described, with the main reason. Use only numbers given above and never compute new ones. No hedging filler, no mention of simulation or method.
 2. recommendations: one to four concrete changes to the plan or its wording that would reduce the main objections. Each has change, why, expectedEffect (one sentence), and evidenceIds (only ids listed above, may be empty).
 3. riskiest: the persona id most likely to be lost or most hostile, and why in one sentence.`;
 }

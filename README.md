@@ -6,7 +6,7 @@ Rehearse a launch, pricing change or repositioning against simulated buyers buil
 npx greenroom run "Raise Pro from $49 to $79 per month" --audience "B2B marketing teams"
 ```
 
-You get a report with the share of buyers who react badly, who would leave, the objections behind it with real quotes, and the changes that would soften it. Every persona is built from quotes pulled from Reddit, Hacker News, review sites and forums. Quotes that do not appear verbatim on the source page are thrown away.
+You get a report with the share of buyers who react badly, who would leave, the objections behind it with real quotes, and the changes that would soften it. Every persona is built from quotes pulled from Reddit, Hacker News, review sites and forums, or from your own support tickets and survey comments. Quotes that do not appear verbatim on the source page are thrown away.
 
 ![Rehearsal report for the 2022 Heroku free plan removal, backtested as of the day before the announcement](docs/report.png)
 
@@ -51,6 +51,20 @@ Leave `--llm` out and greenroom picks the first one that works. Run `greenroom d
 
 Bring your own quotes with `--evidence ./quotes.json` (an array of strings or `{quote, url}` objects) or a folder of `.txt` and `.md` files.
 
+## Use your own customers
+
+The web tells you what the market thinks. Your own customers tell you what your base will do.
+
+```bash
+greenroom run "Raise Pro from $49 to $79 per month"   --customers ./tickets.csv ./nps.jsonl   --segments "Free=12000,Pro=3400:166600:268600,Team=600:119400"
+```
+
+- `--customers` takes support tickets, survey or NPS comments, sales call notes or churn reasons as `.csv`, `.tsv`, `.json` or `.jsonl`. Rows are used as written, with emails and phone numbers stripped, and they come before web quotes when personas are built. Columns are detected from common names (`body`, `comment`, `plan`, `created_at`); override with `--columns text=body,segment=plan,date=created_at`. Up to 60 rows are used, spread across segments.
+- `--segments` gives your real base: `name=customers`, `name=customers:monthly revenue`, or `name=customers:monthly revenue:monthly revenue at the new price`. Every persona is assigned to a segment, audience shares come from your counts instead of quote volume, and the report adds a per-segment table with customers and revenue at risk, as a median and range across samples.
+- With the third number, the report also gives net monthly revenue after the change (customers who stay pay the new price, those who leave pay nothing) and the leave share at which each repriced segment breaks even. In the example, Pro goes from $49 to $79 for 3,400 customers, so it breaks even if fewer than 38% leave.
+- Without segments, shares follow quote counts. Support data over-represents unhappy customers, and the report says so.
+- `--as-of` also drops customer rows dated after the cut-off, so you can backtest a past change against your own history.
+
 ## How it works
 
 1. **Ground.** Search for real discussions, read the pages, extract verbatim quotes, drop anything reworded, strip emails and phone numbers.
@@ -84,6 +98,7 @@ On a subscription there is no per-call charge. On an API key, `greenroom estimat
 
 ```bash
 greenroom run "<change>" [--kind pricing] [--product Acme] [--audience "..."] [--competitor A B]
+                  [--customers tickets.csv] [--segments "Free=12000,Pro=3400:166600"]
 greenroom estimate "<change>"      # calls, tokens, time. Spends nothing.
 greenroom doctor [--deep]          # which backends work here
 greenroom runs                     # saved runs
@@ -126,7 +141,8 @@ console.log(report.headline);
 ## Limits
 
 - Output is a simulation. It shows which objections and segments are likely to matter, not a measured conversion change.
-- Confidence is `low` below 12 quotes or 3 domains, and for any run without evidence. Read the Basis section of the report.
+- Confidence is `low` below 12 quotes or 3 domains (12 customer quotes count as enough variety for medium, 45 for high), and for any run without evidence. It drops a level when segments holding over 10% of customers get no persona. Read the Basis section of the report.
+- Customers, revenue at risk and net revenue count only churn and switching, not downgrades.
 - Personas share the biases of the model that plays them.
 - Run it on a change that already happened and compare before you trust it on one that has not.
 

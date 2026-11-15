@@ -1,6 +1,7 @@
-export { DEFAULTS, parseSeed, planRun, runRehearsal } from "./engine.js";
+export { DEFAULTS, parseSeed, parseSegments, planRun, runRehearsal } from "./engine.js";
 export type { RunOptions, RunResult } from "./engine.js";
 export { estimateRun } from "./pipeline/estimate.js";
+export { loadCustomerData, parseCsv } from "./ground/customers.js";
 export { GreenroomError, EXIT_CODES } from "./errors.js";
 export { PROVIDERS, createProvider, resolveProvider } from "./llm/index.js";
 export type { LlmProvider } from "./llm/types.js";

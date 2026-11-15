@@ -1,10 +1,22 @@
 import { z } from "zod";
 
 /** Bump when report.json changes shape. Agents can branch on it. */
-export const REPORT_SCHEMA_VERSION = 2;
+export const REPORT_SCHEMA_VERSION = 3;
 
 export const ChangeKind = z.enum(["pricing", "launch", "positioning", "rebrand", "feature", "other"]);
 export type ChangeKind = z.infer<typeof ChangeKind>;
+
+export const SegmentSchema = z.object({
+  name: z.string().min(1).describe("Segment name as you use it, for example a plan: Free, Pro, Team."),
+  customers: z.number().int().positive().describe("Customers in this segment today."),
+  mrr: z.number().nonnegative().optional().describe("Monthly recurring revenue of the whole segment today."),
+  mrrAfter: z
+    .number()
+    .nonnegative()
+    .optional()
+    .describe("Monthly revenue of the whole segment at the new price if every customer stayed. Leave out when this segment's price does not change."),
+}).refine((s) => s.mrrAfter === undefined || s.mrr !== undefined, { message: "mrrAfter needs mrr for the same segment", path: ["mrrAfter"] });
+export type Segment = z.infer<typeof SegmentSchema>;
 
 export const SeedSchema = z.object({
   change: z.string().min(8).describe("The change being rehearsed, in plain words. Example: raise Pro from $49 to $79 per month."),
@@ -19,10 +31,16 @@ export const SeedSchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/, "use YYYY-MM-DD")
     .optional()
     .describe("Cut-off date for a fair backtest of a past change. Search only finds pages published by then, dated quotes after it are dropped, and personas are told it is that day."),
+  segments: z
+    .array(SegmentSchema)
+    .max(8)
+    .optional()
+    .describe("Your real customer base by segment. Audience shares are anchored to these counts, and leave rates become customers and revenue at risk."),
+  currency: z.string().regex(/^[A-Z]{3}$/, "use an ISO code like USD").default("USD").describe("Currency of segment mrr."),
 });
 export type Seed = z.infer<typeof SeedSchema>;
 
-export const SourceKind = z.enum(["reddit", "hackernews", "x", "review", "forum", "news", "linkedin", "web", "user"]);
+export const SourceKind = z.enum(["reddit", "hackernews", "x", "review", "forum", "news", "linkedin", "web", "user", "customer"]);
 export type SourceKind = z.infer<typeof SourceKind>;
 
 export const EvidenceSchema = z.object({
@@ -33,6 +51,7 @@ export const EvidenceSchema = z.object({
   quote: z.string(),
   context: z.string().optional(),
   date: z.string().optional().describe("YYYY-MM-DD when the source shows when it was written."),
+  segment: z.string().optional().describe("Customer segment from the customer data row, when given."),
   via: z.string().describe("Which grounding provider fetched it."),
 });
 export type Evidence = z.infer<typeof EvidenceSchema>;
@@ -50,6 +69,7 @@ export const PersonaSchema = z.object({
   priceSensitivity: PriceSensitivity,
   currentSolution: z.string(),
   evidenceIds: z.array(z.string()),
+  customerSegment: z.string().optional().describe("The seed segment this persona belongs to, when segments were given."),
   weight: z.number().describe("Share of the audience, 0 to 1. Sums to 1 across personas."),
 });
 export type Persona = z.infer<typeof PersonaSchema>;
@@ -89,11 +109,39 @@ export type Confidence = z.infer<typeof Confidence>;
 
 const Range = z.object({ median: z.number(), min: z.number(), max: z.number() });
 
+export const SegmentResultSchema = z.object({
+  name: z.string(),
+  customers: z.number(),
+  mrr: z.number().nullable(),
+  share: z.number().describe("Share of the customer base, 0 to 1."),
+  personaIds: z.array(z.string()),
+  negativeShare: z.number().nullable().describe("Within the segment. Null when no persona covers it."),
+  leaveShare: z.number().nullable(),
+  customersAtRisk: z.number().nullable(),
+  mrrAtRisk: z.number().nullable(),
+  mrrAfter: z.number().nullable().describe("Segment revenue at the new price if nobody left. Null when no segment has mrrAfter."),
+  netMrrChange: z.number().nullable().describe("Revenue after the change from those who stay, minus revenue today. Null without mrrAfter or without a persona."),
+  breakEvenLeaveShare: z.number().nullable().describe("Leave share at which revenue stays flat: 1 - mrr / mrrAfter. Null unless the price rises."),
+});
+
+export const AtRiskSchema = z.object({
+  customers: z.number().describe("Customers in covered segments whose persona would churn or switch."),
+  customerShare: z.number().describe("customers divided by the whole customer base."),
+  mrr: z.number().nullable(),
+  mrrShare: z.number().nullable().describe("mrr at risk divided by total mrr."),
+  uncoveredCustomers: z.number().describe("Customers in segments no persona covered. Not counted above."),
+  netMrrChange: z.number().nullable().describe("Sum of segment netMrrChange over covered segments. Downgrades are not counted."),
+  currency: z.string(),
+});
+
 export const SampleStatsSchema = z.object({
   negativeShare: z.number(),
   positiveShare: z.number(),
   leaveShare: z.number(),
   meanStance: z.number(),
+  customersAtRisk: z.number().nullable(),
+  mrrAtRisk: z.number().nullable(),
+  netMrrChange: z.number().nullable(),
 });
 
 export const EnsembleSchema = z.object({
@@ -103,6 +151,9 @@ export const EnsembleSchema = z.object({
   positiveShare: Range,
   leaveShare: Range,
   meanStance: Range,
+  customersAtRisk: Range.nullable().describe("Null when no segments were given."),
+  mrrAtRisk: Range.nullable().describe("Null when segments carry no mrr."),
+  netMrrChange: Range.nullable().describe("Net monthly revenue change. Null when no segment has mrrAfter."),
   perSample: z.array(SampleStatsSchema),
 });
 export type Ensemble = z.infer<typeof EnsembleSchema>;
@@ -124,6 +175,8 @@ export const ReportSchema = z.object({
     leaveShare: z.number().describe("Weighted share choosing churn or switch_competitor."),
     actions: z.record(z.string(), z.number()),
     movedMindShare: z.number().describe("Weighted share whose stance changed between round 1 and the last round."),
+    segments: z.array(SegmentResultSchema).describe("Per seed segment. Empty when no segments were given."),
+    atRisk: AtRiskSchema.nullable().describe("Customers and revenue at risk. Null when no segments were given."),
   }),
   ensemble: EnsembleSchema,
   themes: z.array(ThemeSchema),
@@ -136,6 +189,8 @@ export const ReportSchema = z.object({
     grounded: z.boolean(),
     evidenceCount: z.number(),
     domainCount: z.number(),
+    customerQuotes: z.number().describe("Quotes from the user's own customer data."),
+    weighting: z.enum(["evidence", "segments"]).describe("evidence: audience share from how many quotes back each persona. segments: anchored to the seed's customer counts."),
     confidence: Confidence,
     confidenceReason: z.string(),
     groundingProvider: z.string(),

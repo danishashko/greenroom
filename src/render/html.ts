@@ -1,3 +1,4 @@
+import { money, signedMoney } from "../pipeline/report.js";
 import type { Report } from "../schema.js";
 import { pct } from "../util.js";
 
@@ -66,6 +67,7 @@ blockquote cite{display:block;margin-top:4px;color:var(--gray-400);font-style:no
 table{width:100%;border-collapse:collapse;font-size:16px}
 th,td{text-align:left;padding:12px 16px 12px 0;border-bottom:1px solid var(--w20);vertical-align:top}
 th{font-weight:500;color:var(--w80);width:34%}
+.seg th{width:auto}
 details{border:1px solid var(--w20);border-radius:var(--r-md);padding:16px 24px;background:var(--w06)}
 summary{cursor:pointer;font-weight:500;list-style:none;display:flex;justify-content:space-between;transition:color var(--t-fast) ease-out}
 summary:hover{color:var(--blue-300)}
@@ -124,13 +126,38 @@ export function renderHtml(r: Report): string {
   const s = r.stats;
   const e = r.ensemble;
   const multi = e.samples > 1;
-  const sub = (x: { min: number; max: number }) => (multi ? `, range ${Math.round(x.min * 100)} to ${pct(x.max)}` : "");
+  const risk = s.atRisk;
+  const priced = s.segments.some((x) => x.mrrAfter !== null);
+  const segRows = s.segments
+    .map(
+      (x) =>
+        `<tr><th>${esc(x.name)}</th><td>${x.customers.toLocaleString("en-US")} (${pct(x.share)})</td><td>${x.negativeShare === null ? "no persona" : pct(x.negativeShare)}</td><td>${x.leaveShare === null ? "" : pct(x.leaveShare)}</td><td>${x.customersAtRisk === null ? "" : x.customersAtRisk.toLocaleString("en-US")}</td>${risk?.mrr !== null && risk ? `<td>${x.mrrAtRisk === null ? "" : esc(money(x.mrrAtRisk, risk.currency))}</td>` : ""}${priced ? `<td>${x.netMrrChange === null ? "" : esc(signedMoney(x.netMrrChange, risk?.currency ?? "USD"))}</td><td>${x.breakEvenLeaveShare === null ? "" : pct(x.breakEvenLeaveShare)}</td>` : ""}</tr>`,
+    )
+    .join("");
+  const segTable = s.segments.length
+    ? `<h2>By customer segment</h2><div class="card"><table class="seg"><tr><th>Segment</th><th>Customers</th><th>Negative</th><th>Would leave</th><th>Customers at risk</th>${risk?.mrr !== null ? "<th>Revenue at risk</th>" : ""}${priced ? "<th>Net revenue</th><th>Breaks even if leave under</th>" : ""}</tr>${segRows}</table>${
+        risk
+          ? `<p class="legend" style="margin-top:16px">${risk.customers.toLocaleString("en-US")} customers (${pct(risk.customerShare)})${risk.mrr !== null ? ` and ${esc(money(risk.mrr, risk.currency))} of monthly revenue (${pct(risk.mrrShare ?? 0)})` : ""} at risk.${risk.netMrrChange !== null ? ` Net monthly revenue after the change: ${esc(signedMoney(risk.netMrrChange, risk.currency))}. Downgrades are not counted.` : ""}${risk.uncoveredCustomers ? ` ${risk.uncoveredCustomers.toLocaleString("en-US")} customers sit in segments without a persona and are not counted.` : ""}</p>`
+          : ""
+      }</div>`
+    : "";
+  const sub = (x: { min: number; max: number }) => (multi && Math.round(x.min * 100) !== Math.round(x.max * 100) ? `, range ${Math.round(x.min * 100)} to ${pct(x.max)}` : "");
 
   const stats = `
   <div class="stats">
     <div class="stat${e.negativeShare.median >= 0.5 ? " warn" : ""}"><div class="n">${pct(e.negativeShare.median)}</div><div class="l">react negatively${sub(e.negativeShare)}</div></div>
-    <div class="stat${e.leaveShare.median >= 0.25 ? " warn" : ""}"><div class="n">${pct(e.leaveShare.median)}</div><div class="l">would leave or switch${sub(e.leaveShare)}</div></div>
-    <div class="stat"><div class="n">${pct(e.positiveShare.median)}</div><div class="l">react positively${sub(e.positiveShare)}</div></div>
+    ${
+      risk && e.netMrrChange
+        ? `<div class="stat${e.netMrrChange.median < 0 ? " warn" : ""}"><div class="n">${esc(signedMoney(e.netMrrChange.median, risk.currency))}</div><div class="l">net monthly revenue after the change${multi && e.netMrrChange.min !== e.netMrrChange.max ? `, range ${esc(signedMoney(e.netMrrChange.min, risk.currency))} to ${esc(signedMoney(e.netMrrChange.max, risk.currency))}` : ""}</div></div>`
+        : `<div class="stat${e.leaveShare.median >= 0.25 ? " warn" : ""}"><div class="n">${pct(e.leaveShare.median)}</div><div class="l">would leave or switch${sub(e.leaveShare)}</div></div>`
+    }
+    ${
+      risk && e.customersAtRisk
+        ? e.mrrAtRisk
+          ? `<div class="stat warn"><div class="n">${esc(money(e.mrrAtRisk.median, risk.currency))}</div><div class="l">monthly revenue at risk${multi && e.mrrAtRisk.min !== e.mrrAtRisk.max ? `, range ${esc(money(e.mrrAtRisk.min, risk.currency))} to ${esc(money(e.mrrAtRisk.max, risk.currency))}` : ""}</div></div>`
+          : `<div class="stat warn"><div class="n">${e.customersAtRisk.median.toLocaleString("en-US")}</div><div class="l">customers at risk${multi && e.customersAtRisk.min !== e.customersAtRisk.max ? `, range ${e.customersAtRisk.min.toLocaleString("en-US")} to ${e.customersAtRisk.max.toLocaleString("en-US")}` : ""}</div></div>`
+        : `<div class="stat"><div class="n">${pct(e.positiveShare.median)}</div><div class="l">react positively${sub(e.positiveShare)}</div></div>`
+    }
     <div class="stat"><div class="n">${esc(r.basis.confidence)}</div><div class="l">confidence, ${r.basis.evidenceCount} quotes</div></div>
   </div>`;
 
@@ -165,7 +192,7 @@ export function renderHtml(r: Report): string {
     .map((p) => {
       const l = last(p.id);
       const k = stanceKey(l?.stance ?? 0);
-      return `<div class="card persona"><h3>${esc(p.name)}</h3><p class="role">${esc(p.role)}, ${esc(p.segment)}</p>
+      return `<div class="card persona"><h3>${esc(p.name)}</h3><p class="role">${esc(p.role)}, ${esc(p.segment)}${p.customerSegment ? ` (${esc(p.customerSegment)})` : ""}</p>
       <span class="pill ${k}">${l ? esc(l.action.replace("_", " ")) : "n/a"}</span><span class="pill">${pct(p.weight)} of audience</span><span class="pill">${esc(p.priceSensitivity)} price sensitivity</span>
       <p class="why">${esc(l?.reasoning ?? p.summary)}</p></div>`;
     })
@@ -173,7 +200,8 @@ export function renderHtml(r: Report): string {
 
   const basisRows: [string, string][] = [
     ["Type", "Simulated reactions"],
-    ["Quotes", `${r.basis.evidenceCount} from ${r.basis.domainCount} domains via ${r.basis.groundingProvider}`],
+    ["Quotes", `${r.basis.evidenceCount} from ${r.basis.domainCount} sources via ${r.basis.groundingProvider}${r.basis.customerQuotes ? `, ${r.basis.customerQuotes} from your customer data` : ""}`],
+    ["Audience shares", r.basis.weighting === "segments" ? "Anchored to your customer counts per segment" : "From how many quotes back each persona"],
     ["Personas and rounds", `${s.personas} personas, ${s.rounds} rounds`],
     ["Samples", multi ? `${e.samples} independent persona sets. Charts and personas below are from the median sample. Would leave per sample: ${e.perSample.map((x) => pct(x.leaveShare)).join(", ")}` : "1"],
     ["Stance changed after seeing others", pct(s.movedMindShare)],
@@ -206,6 +234,8 @@ export function renderHtml(r: Report): string {
 </div><div>${swarmSvg(r)}</div></div>
 ${stats}
 <div class="actions"><button class="btn primary" id="copy-json" type="button">Copy JSON</button><button class="btn" id="print" type="button">Print</button></div>
+
+${segTable}
 
 <h2>Reaction split</h2>
 <div class="card">${stack}</div>

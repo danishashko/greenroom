@@ -27,6 +27,8 @@ export class MockProvider extends BaseProvider {
   failOnRound = 0;
   /** Throw this many transient errors before answering anything. */
   transientFailures = 0;
+  /** Segment names no persona will cover, to test uncovered segments. */
+  skipSegments: string[] = [];
   protected override retryDelays = [0, 0];
   private failed = false;
 
@@ -67,6 +69,8 @@ export class MockProvider extends BaseProvider {
       }
       const ids = [...req.prompt.matchAll(/\[(e\d+)\]/g)].map((m) => m[1] as string);
       const n = Number(/exactly (\d+) distinct/.exec(req.prompt)?.[1] ?? 4);
+      // With seed segments, the prompt lists them; assign personas round robin, skipping any in skipSegments.
+      const segs = [...req.prompt.matchAll(/^- "([^"]+)": \d+ customers/gm)].map((m) => m[1] as string).filter((s) => !this.skipSegments.includes(s));
       const personas = Array.from({ length: n }, (_, i) => ({
         name: `Pat ${i + 1}`,
         role: ["Head of Marketing", "Founder", "Ops lead", "Agency owner"][i % 4],
@@ -77,6 +81,7 @@ export class MockProvider extends BaseProvider {
         priceSensitivity: i % 2 ? "high" : "medium",
         currentSolution: "spreadsheets",
         evidenceIds: ids.length ? [ids[i % ids.length], "e999"] : [],
+        ...(segs.length ? { customerSegment: segs[i % segs.length] } : {}),
       }));
       return { json: { personas }, usage };
     }

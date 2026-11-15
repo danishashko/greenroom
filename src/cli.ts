@@ -2,7 +2,7 @@
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { Command } from "commander";
-import { DEFAULTS, parseSeed, planRun, runRehearsal, type RunOptions } from "./engine.js";
+import { DEFAULTS, parseSeed, parseSegments, planRun, runRehearsal, type RunOptions } from "./engine.js";
 import { EXIT_CODES, GreenroomError, toGreenroomError } from "./errors.js";
 import { resolveGround } from "./ground/index.js";
 import { PROVIDERS, createProvider } from "./llm/index.js";
@@ -28,6 +28,10 @@ interface Opts {
   ground?: "auto" | "brightdata" | "local" | "none";
   urls?: string[];
   evidence?: string[];
+  customers?: string[];
+  columns?: string;
+  segments?: string;
+  currency?: string;
   queries?: string;
   pages?: string;
   country?: string;
@@ -61,6 +65,10 @@ function addRunOptions(cmd: Command): Command {
     .option("--ground <mode>", "auto | brightdata | local | none (default auto)")
     .option("--urls <url...>", "pages to read as evidence")
     .option("--evidence <path...>", "files or folders of quotes (txt, md, json, csv)")
+    .option("--customers <path...>", "your own customer text: tickets, survey comments, call notes (csv, tsv, json, jsonl)")
+    .option("--columns <map>", "customer data columns, e.g. text=body,segment=plan,date=created_at (detected when left out)")
+    .option("--segments <spec>", 'your customer base, e.g. "Free=12000,Pro=3400:98000:132000" (name=customers[:monthly revenue now[:at the new price]])')
+    .option("--currency <code>", "currency of segment revenue (default USD)")
     .option("--queries <n>", `max search queries (default ${DEFAULTS.maxQueries})`)
     .option("--pages <n>", `max pages to read from search (default ${DEFAULTS.maxPages})`)
     .option("--country <cc>", "search country, 2 letters")
@@ -72,6 +80,17 @@ function addRunOptions(cmd: Command): Command {
     .option("--out <dir>", "run folder", process.env["GREENROOM_OUT"] ?? DEFAULTS.outDir)
     .option("--json", "machine-readable output on stdout")
     .option("--quiet", "no progress on stderr");
+}
+
+function parseColumns(spec: string | undefined): RunOptions["customerColumns"] {
+  if (!spec) return undefined;
+  const out: Record<string, string> = {};
+  for (const part of spec.split(",")) {
+    const [k, v] = part.split("=").map((x) => x.trim());
+    if (!k || !v || !["text", "segment", "date"].includes(k)) throw new GreenroomError("USAGE", `Cannot read column mapping "${part}".`, "Use text=<col>, segment=<col>, date=<col>.");
+    out[k] = v;
+  }
+  return out;
 }
 
 function toRunOptions(change: string | undefined, o: Opts): RunOptions {
@@ -91,6 +110,8 @@ function toRunOptions(change: string | undefined, o: Opts): RunOptions {
     ...(o.competitor ? { competitors: o.competitor } : {}),
     ...(o.context ? { context: o.context } : {}),
     ...(o.asOf ? { asOf: o.asOf } : {}),
+    ...(o.segments ? { segments: parseSegments(o.segments) } : {}),
+    ...(o.currency ? { currency: o.currency.toUpperCase() } : {}),
   });
   const num = (v: string | undefined, name: string): number | undefined => {
     if (v === undefined) return undefined;
@@ -105,6 +126,8 @@ function toRunOptions(change: string | undefined, o: Opts): RunOptions {
     ground: o.ground,
     urls: o.urls,
     evidencePaths: o.evidence,
+    customerPaths: o.customers,
+    customerColumns: parseColumns(o.columns),
     maxQueries: num(o.queries, "--queries"),
     maxPages: num(o.pages, "--pages"),
     country: o.country,

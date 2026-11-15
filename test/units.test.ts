@@ -356,3 +356,17 @@ describe("agent guide", () => {
     expect(mcp).toContain("instructions: AGENT_GUIDE");
   });
 });
+
+describe("anthropic structured outputs schema", () => {
+  it("drops unsupported limits and closes every object", async () => {
+    const { toStructuredSchema } = await import("../src/llm/anthropic.js");
+    const { z } = await import("zod");
+    const s = toStructuredSchema(jsonSchemaOf(z.object({ a: z.string().min(3).max(9), b: z.array(z.object({ n: z.number().int().min(-2).max(2) })).max(8), c: z.enum(["x", "y"]) }))) as Record<string, any>;
+    const text = JSON.stringify(s);
+    for (const k of ["minLength", "maxLength", "minimum", "maximum", "maxItems"]) expect(text).not.toContain(`"${k}"`);
+    expect(s.additionalProperties).toBe(false);
+    expect(s.properties.b.items.additionalProperties).toBe(false);
+    expect(s.properties.c.enum).toEqual(["x", "y"]);
+    expect(s.required).toEqual(["a", "b", "c"]);
+  });
+});
