@@ -26,6 +26,8 @@ export interface GroundResult {
   evidence: Evidence[];
   productContext?: string;
   warnings: string[];
+  /** Pages that could not be read. Expected: more pages are requested than kept. */
+  skipped?: string[];
   /** Search results and quotes left out because they are dated after the cut-off. */
   droppedAfterCutoff?: number;
 }
@@ -82,6 +84,7 @@ function readUserEvidence(paths: string[]): { file: string; text: string }[] {
 export async function groundStage(ctx: Ctx): Promise<GroundResult> {
   const { seed, llm, ground, groundOptions: g } = ctx;
   const warnings: string[] = [];
+  const skipped: string[] = [];
   let dropped = 0;
   const pages: { url: string; text: string; via: string }[] = [];
   const direct: Evidence[] = [];
@@ -174,10 +177,11 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
         const p = await ground.fetchPage(url);
         return { url, text: p.markdown.slice(0, RAW_CHAR_CAP), via: ground.id };
       } catch (e) {
-        warnings.push(`Could not read ${url}: ${e instanceof Error ? e.message : String(e)}`);
+        skipped.push(`Could not read ${url}: ${e instanceof Error ? e.message : String(e)}`);
         return null;
       }
     });
+    if (skipped.length) ctx.emit({ stage: "ground", level: "info", message: `Read ${fetchUrls.size - skipped.length} of ${fetchUrls.size} pages (${skipped.length} could not be read)`, data: { skipped } });
     const ok = fetched.filter((f): f is NonNullable<typeof f> => !!f && f.text.trim().length > 200);
     // User URLs always count; search results fill the remaining slots.
     const userUrls = new Set(g.urls);
@@ -242,6 +246,6 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
     seenQuote.add(key);
     evidence.push({ ...e, id: `e${evidence.length + 1}` });
   }
-  if (dropped) warnings.push(`Left out ${dropped} results or quotes dated after ${seed.asOf}.`);
-  return { evidence, productContext, warnings, droppedAfterCutoff: dropped };
+  if (dropped) ctx.emit({ stage: "ground", level: "info", message: `Left out ${dropped} ${dropped === 1 ? "result or quote" : "results or quotes"} dated after ${seed.asOf}` });
+  return { evidence, productContext, warnings, skipped, droppedAfterCutoff: dropped };
 }

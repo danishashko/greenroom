@@ -267,6 +267,30 @@ describe("search result filtering", () => {
     expect(fetched.some((u) => /google|youtube/.test(u))).toBe(false);
     expect(new Set(res.report.evidence.map((e) => e.domain)).size).toBe(2);
   });
+
+  it("reports unreadable pages as one summary line, with the URLs in data and warnings", async () => {
+    const { runRehearsal } = await import("../src/engine.js");
+    const { MockProvider, MockGround } = await import("./helpers.js");
+    const { mkdtempSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const path = await import("node:path");
+    const ground = new MockGround();
+    ground.search = async () => ["https://reddit.com/r/a/1", "https://news.ycombinator.com/item?id=2", "https://bad.example.com/a", "https://bad.example.com/b"].map((url) => ({ url, title: "", snippet: "" }));
+    const orig = ground.fetchPage.bind(ground);
+    ground.fetchPage = async (url: string) => {
+      if (url.includes("bad.example")) throw new Error("The operation was aborted due to timeout");
+      return orig(url);
+    };
+    const events: { level: string; message: string; data?: Record<string, unknown> }[] = [];
+    const res = await runRehearsal({ seed: { change: "Raise Pro from $49 to $79 per month" }, llmProvider: new MockProvider(), groundProvider: ground, outDir: mkdtempSync(path.join(tmpdir(), "gr-s-")), personas: 3, rounds: 1, maxPages: 2, onEvent: (e) => events.push(e) });
+    expect(events.filter((e) => e.level === "warn" && e.message.includes("Could not read"))).toHaveLength(0);
+    const summary = events.find((e) => /^Read \d+ of \d+ pages \(\d+ could not be read\)$/.test(e.message));
+    expect(summary?.level).toBe("info");
+    const skipped = summary?.data?.["skipped"] as string[];
+    expect(skipped.length).toBeGreaterThan(0);
+    expect(summary?.message).toContain(`(${skipped.length} could not be read)`);
+    expect(res.warnings.filter((w) => w.startsWith("Could not read"))).toEqual(skipped);
+  });
 });
 
 describe("ensemble", () => {

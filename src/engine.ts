@@ -293,6 +293,6 @@ export async function runRehearsal(opts: RunOptions): Promise<RunResult> {
     dir: store.dir,
     files: { report: store.file("report.json"), markdown: store.file("report.md"), html: store.file("report.html") },
     report,
-    warnings: grounded.warnings,
+    warnings: [...grounded.warnings, ...(grounded.skipped ?? [])],
   };
 }
