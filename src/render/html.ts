@@ -1,3 +1,4 @@
+import { ROOM_CSS, ROOM_JS, roomSection } from "./room.js";
 import { money, signedMoney } from "../pipeline/report.js";
 import type { Report } from "../schema.js";
 import { pct } from "../util.js";
@@ -64,6 +65,11 @@ blockquote cite{display:block;margin-top:4px;color:var(--gray-400);font-style:no
 .pill.pos{border-color:var(--blue-600);color:var(--blue-400)}
 .persona .role{color:var(--w80);font-size:16px;margin:0 0 12px}
 .persona .why{font-size:16px;color:var(--gray-200);margin:12px 0 0}
+.persona{align-self:start}
+.persona details{border:0;padding:0;background:none;margin-top:4px}
+.persona summary{font-size:14px;color:var(--blue-400);justify-content:flex-start;gap:8px}
+.persona summary::before{content:'+';width:14px}
+.persona details[open] summary::before{content:'\\2212'}
 table{width:100%;border-collapse:collapse;font-size:16px}
 th,td{text-align:left;padding:12px 16px 12px 0;border-bottom:1px solid var(--w20);vertical-align:top}
 th{font-weight:500;color:var(--w80);width:34%}
@@ -194,7 +200,7 @@ export function renderHtml(r: Report): string {
       const k = stanceKey(l?.stance ?? 0);
       return `<div class="card persona"><h3>${esc(p.name)}</h3><p class="role">${esc(p.role)}, ${esc(p.segment)}${p.customerSegment ? ` (${esc(p.customerSegment)})` : ""}</p>
       <span class="pill ${k}">${l ? esc(l.action.replace("_", " ")) : "n/a"}</span><span class="pill">${pct(p.weight)} of audience</span><span class="pill">${esc(p.priceSensitivity)} price sensitivity</span>
-      <p class="why">${esc(l?.reasoning ?? p.summary)}</p></div>`;
+      <details><summary>What they would do</summary><p class="why">${esc(l?.reasoning ?? p.summary)}</p></details></div>`;
     })
     .join("");
 
@@ -224,7 +230,7 @@ export function renderHtml(r: Report): string {
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex"><meta name="color-scheme" content="dark">
 <title>${esc(r.headline)}</title>
-<style>${CSS}</style></head>
+<style>${CSS}${ROOM_CSS}</style></head>
 <body><div class="wrap">
 <div class="hero"><div>
 <p class="kicker">Rehearsal report</p>
@@ -236,6 +242,8 @@ ${stats}
 <div class="actions"><button class="btn primary" id="copy-json" type="button">Copy JSON</button><button class="btn" id="print" type="button">Print</button></div>
 
 ${segTable}
+
+${roomSection(r)}
 
 <h2>Reaction split</h2>
 <div class="card">${stack}</div>
@@ -263,6 +271,8 @@ ${r.evidence.length ? `<h2>Evidence</h2><details><summary><span>${r.evidence.len
 <script>
 document.getElementById('copy-json').addEventListener('click',function(){var b=this;navigator.clipboard.writeText(document.getElementById('report-data').textContent).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy JSON'},1500)})});
 document.getElementById('print').addEventListener('click',function(){window.print()});
+window.addEventListener('beforeprint',function(){document.querySelectorAll('details').forEach(function(d){d.open=true})});
 </script>
+<script>${ROOM_JS}</script>
 </body></html>`;
 }

@@ -229,6 +229,21 @@ describe("html report links", () => {
     const html = renderHtml(r);
     expect(html).not.toMatch(/href="javascript:/i);
   });
+
+  it("includes the 3D room with parseable script", async () => {
+    const { renderHtml } = await import("../src/render/html.js");
+    const { ROOM_JS } = await import("../src/render/room.js");
+    const { MockProvider, MockGround } = await import("./helpers.js");
+    const { runRehearsal } = await import("../src/engine.js");
+    const { mkdtempSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const path = await import("node:path");
+    const res = await runRehearsal({ seed: { change: "Raise Pro from $49 to $79 per month" }, llmProvider: new MockProvider(), groundProvider: new MockGround(), outDir: mkdtempSync(path.join(tmpdir(), "gr-room-")), personas: 3, rounds: 2, maxPages: 3 });
+    const html = renderHtml(res.report);
+    expect(html).toContain('<canvas id="room"');
+    expect(html).toContain('data-round="2"');
+    expect(() => new Function(ROOM_JS)).not.toThrow();
+  });
 });
 
 describe("search result filtering", () => {
