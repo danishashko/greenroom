@@ -38,6 +38,14 @@ export function isAfterCutoff(date: string | undefined, asOf: string | undefined
   return date > asOf;
 }
 
+/**
+ * In a backtest, an undated quote from a review site is left out: review pages keep adding
+ * reviews after the cut-off, so a search result dated before it can still show later text.
+ */
+export function undatedReviewInBacktest(source: string, date: string | undefined, asOf: string | undefined): boolean {
+  return Boolean(asOf) && source === "review" && !(date && /^\d{4}-\d{2}-\d{2}$/.test(date));
+}
+
 /** Returns a checker bound to one page, so the page is normalized once, not once per quote. */
 export function verbatimChecker(pageText: string): (quote: string) => boolean {
   const page = normalizeText(pageText);
@@ -86,6 +94,7 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
   const warnings: string[] = [];
   const skipped: string[] = [];
   let dropped = 0;
+  let undatedReviews = 0;
   const pages: { url: string; text: string; via: string }[] = [];
   const direct: Evidence[] = [];
   let productContext: string | undefined;
@@ -217,9 +226,14 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
             continue;
           }
           if (!isVerbatim(v.quote)) continue; // drop anything the model reworded
+          const source = pg.via === "user" ? "user" : classifySource(domain);
+          if (undatedReviewInBacktest(source, v.date, seed.asOf)) {
+            undatedReviews++;
+            continue;
+          }
           out.push({
             id: "",
-            source: pg.via === "user" ? "user" : classifySource(domain),
+            source,
             url: pg.url,
             domain,
             quote: redactPersonalData(v.quote.trim().slice(0, 400)),
@@ -247,5 +261,6 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
     evidence.push({ ...e, id: `e${evidence.length + 1}` });
   }
   if (dropped) ctx.emit({ stage: "ground", level: "info", message: `Left out ${dropped} ${dropped === 1 ? "result or quote" : "results or quotes"} dated after ${seed.asOf}` });
-  return { evidence, productContext, warnings, skipped, droppedAfterCutoff: dropped };
+  if (undatedReviews) ctx.emit({ stage: "ground", level: "info", message: `Left out ${undatedReviews} undated review-site ${undatedReviews === 1 ? "quote" : "quotes"}, since review pages keep growing after ${seed.asOf}` });
+  return { evidence, productContext, warnings, skipped, droppedAfterCutoff: dropped + undatedReviews };
 }

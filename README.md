@@ -10,9 +10,9 @@ Needs Node.js 22.12 or newer.
 
 You get a report with the share of buyers who react badly, who would leave, the objections behind it with real quotes, and the changes that would soften it. Every persona is built from quotes pulled from Reddit, Hacker News, review sites and forums, or from your own support tickets and survey comments. Quotes that do not appear verbatim on the source page are thrown away.
 
-![Rehearsal report for the 2022 Heroku free plan removal, backtested as of the day before the announcement](https://raw.githubusercontent.com/danishashko/greenroom/main/docs/report.png)
+![Rehearsal report for the 2023 Unity Runtime Fee, backtested as of the day before the announcement](https://raw.githubusercontent.com/danishashko/greenroom/main/docs/report.png)
 
-The report above is a backtest: Heroku's 2022 removal of free plans, rehearsed with only what was published before the announcement. Full output in [examples/heroku-2022](https://github.com/danishashko/greenroom/blob/main/examples/heroku-2022/report.md).
+The report above is a backtest: Unity's 2023 per-install Runtime Fee, rehearsed with only what was published before the announcement. Its top three fixes (exempt games already released, keep each project on the terms of the Unity version it ships with, charge the lower of the per-install fee or a revenue share) match what Unity announced ten days later. Full output in [examples/unity-2023](https://github.com/danishashko/greenroom/blob/main/examples/unity-2023/report.md).
 
 ## For AI agents
 
@@ -82,10 +82,10 @@ Outputs per run in `.greenroom/runs/<id>/`: `report.html`, `report.md`, `report.
 ## Backtest a change that already happened
 
 ```bash
-greenroom run "Heroku ends all free plans on November 28, 2022" --as-of 2022-08-24
+greenroom run "Unity charges a Runtime Fee per install from January 1, 2024, including on games already released" \n  --product Unity --competitor "Unreal Engine" Godot --as-of 2023-09-11
 ```
 
-`--as-of` limits search to pages published by that date, drops quotes dated later, and tells every persona that today is that day. Compare the report with what really happened before you trust a run on a change that has not happened yet. The model may still remember the real outcome, and the report says so.
+`--as-of` limits search to pages published by that date, drops quotes dated later and undated quotes from review sites (their pages keep growing), and tells every persona that today is that day. Compare the report with what really happened before you trust a run on a change that has not happened yet. The model may still remember the real outcome, and the report says so.
 
 ## Time and cost
 

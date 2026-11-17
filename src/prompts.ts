@@ -30,7 +30,11 @@ export function seedBlock(seed: Seed, productContext?: string): string {
 export function queriesPrompt(seed: Seed, max: number): string {
   return `${seedBlock(seed)}
 
-Write up to ${max} web search queries that find real people discussing this product category, its pricing, alternatives and complaints. Favor community and review sources: Reddit, Hacker News, G2, Capterra, Trustpilot, forums. Mix queries about the product itself, its competitors, and the pain the product solves. Each query must work in Google. Do not include the change itself if it is not public yet.${seed.asOf ? " Do not search for reactions to the change or for what happened after it." : ""}`;
+Write up to ${max} web search queries that find real people discussing this product category, its pricing, alternatives and complaints. Favor community and review sources: Reddit, Hacker News, G2, Capterra, Trustpilot, forums. ${
+    seed.productName
+      ? `Every query names ${seed.productName}${seed.competitors.length ? " or one of the competitors" : ""}, and at least half name ${seed.productName} itself: its pricing, past price or terms changes, complaints and switching away. A query without a product name finds pages about unrelated tools.`
+      : "Mix queries about the product itself, its competitors, and the pain the product solves."
+  } Each query must work in Google. Do not include the change itself if it is not public yet.${seed.asOf ? " Do not search for reactions to the change or for what happened after it." : ""}`;
 }
 
 export function extractPrompt(
@@ -47,7 +51,15 @@ Page text:
 ${pageText}
 """
 
-Extract up to 6 quotes from real people (customers, users, commenters, reviewers) who express an opinion or experience relevant to this product, its category, pricing or alternatives. Rules:
+Extract up to 6 quotes from real people (customers, users, commenters, reviewers) who express an opinion or experience ${
+    seed.productName
+      ? `about ${seed.productName}${seed.competitors.length ? ", the competitors named above" : ""}, or choosing, paying for or leaving ${seed.productName}${seed.competitors.length ? " or them" : ""}`
+      : "relevant to this product, its category, pricing or alternatives"
+  }. Rules:${
+    seed.productName
+      ? `\n- Skip quotes about other products that mention neither ${seed.productName}${seed.competitors.length ? " nor a named competitor" : ""}. If the page is about another product, for example reviews of a different tool, return an empty list.`
+      : ""
+  }
 - Copy each quote exactly as written on the page. Do not paraphrase, merge or fix typos.
 - Each quote is one to three sentences and at most 400 characters.
 - Skip vendor marketing copy, navigation text and anything without a real person's view.

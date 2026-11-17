@@ -341,6 +341,13 @@ describe("backtest cut-off", () => {
     expect(isAfterCutoff("last week", "2022-08-24")).toBe(false);
     expect(isAfterCutoff("2030-01-01", undefined)).toBe(false);
   });
+  it("drops undated review-site quotes only in a backtest", async () => {
+    const { undatedReviewInBacktest } = await import("../src/pipeline/ground.js");
+    expect(undatedReviewInBacktest("review", undefined, "2023-09-11")).toBe(true);
+    expect(undatedReviewInBacktest("review", "2023-01-05", "2023-09-11")).toBe(false);
+    expect(undatedReviewInBacktest("hackernews", undefined, "2023-09-11")).toBe(false);
+    expect(undatedReviewInBacktest("review", undefined, undefined)).toBe(false);
+  });
   it("leaves Google redirect links unresolved only when they cannot be followed", async () => {
     const { resolveGoogleRedirect } = await import("../src/ground/brightdata.js");
     expect(await resolveGoogleRedirect("https://reddit.com/r/a/1")).toBe("https://reddit.com/r/a/1");
@@ -368,7 +375,8 @@ describe("backtest cut-off", () => {
     expect(res.report.evidence.some((e) => e.quote.startsWith("Posted long after"))).toBe(false);
     expect(res.report.evidence.some((e) => e.quote.startsWith("Written before"))).toBe(true);
     expect(res.report.basis.asOf).toBe("2022-08-24");
-    expect(res.report.basis.droppedAfterCutoff).toBe(4); // 3 later search hits (one per query) + 1 later quote
+    expect(res.report.basis.droppedAfterCutoff).toBe(5); // 3 later search hits (one per query) + 1 later quote + 1 undated review-site quote
+    expect(res.report.evidence.some((e) => e.source === "review" && !e.date)).toBe(false);
     expect(res.report.basis.confidenceReason).toContain("may already know the outcome");
     expect(llm.prompts.some((p) => p.includes("Today is 2022-08-24"))).toBe(true);
   });
@@ -413,5 +421,41 @@ describe("anthropic structured outputs schema", () => {
     expect(s.properties.b.items.additionalProperties).toBe(false);
     expect(s.properties.c.enum).toEqual(["x", "y"]);
     expect(s.required).toEqual(["a", "b", "c"]);
+  });
+});
+
+describe("bright data timeouts", () => {
+  const timeoutError = () => Object.assign(new Error("The operation was aborted due to timeout"), { name: "TimeoutError" });
+  it("retries a page once after a timeout", async () => {
+    const { BrightDataProvider } = await import("../src/ground/brightdata.js");
+    const orig = globalThis.fetch;
+    let calls = 0;
+    globalThis.fetch = (async () => {
+      calls++;
+      if (calls === 1) throw timeoutError();
+      return new Response("# Thread\nA comment.", { status: 200 });
+    }) as typeof fetch;
+    try {
+      const page = await new BrightDataProvider("k").fetchPage("https://www.reddit.com/r/a/comments/1/x/");
+      expect(page.markdown).toContain("A comment.");
+      expect(calls).toBe(2);
+    } finally {
+      globalThis.fetch = orig;
+    }
+  });
+  it("gives up after a second timeout", async () => {
+    const { BrightDataProvider } = await import("../src/ground/brightdata.js");
+    const orig = globalThis.fetch;
+    let calls = 0;
+    globalThis.fetch = (async () => {
+      calls++;
+      throw timeoutError();
+    }) as typeof fetch;
+    try {
+      await expect(new BrightDataProvider("k").fetchPage("https://www.reddit.com/r/a/comments/1/x/")).rejects.toThrow(/after 2 attempts \(timed out/);
+      expect(calls).toBe(2);
+    } finally {
+      globalThis.fetch = orig;
+    }
   });
 });

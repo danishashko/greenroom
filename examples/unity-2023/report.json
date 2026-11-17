@@ -1,0 +1,1294 @@
+{
+  "schemaVersion": 3,
+  "runId": "20261117-205623-425e65",
+  "createdAt": "2026-11-17T18:56:23.700Z",
+  "seed": {
+    "change": "Starting January 1, 2024, Unity charges game developers a Runtime Fee for every new install of a game made with Unity: $0.20 per install on Unity Personal and Plus once a game passes $200,000 in revenue over 12 months and 200,000 lifetime installs, and a sliding fee from $0.15 down to $0.01 per install on Pro and Enterprise. Installs made before 2024 count toward the thresholds, and the fee applies to games already released.",
+    "kind": "pricing",
+    "productName": "Unity",
+    "audience": "indie and mobile game developers and small studios shipping games on Unity",
+    "competitors": [
+      "Unreal Engine",
+      "Godot",
+      "GameMaker"
+    ],
+    "asOf": "2023-09-11",
+    "currency": "USD"
+  },
+  "headline": "100% of the audience reacts negatively and 0% (0 to 11%) would leave or switch. Main objection: retroactive fee on released games.",
+  "readout": "If this ships as described, every developer in the audience reacts negatively. Almost nobody leaves right away, but 76% put things on hold: they keep live projects on Unity and stop making new Unity commitments while they price out Godot, Unreal and GameMaker. The main reason is that the fee reaches back to games already released and counts installs made before 2024. That breaks the royalty-free subscription deal people say they chose Unity for.",
+  "stats": {
+    "personas": 8,
+    "rounds": 3,
+    "negativeShare": 1,
+    "neutralShare": 0,
+    "positiveShare": 0,
+    "meanStance": -1.76,
+    "leaveShare": 0,
+    "actions": {
+      "delay": 0.7571,
+      "ignore": 0.1286,
+      "downgrade": 0.1143
+    },
+    "movedMindShare": 0,
+    "segments": [],
+    "atRisk": null
+  },
+  "ensemble": {
+    "samples": 3,
+    "shownSample": 0,
+    "negativeShare": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+    },
+    "positiveShare": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "leaveShare": {
+      "median": 0,
+      "min": 0,
+      "max": 0.114
+    },
+    "meanStance": {
+      "median": -1.74,
+      "min": -1.76,
+      "max": -1.5
+    },
+    "customersAtRisk": null,
+    "mrrAtRisk": null,
+    "netMrrChange": null,
+    "perSample": [
+      {
+        "negativeShare": 1,
+        "positiveShare": 0,
+        "leaveShare": 0,
+        "meanStance": -1.76,
+        "customersAtRisk": null,
+        "mrrAtRisk": null,
+        "netMrrChange": null
+      },
+      {
+        "negativeShare": 1,
+        "positiveShare": 0,
+        "leaveShare": 0,
+        "meanStance": -1.5,
+        "customersAtRisk": null,
+        "mrrAtRisk": null,
+        "netMrrChange": null
+      },
+      {
+        "negativeShare": 1,
+        "positiveShare": 0,
+        "leaveShare": 0.114,
+        "meanStance": -1.74,
+        "customersAtRisk": null,
+        "mrrAtRisk": null,
+        "netMrrChange": null
+      }
+    ]
+  },
+  "themes": [
+    {
+      "label": "Retroactive fee on released games",
+      "weight": 1,
+      "personaIds": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p8"
+      ],
+      "quotes": [
+        {
+          "evidenceId": "e4",
+          "quote": "Unity is royalty-free altogether, you pay a subscription for the development tools (think Adobe CC or MS Office365) and get all upgrades during your subscription.",
+          "url": "https://news.ycombinator.com/item?id=18603031"
+        },
+        {
+          "evidenceId": "e9",
+          "quote": "Unreal Engine is free, but there's a catch — you'll need to pay 5% in royalty fees on all game revenues include in-game purchases if your games ever make any money.",
+          "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html"
+        },
+        {
+          "evidenceId": "e16",
+          "quote": "It appears that no free slots are included per project, so I'd have to pay for my other dev's slots. Gah.. that hurts.",
+          "url": "https://www.reddit.com/r/gamedev/comments/5jjwwa/unity_3ds_new_price_model_thoughts_experiences/"
+        }
+      ]
+    },
+    {
+      "label": "Trust broken by changing terms",
+      "weight": 0.8714,
+      "personaIds": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p6",
+        "p7",
+        "p8"
+      ],
+      "quotes": [
+        {
+          "evidenceId": "e4",
+          "quote": "Unity is royalty-free altogether, you pay a subscription for the development tools (think Adobe CC or MS Office365) and get all upgrades during your subscription.",
+          "url": "https://news.ycombinator.com/item?id=18603031"
+        },
+        {
+          "evidenceId": "e9",
+          "quote": "Unreal Engine is free, but there's a catch — you'll need to pay 5% in royalty fees on all game revenues include in-game purchases if your games ever make any money.",
+          "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html"
+        },
+        {
+          "evidenceId": "e16",
+          "quote": "It appears that no free slots are included per project, so I'd have to pay for my other dev's slots. Gah.. that hurts.",
+          "url": "https://www.reddit.com/r/gamedev/comments/5jjwwa/unity_3ds_new_price_model_thoughts_experiences/"
+        }
+      ]
+    },
+    {
+      "label": "Unpredictable, hard-to-budget costs",
+      "weight": 0.5857,
+      "personaIds": [
+        "p1",
+        "p3",
+        "p4",
+        "p6",
+        "p7"
+      ],
+      "quotes": [
+        {
+          "evidenceId": "e4",
+          "quote": "Unity is royalty-free altogether, you pay a subscription for the development tools (think Adobe CC or MS Office365) and get all upgrades during your subscription.",
+          "url": "https://news.ycombinator.com/item?id=18603031"
+        },
+        {
+          "evidenceId": "e16",
+          "quote": "It appears that no free slots are included per project, so I'd have to pay for my other dev's slots. Gah.. that hurts.",
+          "url": "https://www.reddit.com/r/gamedev/comments/5jjwwa/unity_3ds_new_price_model_thoughts_experiences/"
+        },
+        {
+          "evidenceId": "e20",
+          "quote": "I have no experience on networking, so I could be vastly misunderstanding resource usage but looking at the Unity Game Services pricing it feels like it could easily balloon out of control.",
+          "url": "https://www.reddit.com/r/Unity3D/comments/v44ntg/are_unity_game_services_as_expensive_as_i_think/"
+        }
+      ]
+    },
+    {
+      "label": "Install counts unclear and open to fraud",
+      "weight": 0.4,
+      "personaIds": [
+        "p1",
+        "p2",
+        "p8"
+      ],
+      "quotes": [
+        {
+          "evidenceId": "e4",
+          "quote": "Unity is royalty-free altogether, you pay a subscription for the development tools (think Adobe CC or MS Office365) and get all upgrades during your subscription.",
+          "url": "https://news.ycombinator.com/item?id=18603031"
+        },
+        {
+          "evidenceId": "e9",
+          "quote": "Unreal Engine is free, but there's a catch — you'll need to pay 5% in royalty fees on all game revenues include in-game purchases if your games ever make any money.",
+          "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html"
+        },
+        {
+          "evidenceId": "e7",
+          "quote": "For a lot of indie game devs Unity is a no-brainer. It's beginner-friendly, great for 3D and it supports more target platforms than any other engine.",
+          "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html"
+        }
+      ]
+    },
+    {
+      "label": "Hurts low-revenue free mobile games",
+      "weight": 0.2571,
+      "personaIds": [
+        "p2",
+        "p4"
+      ],
+      "quotes": [
+        {
+          "evidenceId": "e9",
+          "quote": "Unreal Engine is free, but there's a catch — you'll need to pay 5% in royalty fees on all game revenues include in-game purchases if your games ever make any money.",
+          "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html"
+        },
+        {
+          "evidenceId": "e20",
+          "quote": "I have no experience on networking, so I could be vastly misunderstanding resource usage but looking at the Unity Game Services pricing it feels like it could easily balloon out of control.",
+          "url": "https://www.reddit.com/r/Unity3D/comments/v44ntg/are_unity_game_services_as_expensive_as_i_think/"
+        }
+      ]
+    },
+    {
+      "label": "Fee stacks on other Unity costs",
+      "weight": 0.2571,
+      "personaIds": [
+        "p3",
+        "p4"
+      ],
+      "quotes": [
+        {
+          "evidenceId": "e16",
+          "quote": "It appears that no free slots are included per project, so I'd have to pay for my other dev's slots. Gah.. that hurts.",
+          "url": "https://www.reddit.com/r/gamedev/comments/5jjwwa/unity_3ds_new_price_model_thoughts_experiences/"
+        },
+        {
+          "evidenceId": "e20",
+          "quote": "I have no experience on networking, so I could be vastly misunderstanding resource usage but looking at the Unity Game Services pricing it feels like it could easily balloon out of control.",
+          "url": "https://www.reddit.com/r/Unity3D/comments/v44ntg/are_unity_game_services_as_expensive_as_i_think/"
+        }
+      ]
+    }
+  ],
+  "recommendations": [
+    {
+      "change": "Remove the retroactive part. Games released before January 1, 2024 never pay the Runtime Fee, and installs made before 2024 don't count toward the thresholds.",
+      "why": "Every persona objects to the fee on released games, and most say it breaks trust because developers signed up for a royalty-free subscription.",
+      "expectedEffect": "This removes the objection everyone shares and the main reason developers are freezing new Unity commitments.",
+      "evidenceIds": [
+        "e4",
+        "e6"
+      ]
+    },
+    {
+      "change": "Promise in writing that a project keeps the terms of the Unity version it ships on, so future pricing changes only apply to new versions developers choose to upgrade to.",
+      "why": "Most of the audience says the real damage is that Unity can change terms after the fact, which makes long-term engine commitments feel unsafe.",
+      "expectedEffect": "Studios that are holding off on new Unity projects get a stable basis for committing again.",
+      "evidenceIds": [
+        "e4",
+        "e6",
+        "e23"
+      ]
+    },
+    {
+      "change": "Put a cap on the fee: let developers pay either the per-install amount or a stated small share of the game's revenue from that period, whichever is lower, and publish a calculator.",
+      "why": "Costs that can't be predicted are a top objection, and producers are already comparing Unity's fee with Unreal's royalty, which is easier to understand.",
+      "expectedEffect": "The fee becomes something developers can budget for and compare directly with Unreal, which weakens the argument for switching.",
+      "evidenceIds": [
+        "e9",
+        "e1",
+        "e20",
+        "e21"
+      ]
+    },
+    {
+      "change": "Spell out what counts as an install: exclude reinstalls, multiple devices, demos, pirated or fraudulent installs, and charity or subscription bundles, and give developers a way to dispute their install counts.",
+      "why": "A large part of the audience thinks install counts are unclear and open to abuse, and free-to-play mobile developers worry that installs which earn little or nothing will create bills.",
+      "expectedEffect": "Free-to-play and mobile studios no longer fear huge bills from installs they can't check or that don't bring in money.",
+      "evidenceIds": [
+        "e21"
+      ]
+    }
+  ],
+  "riskiestSegment": {
+    "personaId": "p4",
+    "why": "Elena runs a free-to-play multiplayer game that brings in little revenue per install, so a per-install fee, unclear install counts and Unity's other service costs hit her hardest, and she is already freezing new Unity-dependent work."
+  },
+  "personas": [
+    {
+      "name": "Marcus T.",
+      "role": "Founder and lead programmer of a small self-funded PC/console studio",
+      "segment": "Royalty-free Unity loyalists",
+      "summary": "Marcus picked Unity because it was royalty-free: you pay a subscription for the tools, much like Adobe CC, and keep all your revenue. A per-install fee that also applies to games he has already shipped breaks the reason he chose the engine, so he is likely to be strongly unhappy about the change.",
+      "goals": [
+        "Keep engine costs fixed and predictable so he can plan budgets",
+        "Keep all game revenue after the subscription is paid",
+        "Keep supporting released titles without new costs he didn't plan for"
+      ],
+      "objections": [
+        "Unity used to promise no royalty, and a per-install fee is a royalty under a different name",
+        "Applying the fee to games already released, and counting installs from before 2024, feels like changing the deal after the fact",
+        "The fee is now hard to forecast, while the old subscription was a known cost"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "A Unity Plus or Pro subscription, paid per seat with no revenue share",
+      "evidenceIds": [
+        "e4",
+        "e6",
+        "e5",
+        "e3",
+        "e8"
+      ],
+      "weight": 0.1143,
+      "id": "p1"
+    },
+    {
+      "name": "Priya K.",
+      "role": "Business-minded indie producer who models how engine and storefront fees affect margins",
+      "segment": "Engine cost comparers",
+      "summary": "Priya compares total costs across engines and stores, including Unreal's 5% royalty and Epic Store fees. She will put Unity's per-install fee side by side with Unreal's revenue-based royalty, and for some of her games Unreal could come out cheaper or less risky.",
+      "goals": [
+        "Pick the engine that leaves the most margin after store and engine fees",
+        "Make sure engine costs grow with revenue, not with installs",
+        "Get top graphics quality where the project needs it"
+      ],
+      "objections": [
+        "A per-install fee doesn't follow revenue, while Unreal's 5% royalty at least scales with what the game earns",
+        "Once Unity charges a fee too, Unreal's best-in-class graphics are a stronger reason to switch",
+        "She needs a clear way to model the fee before she commits a project to Unity"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "Uses Unity for some projects and checks Unreal Engine for each new one",
+      "evidenceIds": [
+        "e1",
+        "e2",
+        "e9",
+        "e10",
+        "e13",
+        "e3"
+      ],
+      "weight": 0.1571,
+      "id": "p2"
+    },
+    {
+      "name": "Jonas R.",
+      "role": "Studio lead of a three-to-five person indie team buying several seats",
+      "segment": "Seat-cost constrained studios",
+      "summary": "Jonas already struggles with Unity's per-seat pricing, because every team member needs a paid seat and none are included per project. Adding a per-install fee on top of seat costs makes the value he gets look even worse, given the docs and support he already finds lacking.",
+      "goals": [
+        "Keep tool costs per team member under control",
+        "Get support and documentation that justify what he pays",
+        "Keep the team on one engine without paying for every collaborator"
+      ],
+      "objections": [
+        "The install fee is added on top of seat fees, so Unity charges him twice",
+        "Paying more is hard to accept when the documentation already feels inadequate",
+        "He expects better support if Unity keeps raising what he pays"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "Several Unity Plus/Pro seats on annual commitments",
+      "evidenceIds": [
+        "e15",
+        "e16",
+        "e17",
+        "e18",
+        "e5",
+        "e19"
+      ],
+      "weight": 0.1571,
+      "id": "p3"
+    },
+    {
+      "name": "Elena V.",
+      "role": "Mobile and multiplayer free-to-play developer",
+      "segment": "Free-to-play mobile developers",
+      "summary": "Elena builds games with matchmaking and user-generated content, and her monetization barely covers the cost of running them. She already worries that Unity Game Services costs could get out of hand, and a fee on every install hits a game with many installs and little revenue per player especially hard.",
+      "goals": [
+        "Keep running costs below what each player earns",
+        "Grow the install base without costs growing out of control",
+        "Keep multiplayer and UGC features sustainable"
+      ],
+      "objections": [
+        "The per-install fee punishes high-install, low-revenue mobile games",
+        "It stacks with relay and other service costs that already scale with users",
+        "She can't predict costs if installs spike"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "Unity with Unity Game Services, plus Asset Store add-ons",
+      "evidenceIds": [
+        "e20",
+        "e21",
+        "e22"
+      ],
+      "weight": 0.1,
+      "id": "p4"
+    },
+    {
+      "name": "Sam O.",
+      "role": "Solo indie developer who has already shipped a commercial Unity game and now builds in Godot",
+      "segment": "Godot switchers",
+      "summary": "Sam shipped a PC/Xbox game on Unity and moved to Godot because it iterates faster and feels more focused on games. The new fee confirms Sam's view that Unity is drifting away from game developers.",
+      "goals": [
+        "Iterate quickly without waiting for compiles",
+        "Use a free engine with no surprise fees",
+        "Carry existing game-dev skills over to the new engine"
+      ],
+      "objections": [
+        "The fee reinforces Sam's view that Unity is moving away from game development",
+        "Godot has no runtime fees, so there's little reason to come back",
+        "Unity's slow iteration loop was already a reason to leave"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "Godot with GDScript",
+      "evidenceIds": [
+        "e24",
+        "e25",
+        "e26",
+        "e27",
+        "e11",
+        "e23"
+      ],
+      "weight": 0.1286,
+      "id": "p5"
+    },
+    {
+      "name": "Viktor L.",
+      "role": "Unity C# developer with 7 years of experience looking at migration options",
+      "segment": "Unity veterans exploring alternatives",
+      "summary": "Viktor has worked in Unity for 7 years and just found out that Godot's mono version supports C#, which could make moving his scripts much easier. The fee change gives him a reason to seriously test switching.",
+      "goals": [
+        "Reuse his existing C# code and skills",
+        "Protect years of engine investment",
+        "Keep options open as Unity changes direction"
+      ],
+      "objections": [
+        "Applying the fee to games already released makes staying on Unity look risky",
+        "C# support in Godot lowers the cost of switching",
+        "He worries Unity is moving away from game development"
+      ],
+      "priceSensitivity": "medium",
+      "currentSolution": "Unity, with Godot (C#/mono) under evaluation",
+      "evidenceIds": [
+        "e28",
+        "e29",
+        "e24",
+        "e23"
+      ],
+      "weight": 0.1,
+      "id": "p6"
+    },
+    {
+      "name": "Aisha M.",
+      "role": "Beginner hobbyist learning to make games",
+      "segment": "Beginner hobbyist learners",
+      "summary": "Aisha chooses an engine based on how easy and approachable it is, and being free helps. She is unlikely to hit the revenue and install thresholds, but the news may push her toward free engines that look friendlier.",
+      "goals": [
+        "Learn game development quickly",
+        "Start out at no cost",
+        "Find plenty of tutorials and a quick learning loop"
+      ],
+      "objections": [
+        "News about the fee makes Unity feel risky for a future commercial release",
+        "Godot and Unreal look free and accessible by comparison",
+        "She doesn't understand how the thresholds work, which adds confusion"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "Unity Personal (free), while trying Godot",
+      "evidenceIds": [
+        "e12",
+        "e14",
+        "e7",
+        "e11",
+        "e27"
+      ],
+      "weight": 0.1143,
+      "id": "p7"
+    },
+    {
+      "name": "Chris D.",
+      "role": "Committed Unity generalist developer on 2D and 3D indie projects",
+      "segment": "Unity ecosystem champions",
+      "summary": "Chris sees Unity as more advanced than the alternatives, with more features, more tutorials and the widest platform support. Chris is likely to defend the change as fair if the thresholds keep small developers exempt.",
+      "goals": [
+        "Ship on as many platforms as possible",
+        "Use Unity's documentation, tutorials and Asset Store",
+        "Stay on the engine with the most features"
+      ],
+      "objections": [
+        "Wants clear proof that the thresholds protect small developers",
+        "Would turn critical if the fee terms keep changing",
+        "Expects Unity to keep investing in the engine in return for the fee"
+      ],
+      "priceSensitivity": "low",
+      "currentSolution": "Unity Plus subscription",
+      "evidenceIds": [
+        "e30",
+        "e31",
+        "e7",
+        "e19",
+        "e13",
+        "e8"
+      ],
+      "weight": 0.1286,
+      "id": "p8"
+    }
+  ],
+  "reactions": [
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "A per-install fee is a royalty under another name, and Unity's whole pitch to us was royalty-free subscription tooling",
+        "It applies retroactively to games already shipped, and pre-2024 installs count toward the thresholds, which changes the deal after the fact",
+        "Cost is no longer fixed per seat; it scales with installs, so I can't forecast budgets",
+        "Installs are hard to define and audit: reinstalls, piracy, demos, bundles and subscription services could all trigger fees, and I would have to trust Unity's own data",
+        "Hitting the thresholds could mean a surprise bill on back-catalog titles that I can't pass on to customers"
+      ],
+      "reasoning": "This breaks the reason I chose Unity. I pay a seat subscription and keep my revenue. A per-install fee is a royalty, and applying it to released games with pre-2024 installs counted is a retroactive change of terms. I won't make a rash move on day one, since the full terms and FAQ aren't out and my current project is mid-development. I will not start any new project on Unity until this is clarified. Within 30 days I will do three things: model the exposure on my shipped titles, pull the Unity license terms I'm under (I want to check whether a version lock-in clause protects me), and prototype in Godot and evaluate Unreal's 5% royalty after $1M. If the fee stays retroactive, I'll migrate future work off Unity. For now I'm delaying any commitment and watching for clarification.",
+      "wouldChangeMindIf": "Unity drops the fee for already-released games and pre-2024 installs, or lets existing subscribers stay on their current terms with a binding written guarantee.",
+      "evidenceIds": [
+        "e4",
+        "e6"
+      ],
+      "personaId": "p1",
+      "round": 1
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "Per-install fee scales with downloads, not revenue; a cheap or free-to-play mobile game could owe more than Unreal's 5% would cost",
+        "Retroactive: pre-2024 installs count toward thresholds and the fee hits games already shipped, so I can't trust my existing margin models",
+        "Fee is unpredictable and hard to model: install counting, reinstalls, piracy, bundles and charity or subscription installs are unclear",
+        "Unreal's 5% royalty (after the first $1M) is revenue-linked and now looks lower-risk for some projects",
+        "Unity can change terms again, which makes committing a new project to it a platform risk"
+      ],
+      "reasoning": "I model engine fees as a share of revenue. A flat $0.20 per install breaks that for low-ARPU games, especially free-to-play mobile where installs are high and revenue per install is cents. Retroactive application to shipped games is the worst part, because it shows terms can change after I've committed. In the next 30 days I won't migrate anything, since that would be a knee-jerk move. I'll build a spreadsheet comparing the Unity fee, Unreal's 5% royalty and Epic Store fees, and Godot at 0%, across my pipeline. I'll hold any new Unity project kickoff until Unity publishes install-counting rules and confirms the terms won't change again. I'll start Unreal prototypes for the projects where it already comes out cheaper or less risky.",
+      "wouldChangeMindIf": "Unity makes the fee non-retroactive, caps it at a small percentage of revenue, and publishes clear install-counting rules with a binding commitment not to change them for existing projects.",
+      "evidenceIds": [
+        "e9",
+        "e10",
+        "e2"
+      ],
+      "personaId": "p2",
+      "round": 1
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "switchTo": "Godot",
+      "objections": [
+        "Per-install fee stacks on top of per-seat fees, so we get charged twice",
+        "Retroactive: installs before 2024 count and already-released games are hit",
+        "Docs and support are already weak, and nothing suggests they'll improve for the extra cost",
+        "Unpredictable costs: a free promo, bundle, or piracy could trigger fees we can't budget",
+        "Annual seat commitments lock us in while the terms change under us"
+      ],
+      "reasoning": "I'm already paying for every seat on annual Plus/Pro and feel the docs and support don't justify it. Now Unity adds a per-install fee, applied retroactively to games already out. That reads as charging twice and breaking trust. I won't rip out the engine within 30 days because we have projects in flight and a prepaid annual term. But I'll stop planning new projects in Unity, check whether our games get near the $200k revenue and 200k installs thresholds, and prototype in Godot and Unreal. I'm also waiting for the details, since the fine print on counting installs is vague. I won't renew seats without a clear answer.",
+      "wouldChangeMindIf": "Unity drops the retroactive part, caps fees in a way I can predict, and pairs the change with seat discounts and real support or docs improvements.",
+      "evidenceIds": [
+        "e16",
+        "e17",
+        "e18"
+      ],
+      "personaId": "p3",
+      "round": 1
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "Per-install fee punishes high-install, low-revenue free-to-play mobile games like mine; revenue per player is pennies and $0.20 could exceed it",
+        "Retroactive: pre-2024 installs count and already released games are charged, so I can't plan around it",
+        "Stacks on top of Unity Game Services relay/matchmaking costs that already scale with users",
+        "Unpredictable costs if installs spike, including viral spikes, bundles or install fraud/reinstalls",
+        "Unclear how installs are counted (reinstalls, multiple devices, pirated copies) and trust in Unity is damaged"
+      ],
+      "reasoning": "First read: this is the worst possible model for my kind of game. My F2P multiplayer/UGC titles have lots of installs and tiny ARPU, and my margins already barely cover server costs. The thresholds ($200k revenue, 200k lifetime installs) may leave me exposed since installs accumulate faster than revenue, and retroactive application to released games means I can't plan. I won't rewrite everything in 30 days, since I'm busy and details are vague, but I'll stop starting new Unity projects, model the fee against my current install and revenue numbers, and prototype in Godot and look at Unreal. I'm also watching for clarification before I commit to anything.",
+      "wouldChangeMindIf": "Unity dropped the retroactive application and replaced the per-install fee with a revenue share capped at a small percentage of actual revenue.",
+      "evidenceIds": [
+        "e20",
+        "e21"
+      ],
+      "personaId": "p4",
+      "round": 1
+    },
+    {
+      "stance": -2,
+      "action": "ignore",
+      "objections": [
+        "Retroactive: fee applies to games already released and pre-2024 installs count toward thresholds, which is a trust breach for anyone who shipped on Unity, including my existing PC/Xbox game",
+        "Per-install fee is unpredictable and exposes devs to surprise costs and install fraud or piracy",
+        "Confirms Unity is drifting away from game developers toward monetization",
+        "Does nothing for iteration speed, which was why I left",
+        "Godot has no fees, so there is no reason to return"
+      ],
+      "reasoning": "I already moved to Godot with GDScript for faster iteration and a free engine. This fee does not change my plans. It validates the move. My one real exposure is my shipped Unity game, since the fee applies retroactively to released titles. I'll check whether it crosses the $200k revenue and 200k install thresholds, and probably it doesn't. Beyond that I won't spend time on Unity. I'm not coming back, and a trust-breaking retroactive change makes that even less likely.",
+      "wouldChangeMindIf": "Unity fully cancelled the runtime fee and the retroactive terms in writing, and also delivered a code-to-running-game loop as fast as Godot's.",
+      "evidenceIds": [
+        "e23",
+        "e25",
+        "e24"
+      ],
+      "personaId": "p5",
+      "round": 1
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "Fee applies retroactively to games already released and to pre-2024 installs, which makes Unity look unsafe to build on",
+        "Per-install pricing is unpredictable and can be gamed by piracy, reinstalls, or bundles, with no clear way to dispute it",
+        "Terms were changed unilaterally on existing projects, so I can't trust future terms",
+        "Fits my worry that Unity is drifting away from game development toward ads and monetization",
+        "Switching still costs real time: Godot C# is less mature, and I'd have to port my Unity APIs, editor tooling and asset store plugins"
+      ],
+      "reasoning": "I'm angry, but I'm not going to rip out seven years of work in a week. Within 30 days I'll start a real Godot 4 mono prototype. I'll port one small project's C# logic, since the language carries over but the Unity APIs don't. I'll also read the actual terms and see whether Unity walks the retroactive part back. My current projects stay on Unity for now, and I won't start any new commercial project on Unity until this is clarified. The retroactive clause is the real trust break. I'd be fine with a fee that applied only to new games, so I'm treating this as a reason to build an exit path, not a reason to leave on day one.",
+      "wouldChangeMindIf": "Unity drops the retroactive application to released games and pre-2024 installs, and commits in writing to terms that can't be changed on existing projects.",
+      "evidenceIds": [
+        "e29",
+        "e23"
+      ],
+      "personaId": "p6",
+      "round": 1
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "switchTo": "Godot",
+      "objections": [
+        "Fee applies retroactively to already released games, which makes Unity feel untrustworthy for a future commercial release",
+        "Thresholds (revenue over 12 months plus lifetime installs) are confusing and I can't tell how they would apply to me",
+        "Godot looks free with no strings attached, so switching feels low-risk",
+        "Unity could change the terms again later"
+      ],
+      "reasoning": "I'm a beginner on Unity Personal and also trying Godot. I'm very unlikely to hit $200k revenue and 200k installs, so this doesn't cost me anything today. But it's a trust problem: if they can add a fee to games already out, they can change the rules again. I won't drop Unity this month, since the tutorials are what I'm learning from. I'll put more of my practice time into Godot and hold off on committing to Unity for anything I might sell. I'll wait and see what Unity clarifies and what other people do.",
+      "wouldChangeMindIf": "Unity clearly says in plain language that hobbyists and small free-tier users won't be charged and that the terms can't be changed retroactively again.",
+      "evidenceIds": [
+        "e11",
+        "e12"
+      ],
+      "personaId": "p7",
+      "round": 1
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Retroactive: installs before 2024 count and the fee hits games already released, which breaks the deal I signed up under",
+        "Thresholds only protect small devs if install counting is clear; Unity gave no way to verify or audit installs, and piracy, reinstalls, and charity or bundle installs could trigger fees",
+        "Terms feel rushed and could keep changing; one more change and I turn critical",
+        "Unclear what Unity commits to invest in the engine in return for the fee",
+        "Plus is capped at $200k revenue and 200k installs, but a viral free or cheap mobile game could hit the install threshold and owe fees on thin revenue"
+      ],
+      "reasoning": "I'm a Unity loyalist. Unity has the most features, the widest platform support and the best tutorials and Asset Store, and I'm on Plus. A fee that only applies past $200k revenue and 200k installs doesn't hit me and I'd normally call that fair. But applying it retroactively to released games, counting past installs, and not saying how installs get measured makes me doubt the thresholds really protect small devs. I won't leave in the next 30 days because Godot, Unreal and GameMaker would cost me platforms, tooling and a lot of time. I also won't defend it yet. I'll wait for the FAQ and the exact terms, avoid starting any new commitments, and watch whether the terms change again.",
+      "wouldChangeMindIf": "Unity published precise, auditable install-counting rules, made the thresholds non-retroactive for existing games, and committed in writing that the terms wouldn't change again.",
+      "evidenceIds": [
+        "e7",
+        "e30"
+      ],
+      "personaId": "p8",
+      "round": 1
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "A per-install fee is a royalty under another name, and royalty-free was the reason I chose Unity",
+        "Applies retroactively to games already shipped, and pre-2024 installs count toward thresholds, which changes the deal after the fact",
+        "Per-install cost is hard to forecast, unlike a fixed per-seat subscription I can budget",
+        "Bundle sales, piracy, demos and reinstalls could generate installs with no revenue behind them, and Unity's counting is unclear",
+        "Unity can change terms again at any time, so I can't trust long-term planning on it"
+      ],
+      "reasoning": "The other buyers' reactions mostly confirm my view. The loyalist who says he's not affected by the thresholds doesn't change my mind. Even if I'm under $200k and 200k installs today, the principle is what matters: Unity moved the goalposts on shipped games. I won't act rashly within 30 days. I'm self-funded and mid-project, so a rewrite isn't something I can do overnight. In the next month I'll audit my installs and revenue against the thresholds, freeze any Unity upgrades and subscription expansion, prototype in Godot and Unreal to see what a migration would cost, and wait for Unity's clarifications on the terms. If the retroactive terms stay, my next project won't use Unity.",
+      "wouldChangeMindIf": "Unity formally dropped the retroactive application and the pre-2024 install counting, and committed in writing that existing versions of the terms are locked in for the editor versions I already ship with.",
+      "evidenceIds": [
+        "e4",
+        "e6"
+      ],
+      "personaId": "p1",
+      "round": 2
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "Per-install fee doesn't scale with revenue; low-ARPU or discounted/bundle installs can cost more than they earn, unlike Unreal's 5% royalty",
+        "Retroactive: applies to released games and counts pre-2024 installs, so I can't model existing catalog margins",
+        "Fee mechanics unclear (reinstalls, bundles, demos, charity/giveaways, who is billed: dev or distributor), so I can't build a reliable cost model",
+        "Pro/Enterprise sliding scale means I'd pay seat fees plus a royalty-like fee; stacked costs vs Unreal's free-until-$1M then 5%",
+        "Trust: if terms can change retroactively, long-term project costing on Unity is a risk"
+      ],
+      "reasoning": "Others' reactions confirm my concern; nothing new changes it. I'll hold new Unity commitments and build a side-by-side model: Unity fee vs Unreal 5% (after the first $1M lifetime revenue) plus Epic Store 12% vs other stores, across my catalog. Unreal's revenue-linked royalty is predictable and for premium titles likely cheaper or lower risk, and its graphics are a bonus. I won't abandon Unity projects mid-development before seeing the official FAQ, but new projects default to Unreal or Godot unless the terms soften. Delay rather than churn because thresholds may exclude most of my titles and the details are still unclear.",
+      "wouldChangeMindIf": "Unity drops the retroactivity and moves the fee to a revenue-based share or a clearly capped, documented formula that I can model per title.",
+      "evidenceIds": [
+        "e9",
+        "e10",
+        "e2"
+      ],
+      "personaId": "p2",
+      "round": 2
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "Per-install fee stacks on top of per-seat fees, so Unity charges us twice",
+        "Retroactive: applies to released games and counts pre-2024 installs",
+        "Docs and support already feel inadequate for what we pay",
+        "Unclear how installs are counted (reinstalls, piracy, demos, bundles), so cost can't be forecast",
+        "Annual seat commitments lock us in while terms change"
+      ],
+      "reasoning": "We're a 3-5 person team on several Plus/Pro seats with annual commitments, so we can't walk away this week. We're probably under the $200k/200k thresholds today, so the direct hit may be small. But the retroactive terms destroy trust, and we already pay per seat with no free collaborator slots. Others' reactions (retroactive change, migration prototypes in Godot) raise the same concern. The loyalist's point that thresholds don't hit them doesn't comfort me, because thresholds can change again. In the next 30 days I will not renew or add seats, I'll prototype a small project in Godot and check Unreal's 5% royalty model, and I'll wait for Unity's clarification on counting before deciding anything on the current game.",
+      "wouldChangeMindIf": "Unity drops the retroactive application and pre-2024 install counting, clearly defines install counting in writing, and shows concrete improvements in docs and support.",
+      "evidenceIds": [
+        "e16",
+        "e18",
+        "e17"
+      ],
+      "personaId": "p3",
+      "round": 2
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "Per-install fee punishes high-install, low-revenue F2P mobile games like mine",
+        "Stacks on top of Unity Game Services relay/matchmaking costs that already scale with users",
+        "Retroactive: pre-2024 installs count and already-released games are charged",
+        "Unpredictable costs if installs spike or get inflated by bots/reinstalls",
+        "Revenue and install thresholds are unclear on how they are measured for free-to-play games"
+      ],
+      "reasoning": "I'm not migrating in a week. I have live games, and a port to Godot or Unreal would take months. But the fee makes my cost model unpredictable. My ARPU per install is tiny, so $0.20 per install past the thresholds could wipe out the margin on a UGC/multiplayer game, and it stacks with UGS costs. Retroactive terms are a trust problem, so I won't build new Unity-dependent features on UGS until there's clarity. Over the next 30 days I'll model the worst case from my install counts and revenue, and prototype a Godot build of the core loop with a non-UGS backend. I'm holding off on any new Unity commitments or Asset Store purchases. The other buyers' anger confirms I'm not overreacting, but none of it changes my plan to wait and watch for clarification.",
+      "wouldChangeMindIf": "Unity dropped the retroactive application and capped or replaced the per-install fee with a revenue share, with clear rules on how installs are counted.",
+      "evidenceIds": [
+        "e20",
+        "e21"
+      ],
+      "personaId": "p4",
+      "round": 2
+    },
+    {
+      "stance": -2,
+      "action": "ignore",
+      "objections": [
+        "Per-install royalty applied retroactively to games already shipped, counting pre-2024 installs",
+        "Confirms Unity is drifting away from game developers toward monetization",
+        "Fee structure punishes low-ARPU and free-to-play titles",
+        "Godot has no runtime fees, so nothing pulls me back",
+        "Slow compile/iteration loop was already a reason I left"
+      ],
+      "reasoning": "I already moved to Godot with GDScript, so this doesn't change my daily work. It confirms my reasons for leaving. My old Unity PC/Xbox game may be affected only if it crosses the thresholds, but the bigger issue is trust: terms changed retroactively. Other buyers are angry and considering Godot, which just validates my choice. I'm not going back, and nothing here makes me act beyond continuing to build in Godot. I may mention it to friends still on Unity.",
+      "wouldChangeMindIf": "Unity fully cancelled the Runtime Fee in writing and also delivered an iteration loop as fast as Godot's, and I'd still need a strong reason to return.",
+      "evidenceIds": [
+        "e23",
+        "e25",
+        "e24"
+      ],
+      "personaId": "p5",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Fee applies retroactively to games already released and counts pre-2024 installs, so terms changed after I committed",
+        "Unity looks like it is drifting away from game development and toward monetizing developers",
+        "Install-based fee is unpredictable for low-ARPU and free-to-play mobile",
+        "Seven years of Unity work is at risk if trust keeps eroding",
+        "Unclear how installs get counted and who verifies them"
+      ],
+      "reasoning": "I'm below the thresholds on my current projects, so nothing costs me money today. The retroactive part is what bothers me, because it shows the terms can change under me. Others are saying the same, and that pushes me to take the Godot test seriously. I won't migrate in the next 30 days, though. Godot 4 C# is still maturing, Unity scripts don't port directly because the APIs are completely different, and I have no console or mobile tooling parity to rely on. So I'll spend the month on a small Godot C# prototype and keep shipping in Unity. I'll wait for Unity's details and any clarification before deciding anything bigger.",
+      "wouldChangeMindIf": "Unity dropped the retroactive application and the pre-2024 install counting, and committed in writing that terms for released games can't change again.",
+      "evidenceIds": [
+        "e28",
+        "e29",
+        "e23"
+      ],
+      "personaId": "p6",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Don't understand how the $200k revenue and 200k install thresholds work, which makes Unity feel risky",
+        "Fee applying retroactively to released games makes me distrust future terms if I ever sell a game",
+        "Godot is free with no runtime fee, so it looks safer for a beginner starting from zero",
+        "Others are upset, which adds to my worry even though I'm unlikely to hit the thresholds"
+      ],
+      "reasoning": "I'm a beginner on free Unity Personal and I'm also trying Godot. The fee won't touch me soon, since I'm nowhere near $200k revenue. But the news makes Unity feel untrustworthy for a future commercial release, and the thresholds are confusing. The other buyers' anger over retroactivity reinforces that. I won't drop Unity today because the tutorials and learning loop are what I came for, and I've already started. I'll keep going with Unity while spending more of my practice time on Godot, then decide once Unity clarifies the terms. Being free matters more to me than the details of the fee [e12], and Unity's beginner-friendliness is still real [e7]. Godot is a credible alternative for learning [e11].",
+      "wouldChangeMindIf": "Unity clearly said in plain language that hobbyists on free Personal will never owe a runtime fee and that the terms won't change retroactively.",
+      "evidenceIds": [
+        "e12",
+        "e7",
+        "e11"
+      ],
+      "personaId": "p7",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Retroactive application to games already released, with pre-2024 installs counted toward the thresholds, changes the terms I shipped under",
+        "I need proof the thresholds really protect small developers, and so far there are only the announcement's numbers",
+        "Per-install fees hurt low-ARPU and free-to-play games, which the other buyers point out",
+        "If the terms get revised again after this, I'll lose trust in the whole model",
+        "Unity hasn't committed to investing more in the engine in return for the fee"
+      ],
+      "reasoning": "I'm a Unity champion, and I still think it has the most features, the widest platform support and the best docs and Asset Store. A fee on big hits is defensible, and I'm on Plus and far from $200k revenue and 200k installs. But the other buyers are right about the retroactive part. Counting old installs and charging games already out is a change of terms, not a fair threshold. I won't switch engines in the next 30 days, because Godot, Unreal and GameMaker don't match Unity's platform reach for my projects. I also won't defend this publicly until Unity publishes clear terms: how installs are counted, how fraud and piracy are handled, and a firm commitment that the terms won't change again. For now I'll hold off on new commitments, keep my current Plus subscription, and watch for the FAQ and any revisions.",
+      "wouldChangeMindIf": "Unity drops the retroactive application to released games, publishes clear install-counting rules, and commits in writing to not changing the terms again.",
+      "evidenceIds": [
+        "e30",
+        "e7"
+      ],
+      "personaId": "p8",
+      "round": 2
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "switchTo": "Godot",
+      "objections": [
+        "A per-install fee is a royalty under another name, which breaks the royalty-free reason I chose Unity",
+        "It applies retroactively to games already shipped, and pre-2024 installs count toward the thresholds",
+        "Per-install costs are hard to forecast, and my budget depends on fixed costs",
+        "It changes the deal mid-term; I can't trust the terms to stay put",
+        "Installs are hard to audit and may be inflated by reinstalls, piracy or bundles"
+      ],
+      "reasoning": "I chose Unity because it was a subscription with no revenue share, and I keep my revenue. This change breaks that and reaches back to titles I've already shipped. I can't switch engines in 30 days. I have released games to support and a codebase in C#. So I'll freeze any new Unity commitments, including renewals and upgrades, where possible. I'll check my installs and revenue against the thresholds. I'll prototype my next project in Godot and Unreal to compare costs. Unreal's 5% royalty after $1M is at least predictable and not retroactive. If Unity doesn't drop the retroactive part, I'll move new projects off Unity. Other buyers' reactions only confirm my view. The trust damage is the main issue, not the dollar amount.",
+      "wouldChangeMindIf": "Unity formally dropped the retroactive application to released games and pre-2024 installs and put in writing a fixed, non-revocable pricing guarantee for the versions I ship on.",
+      "evidenceIds": [
+        "e4",
+        "e6"
+      ],
+      "personaId": "p1",
+      "round": 3
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "switchTo": "Unreal Engine",
+      "objections": [
+        "Per-install fee doesn't scale with revenue; for low-ARPU mobile/F2P titles $0.20 can eat a large share of margin, unlike Unreal's 5% of revenue",
+        "Retroactive: pre-2024 installs count and already-released games are charged, which breaks the cost models I signed off on",
+        "Can't model it cleanly: install definition, reinstalls, piracy, bundles and charity/demo installs are unclear and open to abuse",
+        "Unreal's 5% royalty (with first $1M exempt) is now more predictable and tied to revenue, strengthening the case for Unreal on graphics-heavy projects",
+        "Trust: terms changed unilaterally on live products, so any future Unity commitment carries a risk premium"
+      ],
+      "reasoning": "I'm not rewriting live projects within 30 days, so I'm not churning yet. But I'm freezing new Unity commitments. I'll build a spreadsheet comparing Unity's fee, Unreal's 5% royalty plus Epic's 12% store cut, and Godot's zero fee, across my pipeline. Any new project with low ARPU or a high install count will start in Unreal or Godot unless Unity clarifies and drops the retroactivity. Existing Unity projects stay put for now. Unreal's royalty at least follows revenue, which fits my goal of engine cost growing with revenue.",
+      "wouldChangeMindIf": "Unity drops retroactivity, replaces the per-install fee with a revenue share capped below Unreal's 5%, and publishes a clear install definition and a calculator.",
+      "evidenceIds": [
+        "e9",
+        "e10"
+      ],
+      "personaId": "p2",
+      "round": 3
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "Per-install fee stacks on top of per-seat fees, so Unity charges us twice",
+        "Retroactive: pre-2024 installs count and already-released games are hit",
+        "Docs and support are already weak, and nothing in this change improves them",
+        "Unpredictable cost model; we can't budget around installs we don't control",
+        "Trust broken: terms can change under annual commitments"
+      ],
+      "reasoning": "We're a 3-5 person team on several Plus/Pro seats with annual commitments, so I can't leave in 30 days. We're probably under the $200k and 200k thresholds today, so there's no immediate bill. But I already pay for every collaborator's seat and get thin docs and support. Now Unity adds a retroactive fee on top, which tells me the terms can move at any time. In the next 30 days I will not renew or add seats, I'll prototype a small project in Godot and look at Unreal's 5% royalty model, and I'll wait for Unity to clarify. If the retroactive part stays, I'll plan to move new projects off Unity after the commitment ends.",
+      "wouldChangeMindIf": "Unity drops the retroactive application, caps the fee for small studios, and gives real documentation and support improvements in writing.",
+      "evidenceIds": [
+        "e16",
+        "e18",
+        "e17"
+      ],
+      "personaId": "p3",
+      "round": 3
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "Per-install fee hits high-install, low-revenue F2P mobile games hardest; my revenue per player is tiny",
+        "Stacks on top of Unity Game Services relay/matchmaking costs that already scale with users",
+        "Unpredictable: an install spike or viral moment or even install fraud could create a cost I can't forecast",
+        "Retroactive: pre-2024 installs count and already-released games are charged",
+        "Trust: terms changed after I built on Unity, so it could change again"
+      ],
+      "reasoning": "I'm not switching engines in the next 30 days. A rewrite of a live multiplayer UGC game is expensive and I can't afford it right now. But I'm freezing new Unity-dependent commitments, including new UGS services and Asset Store spending, until Unity publishes details on how installs are counted, how reinstalls and fraud are handled, and who pays for free-to-play. In the meantime I'll model my install numbers against the thresholds and prototype a small project in Godot. I'm not at the thresholds today, but my goal is install growth, so I'd hit them with low revenue per install. The other buyers are all negative too, and the retroactivity and trust problem is what moves me most.",
+      "wouldChangeMindIf": "Unity made the fee non-retroactive, tied it to revenue rather than installs, and capped it as a share of revenue so low-ARPU games are not hit.",
+      "evidenceIds": [
+        "e20",
+        "e21"
+      ],
+      "personaId": "p4",
+      "round": 3
+    },
+    {
+      "stance": -2,
+      "action": "ignore",
+      "objections": [
+        "Retroactive fee on already-released games shows Unity terms can change under developers",
+        "Confirms Unity is drifting away from game developers toward monetization",
+        "Godot has no runtime fees, so there is no reason for me to return",
+        "Unity's compile-wait iteration loop was already why I left"
+      ],
+      "reasoning": "I already shipped a PC/Xbox game on Unity and moved to Godot with GDScript for faster iteration. I'm not a Unity customer for new work, so this changes nothing in my workflow. It only validates my decision. Others are weighing a migration, but I've already made it. I'll keep building in Godot and won't come back. The most I'll do is check whether my old shipped Unity game is near the thresholds, which is a minor chore and not a decision.",
+      "wouldChangeMindIf": "Unity cancelled the fee entirely, put that in a binding contract, and also made its code-to-play iteration loop as fast as Godot's.",
+      "evidenceIds": [
+        "e23",
+        "e25",
+        "e24"
+      ],
+      "personaId": "p5",
+      "round": 3
+    },
+    {
+      "stance": -2,
+      "action": "delay",
+      "objections": [
+        "Fee applies retroactively to games already released and counts pre-2024 installs, so past decisions get repriced",
+        "Per-install fee is unpredictable for free or cheap mobile games and can't be modeled with confidence",
+        "Unity can change terms again; trust is broken and the 7 years of investment feel exposed",
+        "Looks like Unity is pivoting away from game development toward monetization and ads",
+        "Switching costs are real: Godot C# lacks a direct Unity script import, so I'd still rewrite engine API calls and lose Asset Store tooling"
+      ],
+      "reasoning": "I'm not switching this week. Godot mono runs C#, but it isn't a drop-in for Unity scripts: the APIs, scene model and Asset Store plugins all differ. Still, retroactive fees are what move me from loyal to hedging. In the next 30 days I'll prototype one small existing project in Godot 4 with C#, hold any new Unity-only commitments, and watch whether Unity clarifies or walks back the retroactive terms. Unreal and GameMaker are less attractive for me because I want to keep C#. The other buyers are all negative, which matches my own view. I'm delaying and testing rather than leaving outright.",
+      "wouldChangeMindIf": "Unity dropped the retroactive application to existing games and installs and committed in writing that terms can't change for a given engine version.",
+      "evidenceIds": [
+        "e29",
+        "e23"
+      ],
+      "personaId": "p6",
+      "round": 3
+    },
+    {
+      "stance": -1,
+      "action": "downgrade",
+      "objections": [
+        "Retroactive fee on already-released games makes Unity feel risky for any future commercial release",
+        "I can't tell how the revenue and install thresholds interact, and that confusion alone is off-putting",
+        "Godot is free with no fees and already looks friendlier to me",
+        "Hard to trust Unity's pricing not to change again"
+      ],
+      "reasoning": "I'm a beginner on Unity Personal and I'm unlikely to hit $200k revenue and 200k installs, so the fee wouldn't hit me directly. But I'm already trying Godot. A fee that applies retroactively, plus thresholds I don't fully understand, makes Unity feel like a bad bet for a future commercial game. Over the next 30 days I'll shift most of my learning time to Godot. I'll keep Unity installed for tutorials I'm already following, because there are lots of Unity tutorials and it's still easy to get into. I'm not deleting it, but it's no longer my main engine. Starting free and having no pricing worries matters most to me right now.",
+      "wouldChangeMindIf": "Unity states clearly in plain language that hobbyists and Personal users are exempt, and drops the retroactive part.",
+      "evidenceIds": [
+        "e11",
+        "e12"
+      ],
+      "personaId": "p7",
+      "round": 3
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Retroactive: installs before 2024 count and the fee hits already-released games, which breaks the deal I signed up under",
+        "Thresholds may protect me today, but I have no proof they stay put; if terms keep changing I turn critical",
+        "Per-install fee on a Plus plan is unpredictable for free or cheap mobile games, and installs are hard to audit or fraud-proof",
+        "Unity hasn't said what engine investment I get in return for the fee",
+        "Trust damage: a unilateral change to a policy that applies to existing projects"
+      ],
+      "reasoning": "I'm a Unity loyalist on Plus and I still think Unity is the most capable engine with the widest platform support, so I'm not jumping to Godot, Unreal or GameMaker this month. I'm probably under $200k and 200k installs, so the fee likely won't hit me directly. Still, the retroactive part is hard to defend, and every other buyer reacted negatively, which makes me less willing to be the one defending it. I'll keep working on my current projects, hold off on renewing or adding anything long-term, and wait for the final terms, a clear way to count installs, and written guarantees that small developers are exempt. I'll also try a small Godot prototype as a hedge. If the terms keep shifting, I'll turn critical and consider moving.",
+      "wouldChangeMindIf": "Unity published binding, written terms with no retroactive counting, a clear exemption for small developers, and a promise that the terms won't change again.",
+      "evidenceIds": [
+        "e30",
+        "e7"
+      ],
+      "personaId": "p8",
+      "round": 3
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e1",
+      "source": "hackernews",
+      "url": "https://news.ycombinator.com/item?id=18603031",
+      "domain": "news.ycombinator.com",
+      "quote": "No bias. If you sell a Unity game, the fee to Epic is 12%. If you sell an Unreal Game, the fee would have been 12% for the store plus 5% for engine royalties for a total of 17%, which would strongly dis-incentivize developers from using Epic's own engine.",
+      "context": "2018 reply defending the Epic Games Store waiving Unreal's 5% royalty; predates the Runtime Fee.",
+      "date": "2018-12-05",
+      "via": "brightdata"
+    },
+    {
+      "id": "e2",
+      "source": "hackernews",
+      "url": "https://news.ycombinator.com/item?id=18603031",
+      "domain": "news.ycombinator.com",
+      "quote": "Epic is certainly not making the store engine neutral. It costs less to use unreal than unity.",
+      "context": "2018 commenter arguing Unreal developers get better terms than Unity developers on the Epic store.",
+      "date": "2018-12-05",
+      "via": "brightdata"
+    },
+    {
+      "id": "e3",
+      "source": "hackernews",
+      "url": "https://news.ycombinator.com/item?id=18603031",
+      "domain": "news.ycombinator.com",
+      "quote": "It isn't Epic's fault that Unity doesn't have a royalty program.",
+      "context": "2018 reply to the claim that Unity takes a cut; at the time Unity had no per-game royalty.",
+      "date": "2018-12-05",
+      "via": "brightdata"
+    },
+    {
+      "id": "e4",
+      "source": "hackernews",
+      "url": "https://news.ycombinator.com/item?id=18603031",
+      "domain": "news.ycombinator.com",
+      "quote": "Unity is royalty-free altogether, you pay a subscription for the development tools (think Adobe CC or MS Office365) and get all upgrades during your subscription.",
+      "context": "2018 commenter describing Unity's subscription pricing model as royalty-free, before the 2023 Runtime Fee.",
+      "date": "2018-12-05",
+      "via": "brightdata"
+    },
+    {
+      "id": "e5",
+      "source": "hackernews",
+      "url": "https://news.ycombinator.com/item?id=18603031",
+      "domain": "news.ycombinator.com",
+      "quote": "Unity's license is if _your company_ makes >= $100k a year you're required to buy the $400 per seat license.",
+      "context": "2018 commenter correcting another user on how Unity's tiered seat licensing depends on company revenue.",
+      "date": "2018-12-05",
+      "via": "brightdata"
+    },
+    {
+      "id": "e6",
+      "source": "hackernews",
+      "url": "https://news.ycombinator.com/item?id=18603031",
+      "domain": "news.ycombinator.com",
+      "quote": "Unity provides the tools on subscription, but does not charge a royalty anymore.",
+      "context": "2018 commenter summarizing Unity's pricing: subscription tiers based on revenue, with no royalty.",
+      "date": "2018-12-07",
+      "via": "brightdata"
+    },
+    {
+      "id": "e7",
+      "source": "web",
+      "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html",
+      "domain": "cyberglads.com",
+      "quote": "For a lot of indie game devs Unity is a no-brainer. It's beginner-friendly, great for 3D and it supports more target platforms than any other engine.",
+      "context": "Blogger and game-dev beginner comparing engines for his first full game, describing Unity's appeal to indie developers.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e8",
+      "source": "web",
+      "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html",
+      "domain": "cyberglads.com",
+      "quote": "Unity has a free Personal Edition that is already quite powerful, but serious game creators will upgrade to either Unity Plus at 35$/month or Unity Pro at 123$/month depending on their revenues.",
+      "context": "Same author describing Unity's pricing tiers while shortlisting engines.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e9",
+      "source": "web",
+      "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html",
+      "domain": "cyberglads.com",
+      "quote": "Unreal Engine is free, but there's a catch — you'll need to pay 5% in royalty fees on all game revenues include in-game purchases if your games ever make any money.",
+      "context": "Author's view of Unreal Engine's cost model, a competitor to Unity.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e10",
+      "source": "web",
+      "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html",
+      "domain": "cyberglads.com",
+      "quote": "Unreal is usually considered as having the most advanced graphics capabilities and allowing the creation of photorealistic games.",
+      "context": "Author summarizing Unreal Engine's strengths relative to Unity.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e11",
+      "source": "web",
+      "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html",
+      "domain": "cyberglads.com",
+      "quote": "So you guessed it I'm going go the unconventional route and I'm going to pick Godot to build my game. I'm not saying that it's better than the engines I mentioned previously, but it does have a few advantages.",
+      "context": "Author's final decision after comparing Unity, Unreal Engine and Godot for a new indie game.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e12",
+      "source": "web",
+      "url": "https://cyberglads.com/making-cyberglads-1-choosing-a-game-engine.html",
+      "domain": "cyberglads.com",
+      "quote": "The fact that it's free doesn't hurt but it's not the main reason, at least for me. It's very easy to get into and it's great for beginners.",
+      "context": "Author explaining why he chose Godot over Unity and Unreal.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e13",
+      "source": "web",
+      "url": "https://aiinstitute.hbs.edu/platform-digit/submission/the-unreal-platform-for-game-developers/",
+      "domain": "aiinstitute.hbs.edu",
+      "quote": "Unreal is VERY intuitive to use. I was actually quite surprised with Unreal’s low market share compared to what I thought it was. Unity is really gaining a strong fan base.",
+      "context": "The post's author replying to a commenter about Unreal Engine versus Unity.",
+      "date": "2017-02-26",
+      "via": "brightdata"
+    },
+    {
+      "id": "e14",
+      "source": "web",
+      "url": "https://aiinstitute.hbs.edu/platform-digit/submission/the-unreal-platform-for-game-developers/",
+      "domain": "aiinstitute.hbs.edu",
+      "quote": "I knew they had effectively “open-sourced” the game engine, but I didn’t know they had built an easy to use interface to make it accessible to the masses…",
+      "context": "A reader commenting on the post's description of Unreal Engine as a platform for game developers.",
+      "date": "2017-02-24",
+      "via": "brightdata"
+    },
+    {
+      "id": "e15",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/gamedev/comments/5jjwwa/unity_3ds_new_price_model_thoughts_experiences/",
+      "domain": "reddit.com",
+      "quote": "The price is not indie friendly being per-seat rather than per-project.",
+      "context": "Original poster's first concern about Unity Pro subscription pricing in a 2016 thread (not the 2023 Runtime Fee); a 2-person indie team with perpetual licenses.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e16",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/gamedev/comments/5jjwwa/unity_3ds_new_price_model_thoughts_experiences/",
+      "domain": "reddit.com",
+      "quote": "It appears that no free slots are included per project, so I'd have to pay for my other dev's slots. Gah.. that hurts.",
+      "context": "Poster reacting to the $125/mo per-seat Unity Pro price when moving off perpetual licenses (2016 thread).",
+      "via": "brightdata"
+    },
+    {
+      "id": "e17",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/gamedev/comments/5jjwwa/unity_3ds_new_price_model_thoughts_experiences/",
+      "domain": "reddit.com",
+      "quote": "If I'm going to pay that much, I need that fuzzy feeling of support.",
+      "context": "Poster explaining why Unity's lack of docs and support for its networking features undermines the Pro subscription's value (2016 thread).",
+      "via": "brightdata"
+    },
+    {
+      "id": "e18",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/gamedev/comments/5jjwwa/unity_3ds_new_price_model_thoughts_experiences/",
+      "domain": "reddit.com",
+      "quote": "it's somewhat demoralizing to pay a subscription for something that doesn't even have proper docs.",
+      "context": "Poster's edit after learning Unity Plus includes the networking service, still frustrated with missing support and docs (2016 thread).",
+      "via": "brightdata"
+    },
+    {
+      "id": "e19",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/gamedev/comments/5jjwwa/unity_3ds_new_price_model_thoughts_experiences/",
+      "domain": "reddit.com",
+      "quote": "It looks like you can do quite a lot with just Unity Plus ($30/mo/slot), however it seems like you need a 12/mo commitment. But for 30/mo... not bad :)",
+      "context": "Poster's edit after finding Unity's official price comparison chart and considering the cheaper Plus tier (2016 thread).",
+      "via": "brightdata"
+    },
+    {
+      "id": "e20",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/Unity3D/comments/v44ntg/are_unity_game_services_as_expensive_as_i_think/",
+      "domain": "reddit.com",
+      "quote": "I have no experience on networking, so I could be vastly misunderstanding resource usage but looking at the Unity Game Services pricing it feels like it could easily balloon out of control.",
+      "context": "Original poster in r/Unity3D worried that Unity Game Services pricing could become unaffordable; post is an older one, not about the Runtime Fee.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e21",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/Unity3D/comments/v44ntg/are_unity_game_services_as_expensive_as_i_think/",
+      "domain": "reddit.com",
+      "quote": "My main concern is that I don't monetize in a way that makes multiplayer match making and user generated content sustainable to maintain. (particularly relay seems like it could get expensive if there was a decent number of concurrent users)",
+      "context": "Same poster explaining their concern about the cost of Unity's Relay service for an online game with limited monetization.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e22",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/14e2o4w/give_me_your_honest_thoughts_on_godot_vs_unity/",
+      "domain": "reddit.com",
+      "quote": "The Unity huge asset store is a big advantage but what I see is that people often end up buying assets to plug holes in what should be a built in feature, and it could be very basic things like tilemaps or proper gamepad support.",
+      "context": "Reply to a software engineer weighing Godot against Unity. The commenter explains why they left Unity.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e23",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/14e2o4w/give_me_your_honest_thoughts_on_godot_vs_unity/",
+      "domain": "reddit.com",
+      "quote": "Unity on the other hand, while the current market leader, is slowly diversifying and acquiring all sorts of companies and pivoting away from gamedev.",
+      "context": "Reply to the same thread about Godot's small market share. The commenter staffed the Godot booth at GDC and says they work for a Godot console-porting company.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e24",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/14e2o4w/give_me_your_honest_thoughts_on_godot_vs_unity/",
+      "domain": "reddit.com",
+      "quote": "Made a commercial game with Unity before (pc/xbox) then I am now working on next game on Godot using gdscript . Game development knowledge is easily transferable between modern engines these days.",
+      "context": "Commenter who shipped a commercial Unity game and is now building their next game in Godot.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e25",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/14e2o4w/give_me_your_honest_thoughts_on_godot_vs_unity/",
+      "domain": "reddit.com",
+      "quote": "Why I use Godot now? Making game is a very iterative process and Godot is way faster than Unity going from code to running your game back and forth.",
+      "context": "Same commenter, explaining why they moved from Unity to Godot.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e26",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/14e2o4w/give_me_your_honest_thoughts_on_godot_vs_unity/",
+      "domain": "reddit.com",
+      "quote": "Yeah, people like to bitch and moan that Unity can run games in the editor and make adjustments and godot cant, however, godot can run individual scenes and the speed with which I can make minor adjustments is ridiculously faster compared to Unity.",
+      "context": "Same commenter, comparing Unity's in-editor play with Godot's scene running.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e27",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/14e2o4w/give_me_your_honest_thoughts_on_godot_vs_unity/",
+      "domain": "reddit.com",
+      "quote": "Iteration loop is the most important thing whenever you are building learning. Would love to see a side by side. I hate waiting for compilation in unity.",
+      "context": "Commenter replying to the iteration-speed discussion about Godot versus Unity.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e28",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/vsmrt3/moving_from_unity_to_godot/",
+      "domain": "reddit.com",
+      "quote": "So I developed with Unity over 7 years now, and well Unitys having his strength/weaknesses just like any other EngineHowever I saw something while downloading Godot today that I didnt know before",
+      "context": "Original poster in r/godot, a long-time Unity developer (7+ years) who is downloading Godot and considering moving from Unity.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e29",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/vsmrt3/moving_from_unity_to_godot/",
+      "domain": "reddit.com",
+      "quote": "It says in the mono version that it supports C# is it possible to retrieve Unity scripts this way? If it's the case you can't imagine how it will save my time by x1000",
+      "context": "Same poster asking whether Godot's C# (Mono) support lets them reuse existing Unity scripts, which would lower the cost of switching.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e30",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/11zmedg/why_choose_godot_over_unity/",
+      "domain": "reddit.com",
+      "quote": "I’m a Unity dev and have never given Godot a try, but from my little perspective on Godot, isn’t Unity more advanced in almost every way, or am I missing something?",
+      "context": "Original poster in r/godot asking why anyone would choose Godot over Unity; a Unity developer with no Godot experience.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e31",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/godot/comments/11zmedg/why_choose_godot_over_unity/",
+      "domain": "reddit.com",
+      "quote": "They’re both built as flexible 2D and 3D Game engines, but Unity is just bigger in terms of features and has a wider selection of documentation and tutorials, so why would game devs choose Godot over Unity?",
+      "context": "Same post: the author explains why they see Unity as the stronger option on features, documentation and tutorials.",
+      "via": "brightdata"
+    }
+  ],
+  "basis": {
+    "grounded": true,
+    "evidenceCount": 31,
+    "domainCount": 4,
+    "customerQuotes": 0,
+    "weighting": "evidence",
+    "confidence": "medium",
+    "confidenceReason": "31 quotes from 4 domains. 3 samples agree within 11 points. Backtest as of 2023-09-11: the model may already know the outcome, so compare against what really happened.",
+    "groundingProvider": "brightdata",
+    "asOf": "2023-09-11",
+    "droppedAfterCutoff": 3,
+    "llmProvider": "claude-cli",
+    "models": {
+      "fast": "sonnet",
+      "strong": "opus"
+    }
+  },
+  "usage": {
+    "calls": 100,
+    "inputTokens": 330280,
+    "outputTokens": 64747,
+    "listPriceUsd": 1.7754,
+    "seconds": 613
+  }
+}

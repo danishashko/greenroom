@@ -78,15 +78,30 @@ export class BrightDataProvider implements GroundProvider {
    */
   private async request(body: Record<string, unknown>): Promise<string> {
     const maxAttempts = 4;
+    const timeoutMs = Number(process.env["GREENROOM_HTTP_TIMEOUT_MS"] ?? 60_000);
     let lastError = "";
+    let timeouts = 0;
+    let made = 0;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      const res = await fetch(this.endpoint, {
-        method: "POST",
-        headers: { "content-type": "application/json", authorization: `Bearer ${this.apiKey}` },
-        body: JSON.stringify(body),
-        signal: AbortSignal.timeout(Number(process.env["GREENROOM_HTTP_TIMEOUT_MS"] ?? 60_000)),
-      });
-      const text = await res.text();
+      made = attempt;
+      let res: Response;
+      let text: string;
+      try {
+        res = await fetch(this.endpoint, {
+          method: "POST",
+          headers: { "content-type": "application/json", authorization: `Bearer ${this.apiKey}` },
+          body: JSON.stringify(body),
+          signal: AbortSignal.timeout(timeoutMs),
+        });
+        text = await res.text();
+      } catch (e) {
+        // The same page can take one second or several minutes through the unlocker, so a timed-out
+        // request gets one more try. A second timeout ends it, to keep a run from stalling on one page.
+        if (!(e instanceof Error && (e.name === "TimeoutError" || e.name === "AbortError"))) throw e;
+        lastError = `timed out after ${Math.round(timeoutMs / 1000)}s`;
+        if (++timeouts >= 2 || attempt === maxAttempts) break;
+        continue;
+      }
       if (res.status === 401 || res.status === 403) {
         throw new GreenroomError("GROUND_FAILED", `Bright Data rejected the request (${res.status}).`, "Check BRIGHTDATA_API_KEY and that the zone names match your dashboard.");
       }
@@ -97,7 +112,7 @@ export class BrightDataProvider implements GroundProvider {
       if (attempt === maxAttempts) break;
       await sleep(brdCode === "failed_query_rejected" ? 16_000 : 2_500 * attempt);
     }
-    throw new GreenroomError("GROUND_FAILED", `Bright Data request failed after ${maxAttempts} attempts (${lastError}).`, "Usually transient. Retry, or check zone names and account balance in the Bright Data dashboard.");
+    throw new GreenroomError("GROUND_FAILED", `Bright Data request failed after ${made} ${made === 1 ? "attempt" : "attempts"} (${lastError}).`, "Usually transient. Retry, or check zone names and account balance in the Bright Data dashboard.");
   }
 
   async check() {
