@@ -3,14 +3,16 @@
 Rehearse a launch, pricing change or repositioning against simulated buyers built from real conversations.
 
 ```bash
-npx greenroom run "Raise Pro from $49 to $79 per month" --audience "B2B marketing teams"
+npx greenroom run 'Raise Pro from $49 to $79 per month' --audience "B2B marketing teams"
 ```
+
+Needs Node.js 22.12 or newer.
 
 You get a report with the share of buyers who react badly, who would leave, the objections behind it with real quotes, and the changes that would soften it. Every persona is built from quotes pulled from Reddit, Hacker News, review sites and forums, or from your own support tickets and survey comments. Quotes that do not appear verbatim on the source page are thrown away.
 
-![Rehearsal report for the 2022 Heroku free plan removal, backtested as of the day before the announcement](docs/report.png)
+![Rehearsal report for the 2022 Heroku free plan removal, backtested as of the day before the announcement](https://raw.githubusercontent.com/danishashko/greenroom/main/docs/report.png)
 
-The report above is a backtest: Heroku's 2022 removal of free plans, rehearsed with only what was published before the announcement. Full output in [examples/heroku-2022](examples/heroku-2022/report.md).
+The report above is a backtest: Heroku's 2022 removal of free plans, rehearsed with only what was published before the announcement. Full output in [examples/heroku-2022](https://github.com/danishashko/greenroom/blob/main/examples/heroku-2022/report.md).
 
 ## For AI agents
 
@@ -56,7 +58,9 @@ Bring your own quotes with `--evidence ./quotes.json` (an array of strings or `{
 The web tells you what the market thinks. Your own customers tell you what your base will do.
 
 ```bash
-greenroom run "Raise Pro from $49 to $79 per month"   --customers ./tickets.csv ./nps.jsonl   --segments "Free=12000,Pro=3400:166600:268600,Team=600:119400"
+greenroom run 'Raise Pro from $49 to $79 per month' \
+  --customers ./tickets.csv ./nps.jsonl \
+  --segments "Free=12000,Pro=3400:166600:268600,Team=600:119400"
 ```
 
 - `--customers` takes support tickets, survey or NPS comments, sales call notes or churn reasons as `.csv`, `.tsv`, `.json` or `.jsonl`. Rows are used as written, with emails and phone numbers stripped, and they come before web quotes when personas are built. Columns are detected from common names (`body`, `comment`, `plan`, `created_at`); override with `--columns text=body,segment=plan,date=created_at`. Up to 60 rows are used, spread across segments.
@@ -89,7 +93,7 @@ Measured with `claude-cli` on a Claude subscription and Bright Data grounding:
 
 | Run | Calls | Time | Input tokens |
 | --- | --- | --- | --- |
-| Default: 8 personas, 3 rounds, 3 samples | 90 | 7 min | 278k |
+| Default: 8 personas, 3 rounds, 3 samples | 90 | 7 min | 280k |
 | Quick look: `--samples 1` | 35 | 3 min | 109k |
 
 On a subscription there is no per-call charge. On an API key, `greenroom estimate` shows the calls and tokens before anything is spent, and a dollar figure when you set `GREENROOM_PRICE_IN_PER_M` and `GREENROOM_PRICE_OUT_PER_M`. `--max-calls` is a hard cap.

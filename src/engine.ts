@@ -68,7 +68,7 @@ export function parseSeed(input: unknown): Seed {
     throw new GreenroomError(
       "USAGE",
       `Invalid seed: ${r.error.issues.map((i) => `${i.path.join(".") || "change"}: ${i.message}`).join("; ")}`,
-      'Pass the change as text, for example: greenroom run "Raise Pro from $49 to $79 per month".',
+      "Pass the change as text, for example: greenroom run 'Raise Pro from $49 to $79 per month'.",
     );
   }
   return r.data;
@@ -82,7 +82,7 @@ export function parseSegments(spec: string): { name: string; customers: number; 
     .filter(Boolean)
     .map((part) => {
       const m = /^(.+?)\s*=\s*([\d_]+)(?:\s*:\s*([\d_.]+))?(?:\s*:\s*([\d_.]+))?$/.exec(part);
-      if (!m) throw new GreenroomError("USAGE", `Cannot read segment "${part}".`, 'Use name=customers, name=customers:mrr or name=customers:mrr:mrrAfter, for example "Pro=3400:98000:132000".');
+      if (!m) throw new GreenroomError("USAGE", `Cannot read segment "${part}".`, 'Use name=customers, name=customers:mrr or name=customers:mrr:mrrAfter, for example "Pro=3400:166600:268600".');
       const customers = Number((m[2] as string).replace(/_/g, ""));
       return { name: (m[1] as string).trim(), customers, ...(m[3] ? { mrr: Number(m[3].replace(/_/g, "")) } : {}), ...(m[4] ? { mrrAfter: Number(m[4].replace(/_/g, "")) } : {}) };
     });
@@ -129,7 +129,7 @@ export async function runRehearsal(opts: RunOptions): Promise<RunResult> {
     createdAt = m.createdAt;
     stored = m.options;
   } else {
-    if (!opts.seed) throw new GreenroomError("USAGE", "A seed with the change to rehearse is required.", 'Example: greenroom run "Raise Pro from $49 to $79 per month".');
+    if (!opts.seed) throw new GreenroomError("USAGE", "A seed with the change to rehearse is required.", "Example: greenroom run 'Raise Pro from $49 to $79 per month'.");
     seed = parseSeed(opts.seed);
     // Bad customer files or column names fail now, before a run folder exists.
     if (opts.customerPaths?.length) loadCustomerData(opts.customerPaths, opts.customerColumns, seed.asOf);

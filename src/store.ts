@@ -21,6 +21,7 @@ export class RunStore {
   }
 
   static open(baseDir: string, runId: string): RunStore {
+    if (!/^[\w.-]+$/.test(runId) || runId.startsWith(".")) throw new GreenroomError("NOT_FOUND", `No run "${runId}".`, "List runs with `greenroom runs`.");
     const dir = path.resolve(baseDir, runId);
     if (!existsSync(dir)) throw new GreenroomError("NOT_FOUND", `No run "${runId}" in ${path.resolve(baseDir)}.`, "List runs with `greenroom runs`.");
     return new RunStore(dir, runId);

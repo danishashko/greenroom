@@ -2,6 +2,15 @@
   "name": "greenroom",
   "version": "0.1.0",
   "description": "Rehearse a launch, pricing change or repositioning against simulated buyers built from real conversations.",
+  "author": "Daniel Shashko",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danishashko/greenroom.git"
+  },
+  "homepage": "https://github.com/danishashko/greenroom#readme",
+  "bugs": {
+    "url": "https://github.com/danishashko/greenroom/issues"
+  },
   "type": "module",
   "bin": {
     "greenroom": "dist/cli.js"
@@ -17,7 +26,7 @@
     "LICENSE"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22.12"
   },
   "scripts": {
     "dev": "tsx src/cli.ts",

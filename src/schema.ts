@@ -29,6 +29,7 @@ export const SeedSchema = z.object({
   asOf: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "use YYYY-MM-DD")
+    .refine((d) => !Number.isNaN(Date.parse(`${d}T00:00:00Z`)) && new Date(`${d}T00:00:00Z`).toISOString().startsWith(d), "not a real date")
     .optional()
     .describe("Cut-off date for a fair backtest of a past change. Search only finds pages published by then, dated quotes after it are dropped, and personas are told it is that day."),
   segments: z

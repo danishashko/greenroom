@@ -67,7 +67,7 @@ function addRunOptions(cmd: Command): Command {
     .option("--evidence <path...>", "files or folders of quotes (txt, md, json, csv)")
     .option("--customers <path...>", "your own customer text: tickets, survey comments, call notes (csv, tsv, json, jsonl)")
     .option("--columns <map>", "customer data columns, e.g. text=body,segment=plan,date=created_at (detected when left out)")
-    .option("--segments <spec>", 'your customer base, e.g. "Free=12000,Pro=3400:98000:132000" (name=customers[:monthly revenue now[:at the new price]])')
+    .option("--segments <spec>", 'your customer base, e.g. "Free=12000,Pro=3400:166600:268600" (name=customers[:monthly revenue now[:at the new price]])')
     .option("--currency <code>", "currency of segment revenue (default USD)")
     .option("--queries <n>", `max search queries (default ${DEFAULTS.maxQueries})`)
     .option("--pages <n>", `max pages to read from search (default ${DEFAULTS.maxPages})`)
@@ -164,7 +164,9 @@ program
   .name("greenroom")
   .description("Rehearse a launch, pricing change or repositioning against simulated buyers built from real conversations.")
   .version(VERSION)
-  .showHelpAfterError("(run with --help for usage)");
+  .showHelpAfterError("(run with --help for usage)")
+  // Unknown flags, missing arguments and bad commands are usage errors (exit 2), as documented.
+  .exitOverride((err) => process.exit(err.exitCode === 0 ? 0 : 2));
 
 addRunOptions(program.command("run").description("Run a full rehearsal").argument("[change...]", "the change in plain words"))
   .option("--resume <runId>", "continue a run from its last finished stage")
@@ -173,7 +175,7 @@ addRunOptions(program.command("run").description("Run a full rehearsal").argumen
   .option("--open", "open the HTML report when done")
   .action(async (change: string[], o: Opts) => {
     try {
-      if (!change.length && !o.seedFile && !o.resume) throw new GreenroomError("USAGE", "Give the change to rehearse.", 'Example: greenroom run "Raise Pro from $49 to $79 per month" --audience "B2B marketing teams"');
+      if (!change.join(" ").trim() && !o.seedFile && !o.resume) throw new GreenroomError("USAGE", "Give the change to rehearse.", `Example: greenroom run 'Raise Pro from $49 to $79 per month' --audience "B2B marketing teams"`);
       const opts = toRunOptions(change.join(" ") || undefined, o);
       const result = await runRehearsal({
         ...opts,

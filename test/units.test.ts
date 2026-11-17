@@ -375,6 +375,12 @@ describe("backtest cut-off", () => {
   it("rejects a malformed cut-off", async () => {
     const { parseSeed } = await import("../src/engine.js");
     expect(() => parseSeed({ change: "End the free plan on November 28", asOf: "24/08/2022" })).toThrow(/YYYY-MM-DD/);
+    expect(() => parseSeed({ change: "End the free plan on November 28", asOf: "2022-02-29" })).toThrow(/not a real date/);
+    expect(parseSeed({ change: "End the free plan on November 28", asOf: "2024-02-29" }).asOf).toBe("2024-02-29");
+  });
+  it("refuses run ids that are paths", async () => {
+    const { RunStore } = await import("../src/store.js");
+    for (const id of ["../..", "..", "a/b", "a\\b", ".hidden"]) expect(() => RunStore.open(".", id)).toThrow(/No run/);
   });
 });
 

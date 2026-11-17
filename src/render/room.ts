@@ -19,7 +19,7 @@ export function roomSection(r: Report): string {
 </div>`;
 }
 
-export const ROOM_CSS = `
+export const ROOM_CSS: string = `
 .room{padding:16px}
 .room-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
 .room-rounds{display:flex;gap:8px;flex-wrap:wrap}
@@ -31,12 +31,12 @@ export const ROOM_CSS = `
 .room-tip{position:absolute;max-width:360px;padding:12px 16px;border-radius:var(--r-md);background:var(--blue-800);border:1px solid var(--blue-700);box-shadow:var(--shadow-md);font-size:14px;line-height:1.5;pointer-events:none;color:var(--w100)}
 .room-tip small{display:block;color:var(--gray-400);margin-top:4px}
 .room .legend{margin-top:8px}
-@media (max-width:640px){#room{height:380px}}
+@media (max-width:640px){#room{height:460px}}
 @media print{.room-bar{display:none}}
 `;
 
 // Plain JS in a string: no template interpolation and no backslashes inside.
-export const ROOM_JS = `
+export const ROOM_JS: string = `
 (function(){
 var cv=document.getElementById('room');if(!cv)return;
 var R=JSON.parse(document.getElementById('report-data').textContent);
@@ -65,7 +65,7 @@ var W=0,H=0,DPR=1;
 function size(w,h,dpr){DPR=dpr||window.devicePixelRatio||1;W=w;H=h;cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR)}
 function project(p,S){var cy=Math.cos(S.yaw),sy=Math.sin(S.yaw),cp=Math.cos(S.pitch),sp=Math.sin(S.pitch);
   var x=p[0]*cy-p[2]*sy,z=p[0]*sy+p[2]*cy;var y=p[1]*cp-z*sp;z=p[1]*sp+z*cp;
-  var D=3.1,f=Math.min(W*(W<560?0.92:0.6),H)*1.3*(S.zoom||1),k=f/(D-z);return {x:W/2+(S.panX||0)*W+x*k,y:H/2+(S.panY||0)*H-y*k,z:z,k:k}}
+  var D=3.1,f=Math.min(W*(W<560?0.92:0.6),H)*1.3*(S.zoom||1),k=f/(D-z);return {x:W/2+(S.panX||0)*W+x*k,y:H/2+(S.panY==null?(W<560?-0.12:0):S.panY)*H-y*k,z:z,k:k}}
 var hits=[];
 function draw(S){
   S=S||{};var round=S.round==null?ROUNDS:S.round,build=S.build==null?1:S.build,edges=S.edges==null?1:S.edges,talk=S.talk==null?(round>1.5?1:0):S.talk,ls=S.labelScale||(W<560?0.8:1),ps=S.pointScale||ls;
