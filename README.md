@@ -3,10 +3,10 @@
 Rehearse a launch, pricing change or repositioning against simulated buyers built from real conversations.
 
 ```bash
-npx greenroom run 'Raise Pro from $49 to $79 per month' --audience "B2B marketing teams"
+npx greenroom-cli run 'Raise Pro from $49 to $79 per month' --audience "B2B marketing teams"
 ```
 
-Needs Node.js 22.12 or newer.
+Needs Node.js 22.12 or newer. `npm i -g greenroom-cli` installs the `greenroom` command used below.
 
 You get a report with the share of buyers who react badly, who would leave, the objections behind it with real quotes, and the changes that would soften it. Every persona is built from quotes pulled from Reddit, Hacker News, review sites and forums, or from your own support tickets and survey comments. Quotes that do not appear verbatim on the source page are thrown away.
 
@@ -18,8 +18,8 @@ The report above is a backtest: Unity's 2023 per-install Runtime Fee, rehearsed 
 
 | You are | Start here |
 | --- | --- |
-| An MCP client | `claude mcp add greenroom -- npx -y greenroom mcp`. The server sends its operating guide as MCP instructions. |
-| An agent with a shell | `npx -y greenroom guide` prints the same guide. Every command below takes `--json`. |
+| An MCP client | `claude mcp add greenroom -- npx -y greenroom-cli mcp`. The server sends its operating guide as MCP instructions. |
+| An agent with a shell | `npx -y greenroom-cli guide` prints the same guide. Every command below takes `--json`. |
 | Claude Code with skills | Copy [skills/greenroom](skills/greenroom/SKILL.md) into `.claude/skills/`. |
 | A coding agent changing this repo | [AGENTS.md](AGENTS.md) |
 
@@ -82,7 +82,8 @@ Outputs per run in `.greenroom/runs/<id>/`: `report.html`, `report.md`, `report.
 ## Backtest a change that already happened
 
 ```bash
-greenroom run "Unity charges a Runtime Fee per install from January 1, 2024, including on games already released" \n  --product Unity --competitor "Unreal Engine" Godot --as-of 2023-09-11
+greenroom run "Unity charges a Runtime Fee per install from January 1, 2024, including on games already released" \
+  --product Unity --competitor "Unreal Engine" Godot --as-of 2023-09-11
 ```
 
 `--as-of` limits search to pages published by that date, drops quotes dated later and undated quotes from review sites (their pages keep growing), and tells every persona that today is that day. Compare the report with what really happened before you trust a run on a change that has not happened yet. The model may still remember the real outcome, and the report says so.
@@ -120,11 +121,11 @@ Exit codes: `0` ok, `2` usage, `3` backend unavailable, `4` call cap hit, `5` no
 ## MCP
 
 ```bash
-claude mcp add greenroom -- npx -y greenroom mcp
+claude mcp add greenroom -- npx -y greenroom-cli mcp
 ```
 
 ```json
-{ "mcpServers": { "greenroom": { "command": "npx", "args": ["-y", "greenroom", "mcp"] } } }
+{ "mcpServers": { "greenroom": { "command": "npx", "args": ["-y", "greenroom-cli", "mcp"] } } }
 ```
 
 Tools: `greenroom_doctor`, `greenroom_estimate`, `greenroom_start`, `greenroom_status`, `greenroom_report`, `greenroom_runs`. Runs take minutes, so `greenroom_start` returns a job id and `greenroom_status` can wait up to 55 seconds per call. Every tool has an output schema and read/write annotations, and the server sends the operating guide as its instructions.
@@ -132,7 +133,7 @@ Tools: `greenroom_doctor`, `greenroom_estimate`, `greenroom_start`, `greenroom_s
 ## Library
 
 ```ts
-import { runRehearsal } from "greenroom";
+import { runRehearsal } from "greenroom-cli";
 
 const { report } = await runRehearsal({
   seed: { change: "Raise Pro from $49 to $79 per month", kind: "pricing" },

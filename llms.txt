@@ -3,14 +3,14 @@
 > CLI, MCP server and library that rehearses a launch, pricing change or repositioning against simulated buyers built from real, verbatim quotes. Works on a Claude subscription (claude -p), any API key, or a local model. Bright Data is the optional grounding layer. Add your own customer text (tickets, survey comments) and segment sizes to get customers and revenue at risk. Results come as a median with a range across independent samples, with a confidence grade.
 
 ## Start here
-- Operating guide for agents: run `npx -y greenroom guide` (the MCP server sends the same text as its instructions)
+- Operating guide for agents: run `npx -y greenroom-cli guide` (the MCP server sends the same text as its instructions)
 - [README](https://github.com/danishashko/greenroom/blob/main/README.md): install, backends, time and cost, CLI, MCP, limits
 - [Claude Code skill](https://github.com/danishashko/greenroom/blob/main/skills/greenroom/SKILL.md)
 - [Example report: Unity Runtime Fee 2023 backtest](https://github.com/danishashko/greenroom/blob/main/examples/unity-2023/report.md)
 
 ## Interfaces
-- CLI: `npx greenroom run "<change>" --json`
-- MCP: `npx -y greenroom mcp` (tools: greenroom_doctor, greenroom_estimate, greenroom_start, greenroom_status, greenroom_report, greenroom_runs)
+- CLI: `npx greenroom-cli run "<change>" --json`
+- MCP: `npx -y greenroom-cli mcp` (tools: greenroom_doctor, greenroom_estimate, greenroom_start, greenroom_status, greenroom_report, greenroom_runs)
 - Schemas: `greenroom schema report`, `greenroom schema seed`
 
 ## Optional

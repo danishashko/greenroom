@@ -2,7 +2,7 @@
 
 For coding agents working on this repo.
 
-To **use** greenroom rather than change it, run `npx greenroom guide`. It prints the operating guide (workflow, seed writing, how to report results, error codes). It is the same text the MCP server sends as its instructions. The source is `src/guide.ts`.
+To **use** greenroom rather than change it, run `npx greenroom-cli guide`. It prints the operating guide (workflow, seed writing, how to report results, error codes). It is the same text the MCP server sends as its instructions. The source is `src/guide.ts`.
 
 ## Map
 

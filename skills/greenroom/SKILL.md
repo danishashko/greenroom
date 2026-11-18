@@ -10,20 +10,20 @@ Run it through the MCP server (`greenroom_*` tools) if it is connected, otherwis
 1. Print the full operating guide first and follow it:
 
    ```bash
-   npx -y greenroom guide
+   npx -y greenroom-cli guide
    ```
 
 2. Check backends and cost before spending anything:
 
    ```bash
-   npx -y greenroom doctor --json
-   npx -y greenroom estimate "<change>" --json
+   npx -y greenroom-cli doctor --json
+   npx -y greenroom-cli estimate "<change>" --json
    ```
 
 3. Run, then read the summary:
 
    ```bash
-   npx -y greenroom run "<change>" --audience "<who buys it>" --json
+   npx -y greenroom-cli run "<change>" --audience "<who buys it>" --json
    ```
 
 Rules that matter most:
