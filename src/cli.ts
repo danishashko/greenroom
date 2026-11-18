@@ -11,7 +11,8 @@ import { ReportSchema, SeedSchema, jsonSchemaOf } from "./schema.js";
 import { RunStore, listRuns } from "./store.js";
 import { pct } from "./util.js";
 
-const VERSION = "0.1.0";
+// Read from package.json so the reported version always matches the published one.
+const VERSION = (JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as { version: string }).version;
 
 interface Opts {
   kind?: string;
