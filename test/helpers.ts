@@ -111,7 +111,8 @@ export class MockProvider extends BaseProvider {
 
     if (has("themes")) {
       const n = (req.prompt.match(/^\d+:/gm) ?? []).length;
-      return { json: { themes: [{ label: "Price rise too steep", objectionNumbers: Array.from({ length: n }, (_, i) => i) }] }, usage };
+      const ids = [...req.prompt.matchAll(/^\[(e\d+)\]/gm)].map((m) => m[1] as string).slice(0, 2);
+      return { json: { themes: [{ label: "Price rise too steep", objectionNumbers: Array.from({ length: n }, (_, i) => i), evidenceIds: ids }] }, usage };
     }
 
     if (has("readout")) {

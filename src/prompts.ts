@@ -184,11 +184,15 @@ export function digestFrom(
   return lines.join("\n");
 }
 
-export function themesPrompt(items: string[]): string {
+export function themesPrompt(items: string[], quotes: Evidence[] = []): string {
   return `These are objections raised by simulated buyers, numbered from 0:
 ${items.map((t, i) => `${i}: ${t}`).join("\n")}
-
-Group them into at most 6 themes. Each theme gets a short plain label (3 to 7 words, no jargon) and the list of objection numbers it covers. Every number appears in at most one theme. Leave out objections that fit no theme.`;
+${quotes.length ? `\nReal quotes from the market:\n${quotes.map((e) => `[${e.id}] ${e.quote.slice(0, 240)}`).join("\n")}\n` : ""}
+Group them into at most 6 themes. Each theme gets a short plain label (3 to 7 words, no jargon) and the list of objection numbers it covers. Every number appears in at most one theme. Leave out objections that fit no theme.${
+    quotes.length
+      ? " For each theme, also list in evidenceIds up to 3 quote ids whose author expresses that same objection in their own words. A quote that only mentions the product, or is about a different complaint, does not count. Leave evidenceIds empty when no quote fits."
+      : " Leave evidenceIds empty."
+  }`;
 }
 
 export function verdictPrompt(args: {

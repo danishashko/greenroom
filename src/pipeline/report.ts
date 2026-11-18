@@ -19,7 +19,13 @@ type Theme = Report["themes"][number];
 
 const ThemesSchema = z.object({
   themes: z
-    .array(z.object({ label: z.string().min(3), objectionNumbers: z.array(z.number().int().min(0)).min(1) }))
+    .array(
+      z.object({
+        label: z.string().min(3),
+        objectionNumbers: z.array(z.number().int().min(0)).min(1),
+        evidenceIds: z.array(z.string()).max(3).default([]),
+      }),
+    )
     .max(8),
 });
 
@@ -269,7 +275,7 @@ export function gradeConfidence(
 }
 
 export function buildThemes(
-  grouped: { label: string; objectionNumbers: number[] }[],
+  grouped: { label: string; objectionNumbers: number[]; evidenceIds?: string[] }[],
   items: { personaId: string; text: string }[],
   personas: Persona[],
   reactions: Reaction[],
@@ -277,7 +283,6 @@ export function buildThemes(
 ): Theme[] {
   const w = new Map(personas.map((p) => [p.id, p.weight]));
   const evById = new Map(evidence.map((e) => [e.id, e]));
-  const personaById = new Map(personas.map((p) => [p.id, p]));
   const themes: Theme[] = [];
   const used = new Set<number>();
   for (const g of grouped) {
@@ -292,20 +297,22 @@ export function buildThemes(
     if (!ids.size) continue;
     const personaIds = [...ids];
     const weight = round(personaIds.reduce((s, id) => s + (w.get(id) ?? 0), 0), 4);
+    // Only quotes the grouping step matched to this objection. A theme with no matching quote shows
+    // none, rather than whatever its personas happened to cite.
     const quotes: Theme["quotes"] = [];
-    for (const id of personaIds) {
-      const cited = reactions.filter((r) => r.personaId === id).flatMap((r) => r.evidenceIds);
-      for (const eid of [...cited, ...(personaById.get(id)?.evidenceIds ?? [])]) {
-        const e = evById.get(eid);
-        if (e && !quotes.some((q) => q.evidenceId === eid) && quotes.length < 3) {
-          quotes.push({ evidenceId: eid, quote: e.quote, url: e.url });
-          break;
-        }
-      }
+    for (const eid of g.evidenceIds ?? []) {
+      const e = evById.get(eid);
+      if (e && !quotes.some((q) => q.evidenceId === eid) && quotes.length < 3) quotes.push({ evidenceId: eid, quote: e.quote, url: e.url });
     }
     themes.push({ label: g.label, weight, personaIds, quotes });
   }
   return themes.sort((a, b) => b.weight - a.weight);
+}
+
+/** Quotes the shown personas were built from or cited, in that order, as candidates for theme quotes. */
+function themeCandidates(personas: Persona[], reactions: Reaction[], evidence: Evidence[], max = 60): Evidence[] {
+  const ids = new Set([...reactions.flatMap((r) => r.evidenceIds), ...personas.flatMap((p) => p.evidenceIds)]);
+  return evidence.filter((e) => ids.has(e.id)).slice(0, max);
 }
 
 export interface ReportInput {
@@ -337,10 +344,10 @@ export async function reportStage(ctx: Ctx, input: ReportInput): Promise<Report>
   if (items.length) {
     const grouped = await ctx.llm.complete({
       system: SYSTEM_ANALYST,
-      prompt: themesPrompt(items.map((i) => i.text)),
+      prompt: themesPrompt(items.map((i) => i.text), themeCandidates(personas, reactions, evidence)),
       schema: ThemesSchema,
       label: "report:themes",
-      tier: "fast",
+      tier: "strong",
     });
     themes = buildThemes(grouped.data.themes, items, personas, reactions, evidence);
   }

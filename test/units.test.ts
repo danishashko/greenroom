@@ -119,10 +119,17 @@ describe("themes", () => {
       { id: "e1", source: "reddit" as const, url: "https://r/1", domain: "reddit.com", quote: "too pricey", via: "x" },
       { id: "e2", source: "review" as const, url: "https://g2/1", domain: "g2.com", quote: "costly", via: "x" },
     ];
-    const t = buildThemes([{ label: "Price", objectionNumbers: [0, 1, 99] }], items, ps, [], ev);
+    const t = buildThemes([{ label: "Price", objectionNumbers: [0, 1, 99], evidenceIds: ["e2", "e1", "e9"] }], items, ps, [], ev);
     expect(t).toHaveLength(1);
     expect(t[0]!.weight).toBe(1);
-    expect(t[0]!.quotes.map((q) => q.evidenceId)).toEqual(["e1", "e2"]);
+    expect(t[0]!.quotes.map((q) => q.evidenceId)).toEqual(["e2", "e1"]);
+  });
+
+  it("shows no quote rather than one that does not match the objection", () => {
+    const ps = [persona("p1", 1, ["e1"])];
+    const ev = [{ id: "e1", source: "reddit" as const, url: "https://r/1", domain: "reddit.com", quote: "great templates", via: "x" }];
+    const t = buildThemes([{ label: "Price", objectionNumbers: [0] }], [{ personaId: "p1", text: "price" }], ps, [], ev);
+    expect(t[0]!.quotes).toEqual([]);
   });
 });
 
