@@ -109,7 +109,7 @@ Build exactly ${n} distinct buyer personas that together cover the audience for 
       ? "There is no source evidence, so build them from the description only and leave evidenceIds empty."
       : "Ground every persona in the quotes: list in evidenceIds every evidence id that fits it, at least 2, only ids shown above. A quote may support more than one persona. Audience share is computed from how many quotes back each persona, so do not pad or trim the list."
   }
-For each persona give: a first name and initial, a specific role, a segment label (2 to 4 words), a two sentence summary, 2 to 4 goals, 2 to 4 objections that are likely to matter for the change above, price sensitivity (low, medium, high), and the current solution they use today. Include at least one persona who is likely to be unhappy about the change and one who is a champion if the evidence supports both.`;
+For each persona give: an invented first name and initial (never a name, username or site name that appears in the quotes or their URLs), a specific role, a segment label (2 to 4 words), a two sentence summary, 2 to 4 goals, 2 to 4 objections that are likely to matter for the change above, price sensitivity (low, medium, high), and the current solution they use today. Include at least one persona who is likely to be unhappy about the change and one who is a champion if the evidence supports both.`;
 }
 
 export function reactionPrompt(args: {
