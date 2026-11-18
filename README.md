@@ -10,9 +10,9 @@ Needs Node.js 22.12 or newer. `npm i -g greenroom-cli` installs the `greenroom` 
 
 You get a report with the share of buyers who react badly, who would leave, the objections behind it with real quotes, and the changes that would soften it. Every persona is built from quotes pulled from Reddit, Hacker News, review sites and forums, or from your own support tickets and survey comments. Quotes that do not appear verbatim on the source page are thrown away.
 
-![Rehearsal report for the 2023 Unity Runtime Fee, backtested as of the day before the announcement](https://raw.githubusercontent.com/danishashko/greenroom/main/docs/report.png)
+![Rehearsal report for the July 2026 Squarespace price rise, backtested as of the day before the announcement](https://raw.githubusercontent.com/danishashko/greenroom/main/docs/report.png)
 
-The report above is a backtest: Unity's 2023 per-install Runtime Fee, rehearsed with only what was published before the announcement. Its top three fixes (exempt games already released, keep each project on the terms of the Unity version it ships with, charge the lower of the per-install fee or a revenue share) match what Unity announced ten days later. Full output in [examples/unity-2023](https://github.com/danishashko/greenroom/blob/main/examples/unity-2023/report.md).
+The report above is a backtest: Squarespace's July 2026 price rise for existing customers, rehearsed with only what was online the day before the billing email went out. The change came after the model's training data ends, so it could not remember the outcome. Its two main fixes (explain what the higher price pays for, soften it for existing customers) are close to what Squarespace did less than three weeks later, when it cut the increase on some plans and pointed to features added to every plan. It missed the anger about paying for AI features, which no quote before the cut-off mentioned. Full output in [examples/squarespace-2026](https://github.com/danishashko/greenroom/blob/main/examples/squarespace-2026/report.md).
 
 ## For AI agents
 
@@ -82,8 +82,8 @@ Outputs per run in `.greenroom/runs/<id>/`: `report.html`, `report.md`, `report.
 ## Backtest a change that already happened
 
 ```bash
-greenroom run "Unity charges a Runtime Fee per install from January 1, 2024, including on games already released" \
-  --product Unity --competitor "Unreal Engine" Godot --as-of 2023-09-11
+greenroom run "Squarespace raises website plan prices for existing subscribers at their next renewal, announced by billing email" \
+  --kind pricing --product Squarespace --competitor Wix WordPress Webflow Framer --as-of 2026-07-05
 ```
 
 `--as-of` limits search to pages published by that date, drops quotes dated later, and tells every persona that today is that day. Undated quotes are dropped when they come from review sites, from Reddit threads that may be newer than the cut-off, or from any page that shows a later date (forum replies and comments keep growing). Compare the report with what really happened before you trust a run on a change that has not happened yet. The model may still remember the real outcome, so for a clean test pick a change announced after the model's training cutoff. The report says so either way.

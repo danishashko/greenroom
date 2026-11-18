@@ -1,6 +1,6 @@
 {
   "name": "greenroom-cli",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Rehearse a launch, pricing change or repositioning against simulated buyers built from real conversations.",
   "author": "Daniel Shashko",
   "repository": {

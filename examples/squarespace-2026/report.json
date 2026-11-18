@@ -1,0 +1,1058 @@
+{
+  "schemaVersion": 3,
+  "runId": "20261118-203142-be0d71",
+  "createdAt": "2026-11-18T18:31:42.804Z",
+  "seed": {
+    "change": "Squarespace raises website plan prices for existing subscribers at their next renewal, announced by billing email. Annual billing: Basic from $16 to $19 per month, Core from $23 to $29, Plus from $39 to $49, Advanced stays at $99. Monthly billing: Core from $36 to $39, Plus from $56 to $65, Basic and Advanced unchanged.",
+    "kind": "pricing",
+    "productName": "Squarespace",
+    "audience": "small business owners, photographers, creatives and web designers running websites on Squarespace",
+    "competitors": [
+      "Wix",
+      "WordPress",
+      "Webflow",
+      "Framer"
+    ],
+    "asOf": "2026-07-05",
+    "currency": "USD"
+  },
+  "headline": "100% of the audience reacts negatively and 21% (19 to 23%) would leave or switch. Main objection: billing email notice feels cold.",
+  "readout": "Every segment reacts negatively. 21% would switch to a competitor and 46% would delay a decision instead of committing to stay. The losses come mostly from price-sensitive customers who came over from Google Domains and have no loyalty to Squarespace. Many others stay only because migrating is hard, while a cold billing-email notice and the lack of any reward for long-time customers push them to look for a way out.",
+  "stats": {
+    "personas": 8,
+    "rounds": 3,
+    "negativeShare": 1,
+    "neutralShare": 0,
+    "positiveShare": 0,
+    "meanStance": -1,
+    "leaveShare": 0.206,
+    "actions": {
+      "stay": 0.3332,
+      "delay": 0.4607,
+      "switch_competitor": 0.2059
+    },
+    "movedMindShare": 0.304,
+    "segments": [],
+    "atRisk": null
+  },
+  "ensemble": {
+    "samples": 3,
+    "shownSample": 1,
+    "negativeShare": {
+      "median": 1,
+      "min": 1,
+      "max": 1
+    },
+    "positiveShare": {
+      "median": 0,
+      "min": 0,
+      "max": 0
+    },
+    "leaveShare": {
+      "median": 0.206,
+      "min": 0.188,
+      "max": 0.226
+    },
+    "meanStance": {
+      "median": -1,
+      "min": -1.23,
+      "max": -1
+    },
+    "customersAtRisk": null,
+    "mrrAtRisk": null,
+    "netMrrChange": null,
+    "perSample": [
+      {
+        "negativeShare": 1,
+        "positiveShare": 0,
+        "leaveShare": 0.188,
+        "meanStance": -1,
+        "customersAtRisk": null,
+        "mrrAtRisk": null,
+        "netMrrChange": null
+      },
+      {
+        "negativeShare": 1,
+        "positiveShare": 0,
+        "leaveShare": 0.206,
+        "meanStance": -1,
+        "customersAtRisk": null,
+        "mrrAtRisk": null,
+        "netMrrChange": null
+      },
+      {
+        "negativeShare": 1,
+        "positiveShare": 0,
+        "leaveShare": 0.226,
+        "meanStance": -1.23,
+        "customersAtRisk": null,
+        "mrrAtRisk": null,
+        "netMrrChange": null
+      }
+    ]
+  },
+  "themes": [
+    {
+      "label": "Billing email notice feels cold",
+      "weight": 0.9998,
+      "personaIds": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p8"
+      ],
+      "quotes": [
+        {
+          "evidenceId": "e6",
+          "quote": "This is seeing a lot of people drop out because they joined as founding members for $86, yet the renewal notification email says $120.",
+          "url": "https://forum.squarespace.com/topic/347188-renewal-pricing-membership-sites/"
+        },
+        {
+          "evidenceId": "e7",
+          "quote": "If they do opt to renew, they pay the same discounted rate they joined at. But having that higher fee noted, even though I've put a note saying it doesn't apply to everyone, feels like an easy reason for them to cancel.",
+          "url": "https://forum.squarespace.com/topic/347188-renewal-pricing-membership-sites/"
+        }
+      ]
+    },
+    {
+      "label": "Price jump hurts tight budgets",
+      "weight": 0.7842,
+      "personaIds": [
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p6",
+        "p8"
+      ],
+      "quotes": []
+    },
+    {
+      "label": "Switching is hard or not worth it",
+      "weight": 0.5783,
+      "personaIds": [
+        "p1",
+        "p2",
+        "p4",
+        "p6",
+        "p7"
+      ],
+      "quotes": [
+        {
+          "evidenceId": "e1",
+          "quote": "It seems inevitable to me that I will have to migrate one day to something more robust. It’s just going to take me a month or two and I’m dreading it.",
+          "url": "https://www.reddit.com/r/squarespace/comments/1edtgg6/is_squarespace_getting_worse_no/"
+        },
+        {
+          "evidenceId": "e8",
+          "quote": "WIX is pretty much on par with Squarespace when it comes to lower-end pricing, though its top end plans are considerably more expensive, without necessarily offering much more.",
+          "url": "https://themframes.com/features/squarespace-alternatives/"
+        },
+        {
+          "evidenceId": "e10",
+          "quote": "Building product pages is possible, but it isn’t as intuitive as Squarespace, FORMAT and others. You also have to do a lot more manual updates, like updating plugins.",
+          "url": "https://themframes.com/features/squarespace-alternatives/"
+        }
+      ]
+    },
+    {
+      "label": "Growing reasons to leave",
+      "weight": 0.5195,
+      "personaIds": [
+        "p2",
+        "p3",
+        "p5",
+        "p7"
+      ],
+      "quotes": [
+        {
+          "evidenceId": "e2",
+          "quote": "Currently wondering if it’s time to jump ship or wait it out.",
+          "url": "https://www.reddit.com/r/squarespace/comments/1edtgg6/is_squarespace_getting_worse_no/"
+        },
+        {
+          "evidenceId": "e4",
+          "quote": "Any other domain registrar allows you to just click \\*charge\\* or \\*renew\\* but this system prevents that. It seems so... with lack of a better word... idiotic, to have a lack of a self serve system to be able to resolve.",
+          "url": "https://www.reddit.com/r/squarespace/comments/1edtgg6/is_squarespace_getting_worse_no/"
+        },
+        {
+          "evidenceId": "e9",
+          "quote": "The perk of the platform is it’s often cheaper to run and you get full control, something that other website builders just can’t give you.",
+          "url": "https://themframes.com/features/squarespace-alternatives/"
+        }
+      ]
+    },
+    {
+      "label": "No reward for long-time customers",
+      "weight": 0.4999,
+      "personaIds": [
+        "p1",
+        "p4",
+        "p5",
+        "p8"
+      ],
+      "quotes": []
+    },
+    {
+      "label": "Paying more for nothing new",
+      "weight": 0.4116,
+      "personaIds": [
+        "p1",
+        "p2",
+        "p7",
+        "p8"
+      ],
+      "quotes": []
+    }
+  ],
+  "recommendations": [
+    {
+      "change": "Replace the billing-email notice with a dedicated announcement sent well before renewal. It should explain what the higher price pays for, name specific recent and upcoming improvements, and show each customer their exact new price and renewal date.",
+      "why": "The cold billing-email notice is an objection for 100% of the audience, and 41% feel they are paying more for nothing new.",
+      "expectedEffect": "Fewer customers will read the change as a stealth price grab, which should lower the number who delay or start looking at alternatives.",
+      "evidenceIds": [
+        "e2"
+      ]
+    },
+    {
+      "change": "Give a loyalty concession to long-tenured subscribers. For example, keep their current price for one more renewal cycle, or apply a smaller increase, based on years as a customer.",
+      "why": "50% of the audience objects that long-time customers get no reward. Long-time advocates and photographers are the ones staying, and the change puts their goodwill at risk.",
+      "expectedEffect": "The most loyal customers will turn from grudging stayers into advocates, and fewer will build up reasons to leave later.",
+      "evidenceIds": [
+        "e12",
+        "e13"
+      ]
+    },
+    {
+      "change": "Make a specific retention offer to customers who came over from Google Domains, such as a reduced Basic price or domain-only options. Also add a simple self-serve renew and charge flow for domains.",
+      "why": "This group has no loyalty and is the most likely to switch. Their frustration covers domain management as well as price.",
+      "expectedEffect": "Fewer price-sensitive former Google Domains customers will switch, and they won't have the extra push of moving their domain somewhere else.",
+      "evidenceIds": [
+        "e3",
+        "e4",
+        "e5"
+      ]
+    },
+    {
+      "change": "Hold the Basic annual increase back, or make it smaller, for small and simple sites. Point out the parts of the value that are hard to get elsewhere, like design quality and no plugin maintenance.",
+      "why": "78% of the audience says the increase hurts tight budgets, and cheaper DIY options start to look attractive at the low end.",
+      "expectedEffect": "Budget-conscious solo creators will have less reason to compare against self-hosted WordPress or Wix and will be more likely to renew.",
+      "evidenceIds": [
+        "e8",
+        "e9",
+        "e10",
+        "e11"
+      ]
+    }
+  ],
+  "riskiestSegment": {
+    "personaId": "p3",
+    "why": "Priya is the largest segment at 21%. She only landed on Squarespace through the Google Domains transfer, has no loyalty, is price sensitive, and has a simple site that is easy to move, which is why she is the persona choosing to switch."
+  },
+  "personas": [
+    {
+      "name": "Maya R.",
+      "role": "Portrait and wedding photographer running a portfolio site",
+      "segment": "Portfolio photographers",
+      "summary": "Maya picked Squarespace years ago for templates that show off her images and still thinks of it as the best showcase for her work. She pays the Basic or Core annual rate, so the rise to $19 or $29 a month is annoying but probably not enough to make her leave.",
+      "goals": [
+        "Show her portfolio in polished, image-first templates",
+        "Spend time shooting rather than maintaining a website",
+        "Turn site visitors into booked clients"
+      ],
+      "objections": [
+        "Paying more for the same portfolio features she already has",
+        "Feels long-term loyalty is not rewarded",
+        "Worries that alternatives would make her work look worse"
+      ],
+      "priceSensitivity": "medium",
+      "currentSolution": "Squarespace Basic or Core plan with a portfolio template",
+      "evidenceIds": [
+        "e12",
+        "e13",
+        "e10",
+        "e11"
+      ],
+      "weight": 0.1176,
+      "id": "p1"
+    },
+    {
+      "name": "Tom H.",
+      "role": "Owner of a local service business with a growing website",
+      "segment": "Growing small businesses",
+      "summary": "Tom already suspects he will outgrow Squarespace someday, but he is dreading a migration that could take months. A price increase at renewal could push him to stop waiting and finally move.",
+      "goals": [
+        "Keep the site online without disruption",
+        "Avoid a costly, months-long migration",
+        "Get more capability as the business grows"
+      ],
+      "objections": [
+        "The increase gives him a reason to move to a more robust platform now",
+        "Migration effort and risk",
+        "Unsure whether to jump ship or wait it out"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "Squarespace Core plan",
+      "evidenceIds": [
+        "e1",
+        "e2",
+        "e9"
+      ],
+      "weight": 0.098,
+      "id": "p2"
+    },
+    {
+      "name": "Priya S.",
+      "role": "Freelance consultant whose domain moved from Google Domains",
+      "segment": "Migrated domain holders",
+      "summary": "Priya ended up at Squarespace when her Google Domains registration was transferred, and she is already frustrated that there is no self-serve way to fix billing and renewal problems. An unexpected price increase in a billing email confirms her view that she should move her domain and site somewhere else.",
+      "goals": [
+        "Renew and manage her domain herself with a click",
+        "Have predictable, transparent billing",
+        "Keep her email and domain running reliably"
+      ],
+      "objections": [
+        "No self-serve renewal or billing resolution",
+        "Distrusts price changes sent by billing email",
+        "Can easily move her domain to another registrar"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "Squarespace Domains (formerly Google Domains) with a basic site",
+      "evidenceIds": [
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "weight": 0.2059,
+      "id": "p3"
+    },
+    {
+      "name": "Leah K.",
+      "role": "Creator selling memberships and courses on her site",
+      "segment": "Membership creators",
+      "summary": "Leah runs a paid membership on Squarespace with founding members on discounted rates, and she has seen renewal emails that show higher prices drive cancellations. She worries that a platform price increase will force her to pass on costs and lose members.",
+      "goals": [
+        "Keep founding members renewing",
+        "Protect her margins on membership revenue",
+        "Communicate pricing clearly to her audience"
+      ],
+      "objections": [
+        "Renewal emails that show higher prices trigger cancellations",
+        "Higher platform costs squeeze her membership margins",
+        "Confusing price messaging hurts trust with members"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "Squarespace Plus plan with Member Areas",
+      "evidenceIds": [
+        "e6",
+        "e7",
+        "e2"
+      ],
+      "weight": 0.1667,
+      "id": "p4"
+    },
+    {
+      "name": "Daniel M.",
+      "role": "Freelance web designer building Squarespace sites for clients",
+      "segment": "Client web designers",
+      "summary": "Daniel recommends Squarespace to clients because it is powerful yet simple compared with Wix's busy interface and WordPress upkeep. He will have to explain the higher renewal prices to clients, but he will likely keep defending the platform.",
+      "goals": [
+        "Deliver attractive client sites quickly",
+        "Recommend a platform clients can manage themselves",
+        "Keep client relationships smooth when bills change"
+      ],
+      "objections": [
+        "Having to explain unexpected renewal increases to clients",
+        "Clients comparing prices with Wix or Webflow",
+        "Risk that clients blame him for higher costs"
+      ],
+      "priceSensitivity": "low",
+      "currentSolution": "Squarespace Business/Core plans across client accounts",
+      "evidenceIds": [
+        "e13",
+        "e11",
+        "e8",
+        "e10"
+      ],
+      "weight": 0.1176,
+      "id": "p5"
+    },
+    {
+      "name": "Sam P.",
+      "role": "Solo artist and illustrator on a tight budget",
+      "segment": "Budget solo creatives",
+      "summary": "Sam runs a simple site on the cheapest annual plan, and the increase from $16 to $19 a month matters to him. He knows Wix is about the same price at the low end and that self-hosted options can be cheaper to run.",
+      "goals": [
+        "Keep a simple online presence as cheaply as possible",
+        "Avoid technical maintenance",
+        "Look professional to potential buyers"
+      ],
+      "objections": [
+        "The roughly 19% increase on Basic is significant for his budget",
+        "Wix offers similar low-end pricing",
+        "Cheaper self-hosted options exist"
+      ],
+      "priceSensitivity": "high",
+      "currentSolution": "Squarespace Basic annual plan",
+      "evidenceIds": [
+        "e8",
+        "e9",
+        "e2"
+      ],
+      "weight": 0.098,
+      "id": "p6"
+    },
+    {
+      "name": "Raj T.",
+      "role": "Tech-comfortable e-commerce shop owner",
+      "segment": "Control-seeking sellers",
+      "summary": "Raj values cost and control and is weighing WordPress, which he sees as cheaper to run with full ownership. He knows building product pages there is less intuitive and needs plugin upkeep, so the increase changes his cost-benefit math.",
+      "goals": [
+        "Lower long-term running costs",
+        "Gain more control over his store",
+        "Keep product pages easy to build"
+      ],
+      "objections": [
+        "The Plus increase from $39 to $49 makes WordPress look cheaper",
+        "Wants full control that Squarespace doesn't give",
+        "Wants a more robust platform as he scales"
+      ],
+      "priceSensitivity": "medium",
+      "currentSolution": "Squarespace Plus plan for online store",
+      "evidenceIds": [
+        "e9",
+        "e10",
+        "e1"
+      ],
+      "weight": 0.098,
+      "id": "p7"
+    },
+    {
+      "name": "Grace W.",
+      "role": "Long-time Squarespace boutique owner and advocate",
+      "segment": "Loyal platform champions",
+      "summary": "Grace has been on Squarespace for a decade and believes it is one of the most powerful builders for growing a business. She is likely to accept the increase, since she finds alternatives like Wix overwhelming, though she would like her loyalty recognized.",
+      "goals": [
+        "Keep growing her client base with a site she trusts",
+        "Avoid switching to a more complicated tool",
+        "Keep using the design quality that drew her in"
+      ],
+      "objections": [
+        "Wants recognition for long tenure",
+        "Wants to see added value for the higher fee",
+        "Watches whether the Advanced plan staying flat suggests upgrading"
+      ],
+      "priceSensitivity": "low",
+      "currentSolution": "Squarespace Core or Advanced plan",
+      "evidenceIds": [
+        "e12",
+        "e13",
+        "e11"
+      ],
+      "weight": 0.098,
+      "id": "p8"
+    }
+  ],
+  "reactions": [
+    {
+      "stance": -1,
+      "action": "stay",
+      "objections": [
+        "Paying $3-$6 more a month for the same portfolio features I already have",
+        "Ten years of loyalty and no reward, just a price hike by billing email",
+        "No new features announced to justify the increase",
+        "Annual cost jump of roughly 19-26% is bigger than inflation"
+      ],
+      "reasoning": "I'm annoyed, but it's about $36 to $72 more a year. Squarespace templates still show my wedding and portrait work better than the alternatives. Wix feels cluttered, and WordPress means maintenance and plugin updates when I'd rather be shooting. Moving a site also costs me time, SEO risk and a redesign, and that outweighs a few dollars a month. I'll stay for now. I'll check my renewal date, see whether I really need Core over Basic, and maybe look at Format or Pixieset as a backup. I won't act on this right away.",
+      "wouldChangeMindIf": "Squarespace raised prices again soon, or a competitor like Format or Framer offered equally polished image-first templates for noticeably less.",
+      "evidenceIds": [
+        "e12",
+        "e10",
+        "e11"
+      ],
+      "personaId": "p1",
+      "round": 1
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Core annual goes from $23 to $29 per month, about 26% more, for the same features",
+        "Increase hits at renewal with only a billing email as notice",
+        "It gives me a reason to start the migration I've been putting off",
+        "I'm price sensitive, and these increases keep adding up",
+        "Nothing new comes with the higher price, such as better e-commerce, performance or flexibility"
+      ],
+      "reasoning": "First read: annoyed but not panicking. On annual billing, Core goes up about $72 a year. That's real money for a small service business, but it's far less than a month or two of migration work and the risk of downtime or losing SEO. So I won't move this month. This does push me from \"someday\" to \"seriously planning.\" In the next 30 days I'll check when my renewal date is and what the new price will be. I'll look at Wix, WordPress and Webflow pricing and what a move would really involve. I'll also check whether I can lock in the current rate by renewing annually early, if that's allowed. I won't do anything drastic yet. If more increases follow, or Squarespace still can't do what my growing business needs, I'll move.",
+      "wouldChangeMindIf": "Squarespace added clear new capabilities to Core, or let me lock the current price for another year or two, and I'd stay put without planning a migration.",
+      "evidenceIds": [
+        "e1",
+        "e2"
+      ],
+      "personaId": "p2",
+      "round": 1
+    },
+    {
+      "stance": -2,
+      "action": "switch_competitor",
+      "switchTo": "Cloudflare Registrar for the domain, with WordPress or Wix for the site",
+      "objections": [
+        "Price hike announced only via billing email, which I distrust",
+        "Still no self-serve way to fix renewal or billing problems",
+        "Basic jumping $16 to $19 is a ~19% increase for a simple site",
+        "Paying more for a service that already feels unreliable to manage",
+        "My domain can be transferred to another registrar easily"
+      ],
+      "reasoning": "I only landed at Squarespace because Google Domains was transferred. I already can't fix billing or renewal myself, and now the price goes up by email. My site is basic and I'm price sensitive, so I have little reason to stay. Within 30 days I'll check that my domain is eligible to transfer, then move it to Cloudflare or Namecheap. I'll look at moving the simple site to WordPress or Wix. I won't do anything rash with email and DNS. I'll plan the move so nothing breaks.",
+      "wouldChangeMindIf": "Squarespace gave me real self-serve renewal and billing controls and held my price for the year.",
+      "evidenceIds": [
+        "e4",
+        "e5"
+      ],
+      "personaId": "p3",
+      "round": 1
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Plus annual goes from $39 to $49 per month, about a 26% jump, and it hits me at renewal with little warning",
+        "I'm price sensitive and my margins on membership revenue are already thin, so this is a direct cost increase",
+        "I can't easily pass it on to founding members who joined at discounted rates without risking cancellations",
+        "A billing-email announcement feels impersonal, and it gives me no time to plan my own member communications",
+        "Moving Member Areas to Wix, WordPress with a membership plugin, or Kajabi means a painful migration, but this makes me start pricing it out"
+      ],
+      "reasoning": "I'm on Plus with Member Areas. The annual price rises $10 a month, which is $120 a year. That's not ruinous, but I'm price sensitive and I know how renewal emails with higher prices make people cancel. I'm not leaving in the next 30 days, because migrating a paid membership is risky and my members would notice. I'll check my renewal date, work out the real cost, and get quotes or trials for Wix, WordPress with a membership plugin, and Kajabi. I'll hold off on telling members anything until I know what I'm doing. As e2 puts it, I'm wondering whether to jump ship or wait it out. For now I'll wait and compare.",
+      "wouldChangeMindIf": "Squarespace showed that Member Areas improvements or a grandfathered rate for my existing plan justified the increase, or my renewal date turned out to be far enough off that I could prepare my members.",
+      "evidenceIds": [
+        "e2"
+      ],
+      "personaId": "p4",
+      "round": 1
+    },
+    {
+      "stance": -1,
+      "action": "stay",
+      "objections": [
+        "Core annual going from $23 to $29 (about 26%) is a steep jump on the plan most of my clients use",
+        "I have to explain unexpected renewal increases to clients, and some will blame me",
+        "Clients will compare prices with Wix and ask about Webflow or Framer",
+        "Announcement by billing email only means clients may see it before I can brief them",
+        "Plus rising to $49 weakens the case for upselling clients who need more features"
+      ],
+      "reasoning": "My price sensitivity is low, and the increase is about $6 a month on Core. That is small next to what clients pay me for design. I still prefer Squarespace to Wix's busy interface and WordPress upkeep, so I'm not moving anyone over this. What bothers me is the client relationship. Clients get surprise billing emails, then ask me why. I'll send a short note to my clients on Core and Plus before their renewals and suggest annual billing, which is cheaper than monthly. I'll keep recommending Squarespace, but with less enthusiasm. If more increases follow, I'll look harder at Framer or Webflow for the clients who suit them.",
+      "wouldChangeMindIf": "Squarespace announced further increases within a year, or Wix or Framer offered comparable ease of use for clearly less money.",
+      "evidenceIds": [
+        "e11",
+        "e10"
+      ],
+      "personaId": "p5",
+      "round": 1
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Basic going from $16 to $19 a month is about 19%, which is a lot on my budget.",
+        "Wix is about the same price at the low end, so I'm not locked in.",
+        "Self-hosted options can be cheaper to run, though I don't want the maintenance.",
+        "I'm only on a simple portfolio site, so I'm not getting anything new for the extra money."
+      ],
+      "reasoning": "I'm annoyed, but I won't act right away. I'm on the Basic annual plan, and it only goes up at my next renewal. That gives me time to compare. Moving a portfolio site means rebuilding it, and I don't want to do that unless the savings are real. Wix is roughly the same price, so switching to it gains me little. Self-hosted WordPress could be cheaper, but I'd have to deal with updates and security, and I want to avoid that. For the next 30 days I'll check my renewal date, price out Wix and cheap WordPress hosting, and stay put for now. The increase is about $36 a year. That stings, but it may not be enough to justify the hassle of moving. If I find a clearly cheaper option that's still simple, I'll leave at renewal.",
+      "wouldChangeMindIf": "I would stay happily if Squarespace held Basic at $16 for existing annual subscribers, or I would leave if I found a simple host or builder that's clearly under about $12 a month.",
+      "evidenceIds": [
+        "e8",
+        "e9",
+        "e2"
+      ],
+      "personaId": "p6",
+      "round": 1
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Plus going from $39 to $49 on annual is a ~25% jump, which widens the gap with self-hosted WordPress/WooCommerce",
+        "Still no real ownership or control of the store stack, which is what I want as I scale",
+        "Increase lands at renewal with only a billing email, so there's little time to plan",
+        "Migration would cost me a month or two of work, so the higher price doesn't automatically justify moving",
+        "Core and Plus rose more than Advanced, so the next step up ($99) is a big jump for a growing store"
+      ],
+      "reasoning": "I'm on Plus, so this hits me directly: about $10 more a month, or roughly $120 a year. That's annoying but not enough to make me move my store this week. It does change my math. WordPress with WooCommerce is cheaper and gives me the control I want. But building product pages there is less intuitive and needs constant plugin upkeep, and a migration would eat a month or two. So I'll check my renewal date, price out WooCommerce hosting and plugin costs, and probably test a staging site. I won't cancel yet. If I'd already been planning to leave eventually, this just moves that date closer. [e9][e10][e1]",
+      "wouldChangeMindIf": "I'd stay put if Squarespace added real store features or more control, such as better checkout customization, lower transaction fees or API access, to justify the extra $10 a month.",
+      "evidenceIds": [
+        "e9",
+        "e10",
+        "e1"
+      ],
+      "personaId": "p7",
+      "round": 1
+    },
+    {
+      "stance": 0,
+      "action": "stay",
+      "objections": [
+        "Ten years of loyalty and no acknowledgment or loyalty discount in a plain billing email",
+        "No new features or added value named to justify the roughly 26% jump on Core annual ($23 to $29)",
+        "Advanced staying flat at $99 looks like a nudge to upgrade, which I'd have to evaluate",
+        "Increase arrives by billing email with little explanation"
+      ],
+      "reasoning": "I'm on Core or Advanced, and I'm not very price sensitive. A $6 a month increase won't change my business. Wix feels overwhelming to me, and I don't want to rebuild a decade-old site on something more complicated. The design quality is why I'm here. I'm a bit irritated that a ten-year customer gets a generic email with no thanks and no new value attached. I'll stay put, look at whether Advanced makes sense for me, and watch what Squarespace ships. I won't act in a rush. I'll keep advocating, but with less warmth than before.",
+      "wouldChangeMindIf": "Squarespace paired the increase with real new features and some acknowledgment of long-tenured customers, such as a loyalty discount or a price lock.",
+      "evidenceIds": [
+        "e11",
+        "e13"
+      ],
+      "personaId": "p8",
+      "round": 1
+    },
+    {
+      "stance": -1,
+      "action": "stay",
+      "objections": [
+        "Paying $3-$6 more a month for the same portfolio features I already have",
+        "Ten-plus years of loyalty gets a price hike by billing email, not any reward",
+        "No new value offered with the increase",
+        "Moving to Wix, WordPress, Webflow or Framer risks making my images look worse and costs me shooting time"
+      ],
+      "reasoning": "I'm a portrait and wedding photographer on Basic or Core annual. The increase is $36 to $72 a year. That's annoying but small next to one booking. Squarespace templates still show my images better than the alternatives. Wix feels cluttered (e11), and WordPress means plugin upkeep (e10). Migrating would take time away from shooting and could hurt how my work looks. Other buyers' reactions don't change my view. Most are staying or delaying, which fits mine. I'll stay, but I'll check what I get on my plan and whether the new price is worth it. If I'm on Core, I may see whether Basic covers what I need.",
+      "wouldChangeMindIf": "I would reconsider if Squarespace raised prices again soon, or if a competitor like Framer or Format offered equally polished photography templates for clearly less.",
+      "evidenceIds": [
+        "e12",
+        "e11",
+        "e10"
+      ],
+      "personaId": "p1",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Core going from $23 to $29 a month on annual billing is about $72 more a year, and I'm price sensitive",
+        "The increase gives me a reason to start the migration I've been dreading",
+        "A migration could take a month or two and risks downtime or lost search rankings",
+        "A price rise by billing email with no new features feels like I'm paying more for the same capability",
+        "I'm unsure whether to leave now or wait, and the increase makes waiting less comfortable"
+      ],
+      "reasoning": "I'm on Core, so the rise is about $6 a month. That's annoying but not enough to justify a months-long migration today. The other buyers showed me the real choice: the boutique owner and the designer are staying because the rebuild costs more than the increase. I agree with that for now. But I already expect to outgrow Squarespace, and this gives me a firm reason to stop drifting. Over the next 30 days I'll keep the site live. I'll check my renewal date, price out WordPress with decent hosting and Webflow, and list what a move would involve. Then I'll decide whether to move on my own schedule, not under pressure. If another increase comes, or I need features Squarespace can't give me, I'll move.",
+      "wouldChangeMindIf": "I'd stay put if Squarespace added clear new capability to Core for the extra $6. I'd move sooner if I found a migration path that took days instead of months.",
+      "evidenceIds": [
+        "e1",
+        "e2"
+      ],
+      "personaId": "p2",
+      "round": 2
+    },
+    {
+      "stance": -2,
+      "action": "switch_competitor",
+      "switchTo": "Wix (site) with domain moved to Cloudflare or Namecheap",
+      "objections": [
+        "Price hike announced only by billing email, which I distrust",
+        "Still no self-serve way to renew or fix billing problems",
+        "I'm price sensitive and my site is basic, so the increase buys me nothing",
+        "Others stay for templates and design, but I have a basic site and no attachment to it",
+        "Domain transfer is easy, so there's little holding me here"
+      ],
+      "reasoning": "The other buyers who are staying are photographers, designers and boutique owners. They value Squarespace's templates and don't want to rebuild a site. I'm in a different position. I got here through a forced Google Domains migration, my site is basic, and I'm price sensitive. Their reasons for staying don't apply to me. Their comments also don't touch my main problem, which is the lack of self-serve billing and renewal. The price increase in a billing email confirms what I already believed. I'll move my domain to a registrar like Cloudflare or Namecheap, where I can renew with one click. For the basic site I'll use Wix or WordPress, or I'll host it elsewhere. I'll start the transfer within 30 days, once I've checked the transfer lock and renewal date so my email doesn't go down.",
+      "wouldChangeMindIf": "Squarespace gave me real self-serve renewal and billing controls and froze my price for a year.",
+      "evidenceIds": [
+        "e4",
+        "e5"
+      ],
+      "personaId": "p3",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Plus annual rises from $39 to $49, about $120 more a year, and it comes straight out of my membership margins",
+        "I'm price sensitive, and I don't want to pass the cost to members or raise their rates",
+        "A billing-email announcement is the same kind of price notice that drives cancellations in my own renewals",
+        "Founding members on discounted rates make any visible price change on my side risky for trust",
+        "Migrating Member Areas, courses and member logins to another platform is a heavy lift"
+      ],
+      "reasoning": "As a Plus annual customer I take the full $10 a month increase. That is $120 a year, which is small next to total revenue but real against thin membership margins. I won't absorb it silently, and I won't pass it on to founding members, because I've seen how a higher price in a renewal email triggers cancellations. Other buyers say they will wait, and I agree. The increase applies only at my next renewal, so I have time. Rebuilding member areas, gated content and payments elsewhere (WordPress with a membership plugin, or Wix) would cost more in time and risk than $120. In the next 30 days I will check my renewal date, price out WordPress and Wix alternatives, and not move anything yet. Some of the other buyers' comments about low price sensitivity don't apply to me.",
+      "wouldChangeMindIf": "Squarespace offered a locked-in rate or a discount for annual Plus members with Member Areas, or announced further increases, which would make me start migrating.",
+      "evidenceIds": [
+        "e2"
+      ],
+      "personaId": "p4",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "stay",
+      "objections": [
+        "Announced by billing email with no heads-up for agencies, so I have to explain it to clients",
+        "Core annual going from $23 to $29 (about $72/year per site) adds up across several client accounts",
+        "Clients will compare against Wix and Webflow, and some may blame me for the increase",
+        "Plus rising to $49 weakens the value for my client stores, since WooCommerce is cheaper"
+      ],
+      "reasoning": "I'm not very price sensitive, and $6 a month on Core is small against what I charge clients. Squarespace is still the fastest way for me to deliver good-looking sites that clients can run themselves. Wix is cluttered and WordPress means upkeep that I'd get stuck handling. The other buyers' reactions confirm that most people are annoyed but won't move, because migration costs more than the increase. What bothers me is the client communication. I'll send a short note to clients before their renewals, and I'll check which e-commerce clients on Plus might do better elsewhere. I won't switch platforms in the next 30 days.",
+      "wouldChangeMindIf": "Squarespace announces further increases within a year, or Core clients start asking me to move them to Webflow or WordPress.",
+      "evidenceIds": [
+        "e11",
+        "e13",
+        "e10"
+      ],
+      "personaId": "p5",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Basic going from $16 to $19 a month is about 19%, roughly $36 more a year, on a tight budget",
+        "Wix is about the same price at the low end, so switching wouldn't save much",
+        "Self-hosted WordPress is cheaper to run, but I don't want the maintenance",
+        "Price increases announced by billing email feel careless"
+      ],
+      "reasoning": "The other buyers are mostly annoyed but staying put. That fits my view. $36 a year hurts on my budget, but I'm not going to rebuild my illustration portfolio this month. Wix costs about the same at the low end, so it wouldn't save me anything. Self-hosting is cheaper, but I don't want the upkeep and I need to look professional to buyers. The consultant's point about having little reason to stay resonates, but it doesn't change what I do. I'll wait until my renewal date, check the exact renewal price, and price out cheaper options such as WordPress with cheap hosting, or a Wix annual plan, before I decide. I'm leaning toward staying unless the savings are clear.",
+      "wouldChangeMindIf": "I'd switch if a managed host or builder offered a professional portfolio site for clearly under $10 a month with an easy migration, and I'd stay if Squarespace held my renewal at the old price.",
+      "evidenceIds": [
+        "e8",
+        "e9",
+        "e2"
+      ],
+      "personaId": "p6",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Plus going from $39 to $49 a month is a 25% jump, so WordPress/WooCommerce looks cheaper to run",
+        "Still no real control over the store stack, and I want more as I scale",
+        "Price rise arrives by billing email with no new features to justify it",
+        "Migrating a live store is a month or two of work and I'm dreading it, so the increase pushes me toward doing it eventually"
+      ],
+      "reasoning": "The extra $10 a month is about $120 a year. That's not enough to make me move a live store this month. Others are right that migration time and downtime risk cost more than one year of the increase. But it does change my math. WordPress with WooCommerce is cheaper and gives me ownership, though product pages are less intuitive and plugin upkeep is a chore. I'll stay through this renewal and start pricing out a WooCommerce migration on a staging site. If Squarespace keeps raising prices without giving me more control, I'll move when I have a quiet stretch. I'm not leaving in the next 30 days, but I'm no longer a happy long-term customer.",
+      "wouldChangeMindIf": "Squarespace added real store control, such as better checkout and API flexibility, or held Plus at $39 for existing subscribers.",
+      "evidenceIds": [
+        "e9",
+        "e10",
+        "e1"
+      ],
+      "personaId": "p7",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "stay",
+      "objections": [
+        "Ten years of loyalty and no recognition in a billing email",
+        "No new features or value tied to the higher fee",
+        "Advanced staying at $99 makes the Core jump look like a nudge to upgrade",
+        "Announced only by billing email with no explanation"
+      ],
+      "reasoning": "I've been on Squarespace for ten years and I'm not price sensitive. The increase is a few dollars a month, and Wix still feels overwhelming to me. WordPress would mean maintenance I don't want. The other buyers are mostly annoyed, but that doesn't change my plan. I'm staying. I do want the company to acknowledge long-term customers and show what the extra money buys. The Advanced price holding flat makes me look at whether upgrading is worth it, but I won't decide that in a rush. I'll renew and watch for added value. I'm a bit more negative than before because the email gave no thanks and no explanation.",
+      "wouldChangeMindIf": "Squarespace paired the increase with real new features and some recognition for long-tenured customers, and I'd move up to a warmer view.",
+      "evidenceIds": [
+        "e11",
+        "e13"
+      ],
+      "personaId": "p8",
+      "round": 2
+    },
+    {
+      "stance": -1,
+      "action": "stay",
+      "objections": [
+        "Paying $3 to $6 more a month for the same portfolio features I already have",
+        "Ten years of loyalty gets a price rise and no reward",
+        "Announcement by billing email feels impersonal",
+        "Alternatives like Wix, WordPress or Framer would make my images look worse or add maintenance"
+      ],
+      "reasoning": "I'm a portrait and wedding photographer on the Basic or Core annual plan. The rise is about $36 to $72 a year. That's annoying, but it's small next to one booked session. Rebuilding my portfolio on Wix, WordPress or Framer would cost me shooting time, and I worry my work would look worse there. The other buyers' reactions all point the same way: the ones who stay value the templates and don't want a migration. I'm staying on my plan and not delaying, and I won't upgrade. I'll also check whether the annual rate locks in before renewal. I'm unhappy about the lack of any loyalty recognition, but that isn't enough to make me leave.",
+      "wouldChangeMindIf": "Squarespace raised prices again within a year or removed features from my plan, or a rival such as Format or Pixieset offered equally polished image-first templates at a clearly lower price.",
+      "evidenceIds": [
+        "e12",
+        "e11"
+      ],
+      "personaId": "p1",
+      "round": 3
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Core annual goes from $23 to $29, about $72 more per year, and I'm price sensitive",
+        "Increase gives me a reason to start thinking about leaving, and I already expect to outgrow Squarespace",
+        "Migration could take a month or two and risks downtime or lost SEO for my local service site",
+        "No new capability comes with the higher price",
+        "Billing-email announcement feels like a quiet increase with no added value"
+      ],
+      "reasoning": "The increase is annoying but it isn't big enough to make me start a migration this month. $6 a month is about $72 a year, which is real money for me but small next to the cost of rebuilding and risking my local search rankings. The other buyers mostly stay put, and I agree with that. I will keep the site running on Squarespace through this renewal. I will also start a low-effort evaluation of WordPress and Webflow, so I'm ready to move on my own schedule. I may switch when the next renewal or increase comes, or when I hit a feature limit.",
+      "wouldChangeMindIf": "Squarespace adds meaningful capabilities to Core, such as better bookings, SEO or e-commerce features, or raises prices again soon. Either would change my plan.",
+      "evidenceIds": [
+        "e1",
+        "e2"
+      ],
+      "personaId": "p2",
+      "round": 3
+    },
+    {
+      "stance": -1,
+      "action": "switch_competitor",
+      "switchTo": "Cloudflare Registrar for the domain, with Wix for the basic site",
+      "objections": [
+        "Price increase announced only via billing email, which I distrust",
+        "No self-serve way to renew or fix billing problems on my migrated Google Domains registration",
+        "I'm price sensitive and my site is basic, so I get little value for the extra money",
+        "Moving my domain to another registrar is easy, so there is little keeping me here"
+      ],
+      "reasoning": "I only landed on Squarespace because Google Domains was transferred. I have no loyalty to it, unlike the photographers and long-time users who are staying. My site is basic and I'm price sensitive, so a Basic increase from $16 to $19 a month is an extra cost for no gain. What really bothers me is that billing and renewal can't be handled self-serve, and now the price goes up through a billing email. That confirms I should leave. Within 30 days I'll start moving the domain to Cloudflare Registrar or Namecheap. I'll rebuild the simple site on WordPress or Wix, whichever is cheaper. The others stay because of template quality and sunk investment. I don't have either reason.",
+      "wouldChangeMindIf": "Squarespace gave me real self-serve renewal and billing controls and kept my current price locked for a year or more.",
+      "evidenceIds": [
+        "e4",
+        "e5"
+      ],
+      "personaId": "p3",
+      "round": 3
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Plus going from $39 to $49 per month on annual billing is about $120 a year more, which cuts into my membership margins.",
+        "I can't pass the cost on to founding members without risking cancellations, and I'd rather not raise their rate.",
+        "A billing email that shows a higher price is exactly the kind of notice that has triggered cancellations for other creators.",
+        "Migrating Member Areas, courses and paid members to another platform is risky and slow, so I'm stuck for now.",
+        "Squarespace gave no grandfathering or loyalty discount to long-time subscribers."
+      ],
+      "reasoning": "I'm price sensitive, but the $10 a month increase is smaller than the cost and risk of moving a live membership. I'd have to rebuild Member Areas, move paying members and risk losing founding members in the process. So I won't leave this month. I'll stay through the renewal and quietly price out WordPress with a membership plugin and Wix. I'll also check whether switching from monthly to annual billing lowers my cost, and I'll plan how to explain any change to my members. Nobody has made the case for acting sooner. The others are also annoyed but staying, and the migration risk outweighs the roughly $120 a year. I'm still wary of what comes next. If Squarespace raises prices again, I'll move. Posts like e2 (\"jump ship or wait it out\") describe how I feel, but I'm waiting.",
+      "wouldChangeMindIf": "I'd leave if Squarespace raised prices again or added fees on member payments, or if a competitor offered an easy migration of Member Areas at a clearly lower cost.",
+      "evidenceIds": [
+        "e2"
+      ],
+      "personaId": "p4",
+      "round": 3
+    },
+    {
+      "stance": -1,
+      "action": "stay",
+      "objections": [
+        "Renewal increases announced only by billing email put me in the position of explaining it to clients",
+        "Core annual rising $23 to $29 (about $72 a year per site) is a 26% jump that clients will notice",
+        "Clients will compare against Wix and Webflow pricing and may blame me for the platform choice",
+        "No grandfathering or advance notice window to warn clients before renewal"
+      ],
+      "reasoning": "I build on Squarespace Core for several clients. The increase is $6 a month per site on annual billing, which is small next to what I charge for a build. I'm not price sensitive. The real cost to me is the awkward client conversations. Moving clients to Wix would mean rebuilding sites and dealing with a busier interface (e11). WordPress would mean the plugin and update upkeep that I don't want to hand to clients (e10). I'll stay on Squarespace. In the next 30 days I'll email clients a short note before their renewals that explains the increase and shows it's still competitive, and I'll move clients who are due soon to annual billing where that makes sense. The others in this round are mostly annoyed but staying, and that matches how I see it.",
+      "wouldChangeMindIf": "Squarespace raised prices again within a year or removed features from Core, which would give clients a real reason to ask me to migrate them.",
+      "evidenceIds": [
+        "e11",
+        "e10"
+      ],
+      "personaId": "p5",
+      "round": 3
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "19% hike on Basic ($16 to $19) is real money on a tight budget",
+        "Wix is about the same price at the low end, so switching saves little",
+        "Self-hosted options are cheaper but I don't want maintenance",
+        "Billing email announcement gives little time to compare options"
+      ],
+      "reasoning": "The increase is about $36 a year. That hurts on my budget, but a simple site is cheap to keep. Wix costs about the same at the low end, so moving wouldn't save much. Self-hosted WordPress could be cheaper, but I'd have to deal with updates, security and hosting, and I don't want that. I'll stay put and not churn now. Over the next 30 days I'll price out cheaper options and check when my annual renewal falls. I'll move only if I find a clearly cheaper, low-maintenance host before then. I'm not happy about the hike, but moving now costs more in time than it saves. [e8] [e2]",
+      "wouldChangeMindIf": "I'd switch if I found a low-maintenance host or builder that costs clearly less than $19 a month and lets me move my portfolio over easily.",
+      "evidenceIds": [
+        "e8",
+        "e2"
+      ],
+      "personaId": "p6",
+      "round": 3
+    },
+    {
+      "stance": -1,
+      "action": "delay",
+      "objections": [
+        "Plus annual going from $39 to $49 is a 25% jump, or $120 a year, with no new store features to justify it",
+        "It makes WordPress with WooCommerce look clearly cheaper to run and gives me full ownership",
+        "Squarespace still limits my control over checkout and backend, which I need as I scale",
+        "A migration would take weeks of rebuilding product pages and testing, and I don't want to do that mid-season",
+        "Billing-email-only notice feels dismissive of existing store owners"
+      ],
+      "reasoning": "I'm on Plus for my store. $120 a year is real but doesn't justify a rushed migration by itself. It does tip my long-term math toward WordPress, since I wanted more control and a more robust platform anyway. WordPress product pages are less intuitive and need plugin upkeep, so I'm not jumping now. Over the next 30 days I'll stay put, check my renewal date, price a WooCommerce setup with hosting, plugins and my time, and build a staging site to test. The other buyers who are delaying have the same logic. Staying until my renewal is the practical choice, and I'll leave if the staging test goes well. I could also switch to monthly billing, but Plus monthly rises to $65, so I won't.",
+      "wouldChangeMindIf": "Squarespace added real store and checkout control or developer-level access on Plus, or kept my current rate for a year, and I'd stop planning a move.",
+      "evidenceIds": [
+        "e9",
+        "e10",
+        "e1"
+      ],
+      "personaId": "p7",
+      "round": 3
+    },
+    {
+      "stance": -1,
+      "action": "stay",
+      "objections": [
+        "No recognition for ten years of loyalty; a billing email with no thank-you or loyalty discount feels impersonal",
+        "Not clear what new value I get for the higher fee on Core",
+        "Advanced staying flat at $99 looks like a nudge to upgrade, and the Core jump of about 26% is steep compared with that",
+        "Announcement by billing email only, with no roadmap of features to justify it"
+      ],
+      "reasoning": "I've been on Squarespace for ten years. The Core increase is about $6 a month, or $72 a year, which is small next to what my boutique earns from the site. Wix feels overwhelming to me, and I'm not rebuilding a site I trust to save a few dollars. The other buyers are mostly negative, but the ones who are staying cite the same reasons I do: the templates, and the cost of migrating. I'm staying. I'm annoyed that a decade of loyalty gets nothing, and I'll write to support to ask for a loyalty discount or locked-in annual pricing. I'll also check whether Advanced gives me enough extra to justify the move, since it now costs only about $70 a month more than Core on annual billing. I'm not leaving over this.",
+      "wouldChangeMindIf": "Squarespace offered loyal long-term subscribers a grandfathered rate or a real new feature set that justified the higher fee, I'd turn positive.",
+      "evidenceIds": [
+        "e11",
+        "e13"
+      ],
+      "personaId": "p8",
+      "round": 3
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e1",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/squarespace/comments/1edtgg6/is_squarespace_getting_worse_no/",
+      "domain": "reddit.com",
+      "quote": "It seems inevitable to me that I will have to migrate one day to something more robust. It’s just going to take me a month or two and I’m dreading it.",
+      "context": "Replying to a thread asking whether Squarespace is getting worse; a user says ecommerce and email campaign features lag behind Shopify and Kajabi.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e2",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/squarespace/comments/1edtgg6/is_squarespace_getting_worse_no/",
+      "domain": "reddit.com",
+      "quote": "Currently wondering if it’s time to jump ship or wait it out.",
+      "context": "Commenter who built a business on Squarespace and found its member areas and email marketing flawed and half-baked, considering whether to leave.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e3",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/squarespace/comments/1edtgg6/is_squarespace_getting_worse_no/",
+      "domain": "reddit.com",
+      "quote": "If they spent all this money acquiring Google Domains, they'll lose it all at this rate.",
+      "context": "Customer whose domain expired after a failed card charge and who couldn't renew it themselves or get support help for 72 hours.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e4",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/squarespace/comments/1edtgg6/is_squarespace_getting_worse_no/",
+      "domain": "reddit.com",
+      "quote": "Any other domain registrar allows you to just click \\*charge\\* or \\*renew\\* but this system prevents that. It seems so... with lack of a better word... idiotic, to have a lack of a self serve system to be able to resolve.",
+      "context": "Same customer, frustrated that they can't renew or pay for a domain themselves after a billing failure on a domain moved from Google Domains.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e5",
+      "source": "reddit",
+      "url": "https://www.reddit.com/r/squarespace/comments/1edtgg6/is_squarespace_getting_worse_no/",
+      "domain": "reddit.com",
+      "quote": "Move your domain some where else.",
+      "context": "Reply to the customer locked out of renewing a domain; this user also moved from Google Domains to Squarespace and plans to migrate again, probably to Cloudflare.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e6",
+      "source": "forum",
+      "url": "https://forum.squarespace.com/topic/347188-renewal-pricing-membership-sites/",
+      "domain": "forum.squarespace.com",
+      "quote": "This is seeing a lot of people drop out because they joined as founding members for $86, yet the renewal notification email says $120.",
+      "context": "A membership site owner on Squarespace says the renewal notification email shows the full subscription fee instead of the lower rate founding members actually pay.",
+      "date": "2026-05-05",
+      "via": "brightdata"
+    },
+    {
+      "id": "e7",
+      "source": "forum",
+      "url": "https://forum.squarespace.com/topic/347188-renewal-pricing-membership-sites/",
+      "domain": "forum.squarespace.com",
+      "quote": "If they do opt to renew, they pay the same discounted rate they joined at. But having that higher fee noted, even though I've put a note saying it doesn't apply to everyone, feels like an easy reason for them to cancel.",
+      "context": "The same site owner explains why the wrong price in the renewal email risks cancellations, even though members are still charged their discounted rate.",
+      "date": "2026-05-05",
+      "via": "brightdata"
+    },
+    {
+      "id": "e8",
+      "source": "web",
+      "url": "https://themframes.com/features/squarespace-alternatives/",
+      "domain": "themframes.com",
+      "quote": "WIX is pretty much on par with Squarespace when it comes to lower-end pricing, though its top end plans are considerably more expensive, without necessarily offering much more.",
+      "context": "Reviewer comparing Wix and Squarespace on price in a Squarespace alternatives roundup.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e9",
+      "source": "web",
+      "url": "https://themframes.com/features/squarespace-alternatives/",
+      "domain": "themframes.com",
+      "quote": "The perk of the platform is it’s often cheaper to run and you get full control, something that other website builders just can’t give you.",
+      "context": "Reviewer on WordPress as a Squarespace alternative. He uses it for his own site and cites cost and control.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e10",
+      "source": "web",
+      "url": "https://themframes.com/features/squarespace-alternatives/",
+      "domain": "themframes.com",
+      "quote": "Building product pages is possible, but it isn’t as intuitive as Squarespace, FORMAT and others. You also have to do a lot more manual updates, like updating plugins.",
+      "context": "Reviewer on the drawbacks of WordPress for ecommerce and upkeep compared with Squarespace.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e11",
+      "source": "web",
+      "url": "https://themframes.com/features/squarespace-alternatives/",
+      "domain": "themframes.com",
+      "quote": "Personally, I find WIX’s user interface to be a little overwhelming. There’s a lot going on and this kind of defeats the object of using simple, no-code website builders.",
+      "context": "Reviewer on his hands-on experience with Wix.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e12",
+      "source": "web",
+      "url": "https://themframes.com/features/squarespace-alternatives/",
+      "domain": "themframes.com",
+      "quote": "10 years ago, I built my first website using Squarespace. I was drawn to its beautiful templates, which as a photographer were perfect for displaying my work in the best possible way.",
+      "context": "Photographer-reviewer describing why he first chose Squarespace.",
+      "via": "brightdata"
+    },
+    {
+      "id": "e13",
+      "source": "web",
+      "url": "https://themframes.com/features/squarespace-alternatives/",
+      "domain": "themframes.com",
+      "quote": "It’s also not a bad choice to ignore all the options above and use Squarespace instead. It’s one of the most powerful website builders that can really help you elevate your business services and grow your client base.",
+      "context": "Reviewer's closing view, which favors staying with Squarespace over the alternatives he tested.",
+      "via": "brightdata"
+    }
+  ],
+  "basis": {
+    "grounded": true,
+    "evidenceCount": 13,
+    "domainCount": 3,
+    "customerQuotes": 0,
+    "weighting": "evidence",
+    "confidence": "medium",
+    "confidenceReason": "13 quotes from 3 domains. 3 samples agree within 4 points. Backtest as of 2026-07-05: the model may already know the outcome, so compare against what really happened.",
+    "groundingProvider": "brightdata",
+    "asOf": "2026-07-05",
+    "droppedAfterCutoff": 0,
+    "llmProvider": "claude-cli",
+    "models": {
+      "fast": "sonnet",
+      "strong": "opus"
+    }
+  },
+  "usage": {
+    "calls": 90,
+    "inputTokens": 292801,
+    "outputTokens": 55548,
+    "listPriceUsd": 1.5384,
+    "seconds": 442
+  }
+}

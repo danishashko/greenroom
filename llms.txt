@@ -6,6 +6,7 @@
 - Operating guide for agents: run `npx -y greenroom-cli guide` (the MCP server sends the same text as its instructions)
 - [README](https://github.com/danishashko/greenroom/blob/main/README.md): install, backends, time and cost, CLI, MCP, limits
 - [Claude Code skill](https://github.com/danishashko/greenroom/blob/main/skills/greenroom/SKILL.md)
+- [Example report: Squarespace July 2026 price rise backtest](https://github.com/danishashko/greenroom/blob/main/examples/squarespace-2026/report.md)
 - [Example report: Unity Runtime Fee 2023 backtest](https://github.com/danishashko/greenroom/blob/main/examples/unity-2023/report.md)
 
 ## Interfaces
