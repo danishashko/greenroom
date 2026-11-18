@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { extractJson } from "../src/llm/base.js";
 import { buildClaudeArgs } from "../src/llm/claude-cli.js";
-import { diversify, quoteIsVerbatim } from "../src/pipeline/ground.js";
+import { coreQueries, diversify, isAfterCutoff, latestDateIn, mergeQueries, quoteIsVerbatim, redditPostLatestDate } from "../src/pipeline/ground.js";
 import { weightPersonas } from "../src/pipeline/personas.js";
 import { buildEnsemble, buildHeadline, buildThemes, computeStats, gradeConfidence } from "../src/pipeline/report.js";
 import { estimateRun } from "../src/pipeline/estimate.js";
@@ -50,6 +50,47 @@ describe("quoteIsVerbatim", () => {
   it("rejects reworded or invented quotes", () => {
     expect(quoteIsVerbatim("We would leave if the price doubled.", page)).toBe(false);
     expect(quoteIsVerbatim("short", page)).toBe(false);
+  });
+});
+
+describe("latest date a page shows", () => {
+  const now = new Date("2026-11-18T12:00:00Z");
+  it("reads forum, article and ISO dates and ignores future ones", () => {
+    expect(latestDateIn("* Jul 17 2026 6 posts\n* Jul 8 2026 2 posts", now)).toBe("2026-07-17");
+    expect(latestDateIn("Updated July 20, 2026. Posted 3 Jun 2025.", now)).toBe("2026-07-20");
+    expect(latestDateIn("modified 2026-08-03, renews Jan 1, 2027", now)).toBe("2026-08-03");
+    expect(latestDateIn("no dates, (c) 2026", now)).toBeUndefined();
+  });
+});
+
+describe("reddit post age", () => {
+  const now = new Date("2026-11-18T12:00:00Z");
+  it("turns the age a thread shows into the latest date it could have been posted", () => {
+    expect(redditPostLatestDate("r/squarespace • 2y ago\nIs Squarespace now too expensive?", now)).toBe("2024-11-18");
+    expect(redditPostLatestDate("u/someone • 4mo ago", now)).toBe("2026-07-18");
+    expect(redditPostLatestDate("no age here", now)).toBeUndefined();
+  });
+
+  it("keeps a thread older than the cut-off and drops one that may be newer", () => {
+    expect(isAfterCutoff(redditPostLatestDate("• 5mo ago", now), "2026-07-16")).toBe(false);
+    expect(isAfterCutoff(redditPostLatestDate("• 4mo ago", now), "2026-07-16")).toBe(true);
+  });
+});
+
+describe("search queries", () => {
+  it("runs the same core queries for every pricing rehearsal of a named product", () => {
+    const seed = SeedSchema.parse({ change: "Raise Pro from $49 to $79 per month", kind: "pricing", productName: "Acme" });
+    expect(coreQueries(seed)).toEqual(["Acme price increase", "Acme too expensive reddit", "Acme alternatives cheaper"]);
+    expect(coreQueries(SeedSchema.parse({ change: "Raise Pro from $49 to $79 per month" }))).toEqual([]);
+  });
+
+  it("puts core queries first, drops repeats and caps the total", () => {
+    expect(mergeQueries(["Acme price increase", "Acme reddit"], ["acme  Price increase", "Acme vs Beta", "Acme churn", "Acme refund"], 4)).toEqual([
+      "Acme price increase",
+      "Acme reddit",
+      "Acme vs Beta",
+      "Acme churn",
+    ]);
   });
 });
 

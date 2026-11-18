@@ -86,7 +86,7 @@ greenroom run "Unity charges a Runtime Fee per install from January 1, 2024, inc
   --product Unity --competitor "Unreal Engine" Godot --as-of 2023-09-11
 ```
 
-`--as-of` limits search to pages published by that date, drops quotes dated later and undated quotes from review sites (their pages keep growing), and tells every persona that today is that day. Compare the report with what really happened before you trust a run on a change that has not happened yet. The model may still remember the real outcome, and the report says so.
+`--as-of` limits search to pages published by that date, drops quotes dated later, and tells every persona that today is that day. Undated quotes are dropped when they come from review sites, from Reddit threads that may be newer than the cut-off, or from any page that shows a later date (forum replies and comments keep growing). Compare the report with what really happened before you trust a run on a change that has not happened yet. The model may still remember the real outcome, so for a clean test pick a change announced after the model's training cutoff. The report says so either way.
 
 ## Time and cost
 

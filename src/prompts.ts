@@ -27,9 +27,11 @@ export function seedBlock(seed: Seed, productContext?: string): string {
   return lines.filter(Boolean).join("\n");
 }
 
-export function queriesPrompt(seed: Seed, max: number): string {
+export function queriesPrompt(seed: Seed, max: number, taken: string[] = []): string {
   return `${seedBlock(seed)}
-
+${taken.length ? `
+These queries already run, so do not repeat them or close variants: ${taken.map((t) => `"${t}"`).join(", ")}.
+` : ""}
 Write up to ${max} web search queries that find real people discussing this product category, its pricing, alternatives and complaints. Favor community and review sources: Reddit, Hacker News, G2, Capterra, Trustpilot, forums. ${
     seed.productName
       ? `Every query names ${seed.productName}${seed.competitors.length ? " or one of the competitors" : ""}, and at least half name ${seed.productName} itself: its pricing, past price or terms changes, complaints and switching away. A query without a product name finds pages about unrelated tools.`
@@ -55,7 +57,7 @@ Extract up to 6 quotes from real people (customers, users, commenters, reviewers
     seed.productName
       ? `about ${seed.productName}${seed.competitors.length ? ", the competitors named above" : ""}, or choosing, paying for or leaving ${seed.productName}${seed.competitors.length ? " or them" : ""}`
       : "relevant to this product, its category, pricing or alternatives"
-  }. Rules:${
+  }.${seed.kind === "pricing" ? " Prefer quotes about price, value for money, billing, renewals, and deciding to stay or switch." : ""} Rules:${
     seed.productName
       ? `\n- Skip quotes about other products that mention neither ${seed.productName}${seed.competitors.length ? " nor a named competitor" : ""}. If the page is about another product, for example reviews of a different tool, return an empty list.`
       : ""

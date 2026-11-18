@@ -2,21 +2,46 @@ import { GreenroomError } from "../errors.js";
 import { sleep } from "../util.js";
 import type { GroundProvider, Page, SearchHit, SearchOptions } from "./types.js";
 
+// Google answers a burst of goto requests with a JavaScript wait page instead of a redirect, which
+// dropped most results (7 of 20 resolved when sent at once). Two at a time with a short gap, and a
+// retry on the wait page, resolved 25 of 25.
+const REDIRECT_SLOTS = 2;
+const REDIRECT_GAP_MS = 250;
+let redirectActive = 0;
+const redirectQueue: (() => void)[] = [];
+async function withRedirectSlot<T>(fn: () => Promise<T>): Promise<T> {
+  if (redirectActive >= REDIRECT_SLOTS) await new Promise<void>((r) => redirectQueue.push(r));
+  redirectActive++;
+  try {
+    return await fn();
+  } finally {
+    await sleep(REDIRECT_GAP_MS);
+    redirectActive--;
+    redirectQueue.shift()?.();
+  }
+}
+
 /**
- * Google wraps many results (often most Reddit threads) in google.com/goto links. One plain
+ * Google wraps many results (often most Reddit threads) in google.com/goto links. A plain
  * request with redirects off returns the real URL in Location. Returns null if it cannot.
  */
-export async function resolveGoogleRedirect(link: string): Promise<string | null> {
+export async function resolveGoogleRedirect(link: string, attempts = 4): Promise<string | null> {
   if (!/^https?:\/\/(www\.)?google\.[a-z.]+\/(goto|url)\?/i.test(link)) return link;
-  try {
-    const res = await fetch(link, { redirect: "manual", headers: { "user-agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(10_000) });
-    const loc = res.headers.get("location");
-    if (loc && /^https?:\/\//i.test(loc) && !/^https?:\/\/(www\.)?google\./i.test(loc)) return loc;
-    const q = new URL(link).searchParams.get("q") ?? new URL(link).searchParams.get("url");
-    return q && /^https?:\/\//i.test(q) ? q : null;
-  } catch {
+  const direct = new URL(link).searchParams.get("q") ?? new URL(link).searchParams.get("url");
+  if (direct && /^https?:\/\//i.test(direct)) return direct;
+  return withRedirectSlot(async () => {
+    for (let a = 1; a <= attempts; a++) {
+      try {
+        const res = await fetch(link, { redirect: "manual", headers: { "user-agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(10_000) });
+        const loc = res.headers.get("location");
+        if (loc && /^https?:\/\//i.test(loc) && !/^https?:\/\/(www\.)?google\./i.test(loc)) return loc;
+      } catch {
+        // Network error or timeout: retry below.
+      }
+      if (a < attempts) await sleep(2_000 * a);
+    }
     return null;
-  }
+  });
 }
 
 const MONTHS: Record<string, number> = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
