@@ -1,6 +1,24 @@
-# greenroom
+<h1 align="center">greenroom</h1>
 
-Rehearse a launch, pricing change or repositioning against simulated buyers built from real conversations.
+<p align="center">Rehearse a launch, pricing change or repositioning against simulated buyers built from real conversations.</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/greenroom-cli"><img src="https://img.shields.io/npm/v/greenroom-cli?style=flat-square&logo=npm&label=npm&color=3D7FFC" alt="npm version"/></a>
+  <a href="https://www.npmjs.com/package/greenroom-cli"><img src="https://img.shields.io/npm/dm/greenroom-cli?style=flat-square&label=downloads&color=3D7FFC" alt="npm downloads"/></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ed573?style=flat-square" alt="License: MIT"/></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%E2%89%A522.12-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node 22.12 or newer"/></a>
+  <a href="#mcp"><img src="https://img.shields.io/badge/MCP-server-E6007A?style=flat-square" alt="MCP server"/></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"/></a>
+</p>
+
+<p align="center">
+  <a href="#how-it-works"><strong>How it works</strong></a> ·
+  <a href="#backtest-a-change-that-already-happened"><strong>Backtest</strong></a> ·
+  <a href="#cli"><strong>CLI</strong></a> ·
+  <a href="#mcp"><strong>MCP</strong></a> ·
+  <a href="#library"><strong>Library</strong></a> ·
+  <a href="#time-and-cost"><strong>Cost</strong></a>
+</p>
 
 ```bash
 npx greenroom-cli run 'Raise Pro from $49 to $79 per month' --audience "B2B marketing teams"
