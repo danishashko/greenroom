@@ -209,13 +209,43 @@ export function atRiskLine(e: Ensemble, currency: string): string {
 /** Numbers first. With several samples, the medians lead and the range follows in brackets. */
 export function buildHeadline(e: Ensemble, topTheme?: string, currency = "USD"): string {
   const leave = withRange(e.leaveShare, e.samples);
-  const lead =
+  // What people would do leads; how they feel follows, since stance leans on the tone of the quotes.
+  const mood =
     e.negativeShare.median >= e.positiveShare.median
-      ? `${withRange(e.negativeShare, e.samples)} of the audience reacts negatively and ${leave} would leave or switch.`
-      : `${withRange(e.positiveShare, e.samples)} of the audience reacts positively and ${leave} would leave or switch.`;
+      ? `${withRange(e.negativeShare, e.samples)} react negatively.`
+      : `${withRange(e.positiveShare, e.samples)} react positively.`;
   const risk = atRiskLine(e, currency);
-  const out = risk ? `${lead} ${risk}` : lead;
-  return topTheme ? `${out} Main objection: ${topTheme.toLowerCase()}.` : out;
+  const parts = [`${leave} of the audience would leave or switch.`, risk, topTheme ? `Main objection: ${topTheme.toLowerCase()}.` : "", mood];
+  return parts.filter(Boolean).join(" ");
+}
+
+/** Tone counts of the quotes the personas were built from. */
+export function quoteMix(evidence: Evidence[]): { negative: number; neutral: number; positive: number; untagged: number } {
+  const mix = { negative: 0, neutral: 0, positive: 0, untagged: 0 };
+  for (const e of evidence) mix[e.tone ?? "untagged"]++;
+  return mix;
+}
+
+/** A note when the quotes lean so far one way that the reactions will lean with them. Empty otherwise. */
+export function quoteMixNote(mix: ReturnType<typeof quoteMix>): string {
+  const tagged = mix.negative + mix.neutral + mix.positive;
+  if (tagged < 6) return "";
+  if (mix.negative / tagged >= 0.75) return `${mix.negative} of ${tagged} quotes are complaints and ${mix.positive} are positive, so reactions lean negative: unhappy customers post more than happy ones.`;
+  if (mix.positive / tagged >= 0.75) return `${mix.positive} of ${tagged} quotes are positive and ${mix.negative} are complaints, so reactions lean positive.`;
+  return "";
+}
+
+/** Basis line for the quote tone, or empty when no quote was tagged. */
+export function mixLine(r: Report): string {
+  const m = r.basis.quoteMix;
+  if (!m || m.negative + m.neutral + m.positive === 0) return "";
+  return `${m.negative} negative, ${m.neutral} neutral, ${m.positive} positive${m.untagged ? `, ${m.untagged} untagged` : ""}`;
+}
+
+/** Basis line for a backtest cut-off. */
+export function cutoffLine(r: Report): string {
+  const undated = r.basis.droppedUndated ?? 0;
+  return `${r.basis.asOf}. ${r.basis.droppedAfterCutoff} later results or quotes left out${undated ? `, and ${undated} undated ${undated === 1 ? "quote" : "quotes"}` : ""}. Every quote kept is dated on or before the cut-off`;
 }
 
 /** Wide disagreement between samples is a confidence problem even when evidence is plentiful. */
@@ -324,6 +354,7 @@ export interface ReportInput {
   samples: { personas: Persona[]; reactions: Reaction[] }[];
   groundingProvider: string;
   droppedAfterCutoff?: number;
+  droppedUndated?: number;
 }
 
 export async function reportStage(ctx: Ctx, input: ReportInput): Promise<Report> {
@@ -404,6 +435,9 @@ export async function reportStage(ctx: Ctx, input: ReportInput): Promise<Report>
     // Blended shares can agree while the bottom line flips sign between samples.
     conf.reason += ` Net revenue ranges from ${signedMoney(net.min, currency)} to ${signedMoney(net.max, currency)} across samples, so whether the change gains or loses revenue is not settled.`;
   }
+  const mix = quoteMix(evidence);
+  const mixNote = quoteMixNote(mix);
+  if (mixNote) conf.reason += ` ${mixNote}`;
   if (ctx.seed.asOf) {
     // Search and quotes respect the cut-off, but the model itself may remember what happened next.
     conf.reason += ` Backtest as of ${ctx.seed.asOf}: the model may already know the outcome, so compare against what really happened.`;
@@ -436,6 +470,8 @@ export async function reportStage(ctx: Ctx, input: ReportInput): Promise<Report>
       groundingProvider: input.groundingProvider,
       asOf: ctx.seed.asOf ?? null,
       droppedAfterCutoff: input.droppedAfterCutoff ?? 0,
+      droppedUndated: input.droppedUndated ?? 0,
+      quoteMix: mix,
       llmProvider: ctx.llm.id,
       models: ctx.llm.models,
     },

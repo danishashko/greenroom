@@ -36,7 +36,7 @@ Write up to ${max} web search queries that find real people discussing this prod
     seed.productName
       ? `Every query names ${seed.productName}${seed.competitors.length ? " or one of the competitors" : ""}, and at least half name ${seed.productName} itself: its pricing, past price or terms changes, complaints and switching away. A query without a product name finds pages about unrelated tools.`
       : "Mix queries about the product itself, its competitors, and the pain the product solves."
-  } Each query must work in Google. Do not include the change itself if it is not public yet.${seed.asOf ? " Do not search for reactions to the change or for what happened after it." : ""}`;
+  } Include at least one query that finds satisfied or loyal customers, not only complaints. Each query must work in Google. Do not include the change itself if it is not public yet.${seed.asOf ? " Do not search for reactions to the change or for what happened after it. This is a backtest: target Reddit, Hacker News and forums, where posts carry dates. Review sites rarely date each review, so their quotes are dropped." : ""}`;
 }
 
 export function extractPrompt(
@@ -68,6 +68,7 @@ Extract up to 6 quotes from real people (customers, users, commenters, reviewers
 - Do not include usernames, names, emails or phone numbers.
 - Add a short context note: what the quote is replying to or what the author's situation is.
 - date: the day the quote was written as YYYY-MM-DD, only when the page shows it exactly near that quote. Otherwise leave it empty.
+- tone: how the author feels about ${seed.productName ?? "the product"}: negative, neutral or positive. Keep quotes from satisfied and loyal customers too, not only complaints.
 Return an empty list if nothing qualifies.`;
 }
 

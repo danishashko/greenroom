@@ -28,9 +28,9 @@ Needs Node.js 22.12 or newer. `npm i -g greenroom-cli` installs the `greenroom` 
 
 You get a report with the share of buyers who react badly, who would leave, the objections behind it with real quotes, and the changes that would soften it. Every persona is built from quotes pulled from Reddit, Hacker News, review sites and forums, or from your own support tickets and survey comments. Quotes that do not appear verbatim on the source page are thrown away.
 
-![3D view of the Squarespace July 2026 rehearsal: 8 personas built from 13 real quotes, one persona linked to the quote it cites, 21% would leave or switch](https://raw.githubusercontent.com/danishashko/greenroom/main/docs/room.png)
+![3D view of the Squarespace July 2026 rehearsal: 8 personas built from 16 dated quotes, one persona linked to the forum quote it cites; the top objection is a price rise announced only by email](https://raw.githubusercontent.com/danishashko/greenroom/main/docs/squarespace-room.png)
 
-The report above is a backtest: Squarespace's July 2026 price rise for existing customers, rehearsed with only what was online the day before the billing email went out. The change came after the model's training data ends, so it could not remember the outcome. Its two main fixes (explain what the higher price pays for, soften it for existing customers) are close to what Squarespace did less than three weeks later, when it cut the increase on some plans and pointed to features added to every plan. It missed the anger about paying for AI features, which no quote before the cut-off mentioned. Full output in [examples/squarespace-2026](https://github.com/danishashko/greenroom/blob/main/examples/squarespace-2026/report.md).
+The report above is a backtest: Squarespace's July 2026 price rise for existing customers, rehearsed with only what was online the day before the billing email went out. All 16 quotes are dated between 2017 and 2025 and they are mixed: 7 negative, 4 neutral, 5 positive. The change came after the model's training data ends, so it could not remember the outcome. The top objection was the real one: a rise applied automatically, announced only by email, with nothing new for the money. Nobody leaves in the simulation; most hold off and start comparing rivals. Its fixes (tie the rise to named improvements, give longer notice in the dashboard, let existing customers lock their current rate) are close to what Squarespace did less than three weeks later, when it cut the increase on some plans and pointed to features added to every plan. It missed the anger about paying for AI features, which no quote before the cut-off mentioned. Full output in [examples/squarespace-2026](https://github.com/danishashko/greenroom/blob/main/examples/squarespace-2026/report.md).
 
 ## For AI agents
 
@@ -101,10 +101,10 @@ Outputs per run in `.greenroom/runs/<id>/`: `report.html`, `report.md`, `report.
 
 ```bash
 greenroom run "Squarespace raises website plan prices for existing subscribers at their next renewal, announced by billing email" \
-  --kind pricing --product Squarespace --competitor Wix WordPress Webflow Framer --as-of 2026-07-05
+  --kind pricing --product Squarespace --competitor Wix WordPress Webflow Framer --as-of 2026-07-05 --queries 10 --pages 20
 ```
 
-`--as-of` limits search to pages published by that date, drops quotes dated later, and tells every persona that today is that day. Undated quotes are dropped when they come from review sites, from Reddit threads that may be newer than the cut-off, or from any page that shows a later date (forum replies and comments keep growing). Compare the report with what really happened before you trust a run on a change that has not happened yet. The model may still remember the real outcome, so for a clean test pick a change announced after the model's training cutoff. The report says so either way.
+`--as-of` limits search to pages published by that date, drops quotes dated later, and tells every persona that today is that day. Every web quote kept must carry a date on or before the cut-off: its own, or the newest date on its page (for Reddit, the newest post or comment), so it was written on or before that day. Quotes with no date, undated quotes from review sites, and undated quotes on pages that show a later date are dropped. The report lists each quote's date and how many were left out. A backtest drops every undated quote, so give it a wider search (`--queries 10 --pages 20`, as above) to keep enough of them. Compare the report with what really happened before you trust a run on a change that has not happened yet. The model may still remember the real outcome, so for a clean test pick a change announced after the model's training cutoff. The report says so either way.
 
 ## Time and cost
 

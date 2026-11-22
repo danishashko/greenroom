@@ -278,6 +278,7 @@ export async function runRehearsal(opts: RunOptions): Promise<RunResult> {
       samples: sampleRuns,
       groundingProvider: groundProvider?.id ?? grounded.evidence.find((e) => e.via !== "user")?.via ?? "none",
       droppedAfterCutoff: grounded.droppedAfterCutoff,
+      droppedUndated: grounded.droppedUndated,
     });
     report.usage = totalUsage();
     store.write("report.json", report);

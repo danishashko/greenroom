@@ -1,5 +1,5 @@
 import { ROOM_CSS, ROOM_JS, roomSection } from "./room.js";
-import { money, signedMoney } from "../pipeline/report.js";
+import { cutoffLine, mixLine, money, signedMoney } from "../pipeline/report.js";
 import type { Report } from "../schema.js";
 import { pct } from "../util.js";
 
@@ -151,12 +151,12 @@ export function renderHtml(r: Report): string {
 
   const stats = `
   <div class="stats">
-    <div class="stat${e.negativeShare.median >= 0.5 ? " warn" : ""}"><div class="n">${pct(e.negativeShare.median)}</div><div class="l">react negatively${sub(e.negativeShare)}</div></div>
     ${
       risk && e.netMrrChange
         ? `<div class="stat${e.netMrrChange.median < 0 ? " warn" : ""}"><div class="n">${esc(signedMoney(e.netMrrChange.median, risk.currency))}</div><div class="l">net monthly revenue after the change${multi && e.netMrrChange.min !== e.netMrrChange.max ? `, range ${esc(signedMoney(e.netMrrChange.min, risk.currency))} to ${esc(signedMoney(e.netMrrChange.max, risk.currency))}` : ""}</div></div>`
         : `<div class="stat${e.leaveShare.median >= 0.25 ? " warn" : ""}"><div class="n">${pct(e.leaveShare.median)}</div><div class="l">would leave or switch${sub(e.leaveShare)}</div></div>`
     }
+    <div class="stat${e.negativeShare.median >= 0.5 ? " warn" : ""}"><div class="n">${pct(e.negativeShare.median)}</div><div class="l">react negatively${sub(e.negativeShare)}</div></div>
     ${
       risk && e.customersAtRisk
         ? e.mrrAtRisk
@@ -213,13 +213,14 @@ export function renderHtml(r: Report): string {
     ["Stance changed after seeing others", pct(s.movedMindShare)],
     ["Models", `${r.basis.llmProvider}: ${r.basis.models.fast} and ${r.basis.models.strong}`],
     ["Calls and time", `${r.usage.calls} calls, ${r.usage.seconds}s${r.usage.listPriceUsd !== null ? `, list-price equivalent $${r.usage.listPriceUsd}` : ""}`],
-    ...(r.basis.asOf ? ([["Cut-off", `${r.basis.asOf}. ${r.basis.droppedAfterCutoff} later results or quotes left out`]] as [string, string][]) : []),
+    ...(mixLine(r) ? ([["Quote tone", mixLine(r)]] as [string, string][]) : []),
+    ...(r.basis.asOf ? ([["Cut-off", cutoffLine(r)]] as [string, string][]) : []),
     ["Confidence", `${r.basis.confidence}. ${r.basis.confidenceReason}`],
   ];
   const basis = basisRows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("");
 
   const evidence = r.evidence
-    .map((e) => `<div class="ev"><strong>${esc(e.id)}</strong> ${esc(e.quote)}<small>${esc(e.source)}, ${link(e.url)}</small></div>`)
+    .map((e) => `<div class="ev"><strong>${esc(e.id)}</strong> ${esc(e.quote)}<small>${esc(e.source)}${e.date ? `, ${e.dateFrom === "page" ? "on or before " : ""}${esc(e.date)}` : ""}${e.tone ? `, ${esc(e.tone)}` : ""}, ${link(e.url)}</small></div>`)
     .join("");
 
   const data = JSON.stringify(r).replace(/</g, "\\u003c");

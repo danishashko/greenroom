@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /** Bump when report.json changes shape. Agents can branch on it. */
-export const REPORT_SCHEMA_VERSION = 3;
+export const REPORT_SCHEMA_VERSION = 4;
 
 export const ChangeKind = z.enum(["pricing", "launch", "positioning", "rebrand", "feature", "other"]);
 export type ChangeKind = z.infer<typeof ChangeKind>;
@@ -52,6 +52,8 @@ export const EvidenceSchema = z.object({
   quote: z.string(),
   context: z.string().optional(),
   date: z.string().optional().describe("YYYY-MM-DD when the source shows when it was written."),
+  dateFrom: z.enum(["quote", "page"]).optional().describe("quote: the date shown next to the quote. page: the nearest date the page shows above the quote, usually its post, comment or article date. Reddit ages are rounded down, so the quote was written on or before it."),
+  tone: z.enum(["negative", "neutral", "positive"]).optional().describe("How the quote's author feels about the product, as tagged at extraction."),
   segment: z.string().optional().describe("Customer segment from the customer data row, when given."),
   via: z.string().describe("Which grounding provider fetched it."),
 });
@@ -197,6 +199,8 @@ export const ReportSchema = z.object({
     groundingProvider: z.string(),
     asOf: z.string().nullable().describe("Cut-off date of a backtest, or null."),
     droppedAfterCutoff: z.number().describe("Quotes and pages left out because they are dated after asOf."),
+    droppedUndated: z.number().describe("Web quotes left out of a backtest because neither the quote nor its page shows a date."),
+    quoteMix: z.object({ negative: z.number(), neutral: z.number(), positive: z.number(), untagged: z.number() }).describe("Tone of the quotes the personas were built from."),
     llmProvider: z.string(),
     models: z.object({ fast: z.string(), strong: z.string() }),
   }),

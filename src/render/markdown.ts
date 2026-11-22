@@ -1,4 +1,4 @@
-import { money, signedMoney } from "../pipeline/report.js";
+import { cutoffLine, mixLine, money, signedMoney } from "../pipeline/report.js";
 import type { Report } from "../schema.js";
 import { pct } from "../util.js";
 
@@ -77,7 +77,8 @@ export function renderMarkdown(r: Report): string {
   lines.push(`- Type: simulated reactions, not measured behavior`);
   lines.push(`- Quotes: ${r.basis.evidenceCount} from ${r.basis.domainCount} sources via ${r.basis.groundingProvider}${r.basis.customerQuotes ? `, ${r.basis.customerQuotes} from your customer data` : ""}`);
   lines.push(`- Audience shares: ${r.basis.weighting === "segments" ? "anchored to your customer counts per segment" : "from how many quotes back each persona"}`);
-  if (r.basis.asOf) lines.push(`- Cut-off: ${r.basis.asOf}, ${r.basis.droppedAfterCutoff} later results or quotes left out`);
+  if (mixLine(r)) lines.push(`- Quote tone: ${mixLine(r)}`);
+  if (r.basis.asOf) lines.push(`- Cut-off: ${cutoffLine(r)}`);
   lines.push(`- Personas: ${r.stats.personas}, rounds: ${r.stats.rounds}`);
   lines.push(`- Models: ${r.basis.llmProvider} (${r.basis.models.fast} / ${r.basis.models.strong})`);
   lines.push(`- Calls: ${r.usage.calls}, time: ${r.usage.seconds}s${r.usage.listPriceUsd !== null ? `, list-price equivalent: $${r.usage.listPriceUsd}` : ""}`);
@@ -85,7 +86,8 @@ export function renderMarkdown(r: Report): string {
 
   if (r.evidence.length) {
     lines.push("## Evidence", "");
-    for (const e of r.evidence) lines.push(`- [${e.id}] (${e.source}) "${e.quote.replace(/\n/g, " ")}" ${e.url}`);
+    for (const e of r.evidence)
+      lines.push(`- [${e.id}] (${e.source}${e.date ? `, ${e.dateFrom === "page" ? "on or before " : ""}${e.date}` : ""}${e.tone ? `, ${e.tone}` : ""}) "${e.quote.replace(/\n/g, " ")}" ${e.url}`);
     lines.push("");
   }
   lines.push(`Run ${r.runId}, ${r.createdAt}`, "");

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { extractJson } from "../src/llm/base.js";
 import { buildClaudeArgs } from "../src/llm/claude-cli.js";
-import { coreQueries, diversify, isAfterCutoff, latestDateIn, mergeQueries, quoteIsVerbatim, redditPostLatestDate } from "../src/pipeline/ground.js";
+import { coreQueries, dateAbove, datesIn, diversify, isAfterCutoff, mergeQueries, quoteIsVerbatim, redditPostLatestDate } from "../src/pipeline/ground.js";
 import { weightPersonas } from "../src/pipeline/personas.js";
 import { buildEnsemble, buildHeadline, buildThemes, computeStats, gradeConfidence } from "../src/pipeline/report.js";
 import { estimateRun } from "../src/pipeline/estimate.js";
@@ -53,13 +53,19 @@ describe("quoteIsVerbatim", () => {
   });
 });
 
-describe("latest date a page shows", () => {
+describe("date shown above a quote", () => {
   const now = new Date("2026-11-18T12:00:00Z");
   it("reads forum, article and ISO dates and ignores future ones", () => {
-    expect(latestDateIn("* Jul 17 2026 6 posts\n* Jul 8 2026 2 posts", now)).toBe("2026-07-17");
-    expect(latestDateIn("Updated July 20, 2026. Posted 3 Jun 2025.", now)).toBe("2026-07-20");
-    expect(latestDateIn("modified 2026-08-03, renews Jan 1, 2027", now)).toBe("2026-08-03");
-    expect(latestDateIn("no dates, (c) 2026", now)).toBeUndefined();
+    expect(datesIn("* Jul 17 2026 6 posts * Jul 8 2026 2 posts", now).map((d) => d.iso)).toEqual(["2026-07-17", "2026-07-08"]);
+    expect(datesIn("Posted 3 Jun 2025, renews Jan 1, 2027", now).map((d) => d.iso)).toEqual(["2025-06-03"]);
+    expect(datesIn("no dates, (c) 2026", now)).toEqual([]);
+  });
+  it("takes the nearest date above the quote, not a newer one elsewhere on the page", () => {
+    const page = ["r/squarespace • 2y ago", "Is it too expensive? The price went from 120 to 170 a year.", "• [3mo ago](https://x) a newer comment", "Related: • 2mo ago"].join(" ");
+    expect(dateAbove(page, "The price went from 120 to 170 a year.", now)).toBe("2024-11-18");
+    expect(dateAbove(page, "a newer comment", now)).toBe("2026-08-18");
+    expect(dateAbove("Published July 3, 2024. I love this tool for my portfolio.", "I love this tool for my portfolio.", now)).toBe("2024-07-03");
+    expect(dateAbove("I love this tool for my portfolio. July 3, 2024", "I love this tool for my portfolio.", now)).toBeUndefined();
   });
 });
 
@@ -80,7 +86,7 @@ describe("reddit post age", () => {
 describe("search queries", () => {
   it("runs the same core queries for every pricing rehearsal of a named product", () => {
     const seed = SeedSchema.parse({ change: "Raise Pro from $49 to $79 per month", kind: "pricing", productName: "Acme" });
-    expect(coreQueries(seed)).toEqual(["Acme price increase", "Acme too expensive reddit", "Acme alternatives cheaper"]);
+    expect(coreQueries(seed)).toEqual(["Acme price increase", "Acme too expensive reddit", "Acme alternatives cheaper", "Acme worth it reddit"]);
     expect(coreQueries(SeedSchema.parse({ change: "Raise Pro from $49 to $79 per month" }))).toEqual([]);
   });
 
@@ -136,7 +142,7 @@ describe("weights and stats", () => {
     expect(s.leaveShare).toBe(0.5);
     expect(s.movedMindShare).toBe(0.5);
     expect(s.meanStance).toBeCloseTo(-0.7, 1);
-    expect(buildHeadline(buildEnsemble([s]), "Price too steep")).toBe("50% of the audience reacts negatively and 50% would leave or switch. Main objection: price too steep.");
+    expect(buildHeadline(buildEnsemble([s]), "Price too steep")).toBe("50% of the audience would leave or switch. Main objection: price too steep. 50% react negatively.");
   });
 });
 
@@ -347,7 +353,7 @@ describe("ensemble", () => {
     const e = buildEnsemble([st(0.29, 0.89), st(0.55, 0.83), st(0.4, 0.86)]);
     expect(e.leaveShare).toEqual({ median: 0.4, min: 0.29, max: 0.55 });
     expect(e.shownSample).toBe(2);
-    expect(buildHeadline(e)).toBe("86% (83 to 89%) of the audience reacts negatively and 40% (29 to 55%) would leave or switch.");
+    expect(buildHeadline(e)).toBe("40% (29 to 55%) of the audience would leave or switch. 86% (83 to 89%) react negatively.");
   });
   it("downgrades confidence when samples disagree, and says so", () => {
     const wide = buildEnsemble([st(0.29, 0.89), st(0.55, 0.83), st(0.4, 0.86)]);
@@ -505,5 +511,16 @@ describe("bright data timeouts", () => {
     } finally {
       globalThis.fetch = orig;
     }
+  });
+});
+
+describe("quote dates and tone", () => {
+  it("flags a quote pool that leans one way", async () => {
+    const { quoteMix, quoteMixNote } = await import("../src/pipeline/report.js");
+    const ev = (tone?: "negative" | "neutral" | "positive") => ({ id: "e", source: "reddit" as const, url: "u", domain: "d", quote: "q", via: "x", tone });
+    const lean = quoteMix([...Array(9)].map(() => ev("negative")).concat([ev("positive"), ev()]));
+    expect(lean).toEqual({ negative: 9, neutral: 0, positive: 1, untagged: 1 });
+    expect(quoteMixNote(lean)).toContain("9 of 10 quotes are complaints");
+    expect(quoteMixNote(quoteMix([ev("negative"), ev("negative"), ev("positive"), ev("neutral"), ev("positive"), ev("neutral")]))).toBe("");
   });
 });

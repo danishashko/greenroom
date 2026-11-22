@@ -11,7 +11,16 @@ import type { Ctx } from "./context.js";
 
 const QueriesSchema = z.object({ queries: z.array(z.string().min(3)).min(1).max(12) });
 const VoicesSchema = z.object({
-  voices: z.array(z.object({ quote: z.string().min(12).max(600), context: z.string().max(300).default(""), date: z.string().optional() })).max(8),
+  voices: z
+    .array(
+      z.object({
+        quote: z.string().min(12).max(600),
+        context: z.string().max(300).default(""),
+        date: z.string().optional(),
+        tone: z.enum(["negative", "neutral", "positive"]).optional(),
+      }),
+    )
+    .max(8),
 });
 
 /** Raw text kept per page before focusing. Unlocked pages can exceed 300k characters. */
@@ -30,6 +39,8 @@ export interface GroundResult {
   skipped?: string[];
   /** Search results and quotes left out because they are dated after the cut-off. */
   droppedAfterCutoff?: number;
+  /** Web quotes left out of a backtest because neither the quote nor its page shows a date. */
+  droppedUndated?: number;
 }
 
 /** A YYYY-MM-DD date that is strictly after the cut-off. Unknown or malformed dates are kept. */
@@ -63,25 +74,56 @@ export function quoteIsVerbatim(quote: string, pageText: string): boolean {
 /** Spread picks across domains so one noisy thread cannot dominate. */
 const MONTH_INDEX: Record<string, number> = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
 
+const AGE = /•\s*\[?(\d+)\s*(y|yr|mo|w|d|h|min)\.?\s+ago/gi;
+
+/** The latest day an age like "4mo ago" can mean. Reddit rounds ages down, so this is an upper bound. */
+function ageToDate(n: number, unit: string, now: Date): string {
+  const d = new Date(now);
+  const u = unit.toLowerCase();
+  if (u === "y" || u === "yr") d.setUTCFullYear(d.getUTCFullYear() - n);
+  else if (u === "mo") d.setUTCMonth(d.getUTCMonth() - n);
+  else if (u === "w") d.setUTCDate(d.getUTCDate() - 7 * n);
+  else if (u === "d") d.setUTCDate(d.getUTCDate() - n);
+  return d.toISOString().slice(0, 10);
+}
+
 /**
- * The latest calendar date a page shows anywhere ("Jul 17 2026", "July 17, 2026", "17 Jul 2026",
- * "2026-07-17"), ignoring dates after now. In a backtest, a page that shows a date after the cut-off
- * kept growing after it (forum replies, comments, edits), so its undated quotes cannot be trusted.
+ * Every date a text shows, with its position: calendar dates ("Jul 17 2026", "July 17, 2026",
+ * "17 Jul 2026", "2026-07-17") and Reddit ages ("• 4mo ago"). Dates after now are ignored.
  */
-export function latestDateIn(text: string, now = new Date()): string | undefined {
+export function datesIn(text: string, now = new Date()): { at: number; iso: string }[] {
   const today = now.toISOString().slice(0, 10);
-  let latest: string | undefined;
-  const consider = (y: number, m: number, d: number) => {
+  const out: { at: number; iso: string }[] = [];
+  const consider = (at: number, y: number, m: number, d: number) => {
     if (m < 0 || m > 11 || d < 1 || d > 31 || y < 1990) return;
     const iso = new Date(Date.UTC(y, m, d)).toISOString().slice(0, 10);
-    if (iso <= today && (!latest || iso > latest)) latest = iso;
+    if (iso <= today) out.push({ at, iso });
   };
   const monthFirst = /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\b/gi;
   const dayFirst = /\b(\d{1,2})\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?,?\s+(\d{4})\b/gi;
-  for (const m of text.matchAll(monthFirst)) consider(Number(m[3]), MONTH_INDEX[(m[1] as string).toLowerCase()] ?? -1, Number(m[2]));
-  for (const m of text.matchAll(dayFirst)) consider(Number(m[3]), MONTH_INDEX[(m[2] as string).toLowerCase()] ?? -1, Number(m[1]));
-  for (const m of text.matchAll(/\b(\d{4})-(\d{2})-(\d{2})\b/g)) consider(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-  return latest;
+  for (const m of text.matchAll(monthFirst)) consider(m.index, Number(m[3]), MONTH_INDEX[(m[1] as string).toLowerCase()] ?? -1, Number(m[2]));
+  for (const m of text.matchAll(dayFirst)) consider(m.index, Number(m[3]), MONTH_INDEX[(m[2] as string).toLowerCase()] ?? -1, Number(m[1]));
+  for (const m of text.matchAll(/\b(\d{4})-(\d{2})-(\d{2})\b/g)) consider(m.index, Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  for (const m of text.matchAll(AGE)) out.push({ at: m.index, iso: ageToDate(Number(m[1]), m[2] as string, now) });
+  return out;
+}
+
+/**
+ * The date a quote was written, read from the page: the nearest date shown above it. Posts and
+ * comments put their date or age in the header before the text, and articles put the publish
+ * date at the top. Undefined when the quote cannot be found or nothing above it carries a date.
+ */
+export function dateAbove(pageText: string, quote: string, now = new Date()): string | undefined {
+  const page = normalizeText(pageText);
+  const q = normalizeText(quote);
+  let at = -1;
+  for (const probe of [q, q.slice(0, 60), q.slice(0, 30)]) {
+    if (probe.length >= 12 && (at = page.indexOf(probe)) >= 0) break;
+  }
+  if (at < 0) return undefined;
+  let best: { at: number; iso: string } | undefined;
+  for (const d of datesIn(page.slice(0, at), now)) if (!best || d.at > best.at) best = d;
+  return best?.iso;
 }
 
 /**
@@ -90,16 +132,8 @@ export function latestDateIn(text: string, now = new Date()): string | undefined
  * Returns YYYY-MM-DD, or undefined when the page shows no age.
  */
 export function redditPostLatestDate(markdown: string, now = new Date()): string | undefined {
-  const m = /•\s*(\d+)\s*(y|yr|mo|w|d|h|min)\.?\s+ago/i.exec(markdown);
-  if (!m) return undefined;
-  const n = Number(m[1]);
-  const d = new Date(now);
-  const unit = (m[2] as string).toLowerCase();
-  if (unit === "y" || unit === "yr") d.setUTCFullYear(d.getUTCFullYear() - n);
-  else if (unit === "mo") d.setUTCMonth(d.getUTCMonth() - n);
-  else if (unit === "w") d.setUTCDate(d.getUTCDate() - 7 * n);
-  else if (unit === "d") d.setUTCDate(d.getUTCDate() - n);
-  return d.toISOString().slice(0, 10);
+  const m = new RegExp(AGE.source, "i").exec(markdown);
+  return m ? ageToDate(Number(m[1]), m[2] as string, now) : undefined;
 }
 
 /**
@@ -109,8 +143,9 @@ export function redditPostLatestDate(markdown: string, now = new Date()): string
 export function coreQueries(seed: Seed): string[] {
   const p = seed.productName?.trim();
   if (!p) return [];
-  if (seed.kind === "pricing") return [`${p} price increase`, `${p} too expensive reddit`, `${p} alternatives cheaper`];
-  return [`${p} reddit`, `${p} complaints`, `${p} alternatives`];
+  // The last query looks for people who are happy to stay, so the room is not built from complaints alone.
+  if (seed.kind === "pricing") return [`${p} price increase`, `${p} too expensive reddit`, `${p} alternatives cheaper`, `${p} worth it reddit`];
+  return [`${p} reddit`, `${p} complaints`, `${p} alternatives`, `${p} worth it reddit`];
 }
 
 /** Merges core and model queries: core first, case-insensitive duplicates dropped, capped at max. */
@@ -161,6 +196,7 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
   const skipped: string[] = [];
   let dropped = 0;
   let undatedReviews = 0;
+  let undated = 0;
   const pages: { url: string; text: string; via: string }[] = [];
   const direct: Evidence[] = [];
   let productContext: string | undefined;
@@ -301,7 +337,6 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
       const text = focusText(cleanMarkdown(pg.text), terms, FOCUS_CHAR_CAP);
       if (text.length < 200) return [];
       const isVerbatim = verbatimChecker(text);
-      const pageGrewAfterCutoff = !!seed.asOf && isAfterCutoff(latestDateIn(pg.text), seed.asOf);
       try {
         const r = await llm.complete({ system: SYSTEM_ANALYST, prompt: extractPrompt(seed, pg.url, text), schema: VoicesSchema, label: "ground:extract", tier: "fast" });
         const domain = domainOf(pg.url) === "unknown" ? "user-supplied" : domainOf(pg.url);
@@ -312,13 +347,21 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
             continue;
           }
           if (!isVerbatim(v.quote)) continue; // drop anything the model reworded
-          if (pageGrewAfterCutoff && !(v.date && /^\d{4}-\d{2}-\d{2}$/.test(v.date))) {
-            dropped++;
-            continue;
-          }
           const source = pg.via === "user" ? "user" : classifySource(domain);
           if (undatedReviewInBacktest(source, v.date, seed.asOf)) {
             undatedReviews++;
+            continue;
+          }
+          const ownDate = v.date && /^\d{4}-\d{2}-\d{2}$/.test(v.date) ? v.date : undefined;
+          const date = ownDate ?? (source === "user" ? undefined : dateAbove(pg.text, v.quote));
+          if (isAfterCutoff(date, seed.asOf)) {
+            // The post or comment holding the quote was written after the cut-off.
+            dropped++;
+            continue;
+          }
+          if (seed.asOf && source !== "user" && !date) {
+            // A backtest only keeps quotes it can show were written before the cut-off.
+            undated++;
             continue;
           }
           out.push({
@@ -328,7 +371,9 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
             domain,
             quote: redactPersonalData(v.quote.trim().slice(0, 400)),
             context: v.context ? redactPersonalData(v.context) : undefined,
-            date: v.date && /^\d{4}-\d{2}-\d{2}$/.test(v.date) ? v.date : undefined,
+            date,
+            dateFrom: ownDate ? "quote" : date ? "page" : undefined,
+            tone: v.tone,
             via: pg.via,
           });
         }
@@ -351,6 +396,7 @@ export async function groundStage(ctx: Ctx): Promise<GroundResult> {
     evidence.push({ ...e, id: `e${evidence.length + 1}` });
   }
   if (dropped) ctx.emit({ stage: "ground", level: "info", message: `Left out ${dropped} ${dropped === 1 ? "result or quote" : "results or quotes"} dated after ${seed.asOf}` });
+  if (undated) ctx.emit({ stage: "ground", level: "info", message: `Left out ${undated} ${undated === 1 ? "quote" : "quotes"} with no date on the quote or its page` });
   if (undatedReviews) ctx.emit({ stage: "ground", level: "info", message: `Left out ${undatedReviews} undated review-site ${undatedReviews === 1 ? "quote" : "quotes"}, since review pages keep growing after ${seed.asOf}` });
-  return { evidence, productContext, warnings, skipped, droppedAfterCutoff: dropped + undatedReviews };
+  return { evidence, productContext, warnings, skipped, droppedAfterCutoff: dropped + undatedReviews, droppedUndated: undated };
 }
